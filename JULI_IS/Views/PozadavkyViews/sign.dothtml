@@ -1,0 +1,97 @@
+﻿@viewModel ViewModels.PozadavkyViewModels.SignViewModel, JULI_IS
+@masterPage Views/app.dotmaster
+
+<dot:Content ContentPlaceHolderID="PageContent">
+    <div class="form wrapper">
+        <h1>Podpis požadavků</h1>
+
+        <p>
+            Vypsat požadavky pouze pro 
+            <dot:RadioButton Checked="{value: CurrentUserOnly}" CheckedValue="{value: true}"
+                             GroupName="RadioGroup" Text=" aktuálního uživatele " Changed="{command: ChangeCurrentUser()}" />
+
+            <dot:RadioButton Checked="{value: CurrentUserOnly}" CheckedValue="{value: false}"
+                             GroupName="RadioGroup" Text=" všechny" Changed="{command: ChangeCurrentUser()}" />
+        </p>
+
+        <p>Počet požadavků: {{value: SeznamPozadavkuGv.PagingOptions.TotalItemsCount}}</p>
+        <br />
+        <p Visible="{value: NothingFound}"> Nenalezeny žádné požadavky! </p>
+
+        <dot:GridView DataSource="{value: SeznamPozadavkuGv}" class="table table-bordered">
+            <Columns>
+                <!--<dot:GridViewTextColumn ValueBinding="{value: ID}" HeaderText="ID" />-->
+                <dot:GridViewTextColumn ValueBinding="{value: FullPozadavekID}" HeaderText="Číslo požadavku" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Popis}" HeaderText="Popis požadavku" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: CelkovaCena}" HeaderText="Celková cena" AllowSorting="true" FormatString="N2" />
+                <dot:GridViewTextColumn ValueBinding="{value: Mena}" HeaderText="Měna" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: PocetPolozek}" HeaderText="Počet položek" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Zalozil}" HeaderText="Založil" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Datum}" HeaderText="Datum" FormatString="d" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: DodavatelName}" HeaderText="Dodavatel" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: PodpisLevel}" HeaderText="Lvl." AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: SchvalovatelID}" HeaderText="ID" AllowSorting="true" />
+
+                <!--tlacitko pro editaci pozadavku-->
+                <dot:GridViewTemplateColumn HeaderText="Detail">
+                    <ContentTemplate>
+                        <dot:RouteLink RouteName="PozadavekEdit" Param-Id="{value: ID}">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </dot:RouteLink>
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>
+
+                <!--tlacitko pro schvaleni pozadavku-->
+                <dot:GridViewTemplateColumn HeaderText="Schválit" Visible="{value: CurrentUserOnly}">
+                    <ContentTemplate>
+                        <dot:LinkButton class="glyphicon glyphicon-ok" Click="{command: _parent.PozadavekSchvalit(ID, PodpisLevel + 1)}">
+                            <PostBack.Handlers>
+                                <dot:ConfirmPostBackHandler Message="Opravdu schválit požadavek?" />
+                            </PostBack.Handlers>
+                        </dot:LinkButton>
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>
+
+                <!--tlacitko pro neschvaleni pozadavku-->
+                <dot:GridViewTemplateColumn HeaderText="Zamítnout" Visible="{value: CurrentUserOnly}">
+                    <ContentTemplate>
+                        <dot:LinkButton class="glyphicon glyphicon-remove" Click="{command: _parent.PozadavekPokusOZamitnuti(ID)}">
+                            <PostBack.Handlers>
+                                <dot:ConfirmPostBackHandler Message="Opravdu požadavek zamítnout?" />
+                            </PostBack.Handlers>
+                        </dot:LinkButton>
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>
+
+
+            </Columns>
+        </dot:GridView>
+
+        <dot:DataPager DataSet="{value: SeznamPozadavkuGv}" class="pagination" />
+        <br /><hr />
+
+        <div Visible="{value: PozadavekZamitan}">
+            <br>
+            <label class="control-label">Prosím vyberte důvod zamítnutí požadavku nebo zadejte vlastní:</label>
+            
+                <dot:ComboBox DataSource="{value: DuvodyZamitnuti}"
+                              SelectionChanged="{command: DuvodChange()}"
+                              SelectedValue="{value: ZamitanyPozadavekData.DuvodZamitnutiID}"
+                              ValueMember="ID"
+                              DisplayMember="Text"
+                              class="form-control" />
+
+
+                <div Visible="{value: JinyDuvod}">
+                    <p><br>Prosím popište důvod:</p>
+                    <dot:TextBox class="form-control" Text="{value: ZamitanyPozadavekData.DuvodZamitnutiText}" />
+                </div>
+            <br />
+            <dot:Button Visible="{value: PozadavekZamitan}" class="btn btn-primary" Text="Zamítnout" Click="{command: PozadavekZamitnout()}" />
+        </div>
+        <p><br></p>
+        <p>{{value: Vysledek}}</p>
+    
+    </div>
+</dot:Content>
+

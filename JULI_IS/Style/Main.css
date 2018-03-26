@@ -1,0 +1,200 @@
+﻿
+/*
+    GLOBAL
+*/
+
+
+.ComboBoxStyle {
+    height: 34px !important;
+    width: 100%;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset !important;
+    color: #555 !important;
+    display: block !important;
+    font-size: 14px !important;
+    height: 34px !important;
+    line-height: 1.42857 !important;
+    /*padding: 6px 12px !important;*/
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}
+
+.bp-input {
+    border-width: 0px;
+    margin-left: 14px;
+    margin-top: 5px;
+}
+
+.dotvvm-bp-combo-box .bp-text-box {
+    height: unset;
+    width: unset;
+}
+
+.dotvvm-bp-combo-box.bp-state-focused .bp-text-box {
+    box-shadow: unset;
+    border-color: unset;
+}
+
+.bp-text-box:focus {
+    box-shadow: unset;
+}
+
+.dotvvm-bp-combo-box > .bp-text-box {
+    width: unset;
+}
+
+.bp-text-box {
+    height: unset !important;
+    width: 92% !important;
+    background: #fff none repeat scroll 0 0 !important;
+    border: 0 !important;
+}
+
+/*
+Header
+---------- */
+
+header .fa {
+    color: white;
+}
+
+#language-switch {
+    padding-left: 5%;
+}
+
+/*
+HomePage
+---------- */
+section#homepage .jumbotron {
+    height: 500px;
+    overflow: scroll;
+}
+
+section#homepage .icony-aplikaci {
+    text-align: center;   
+}
+
+section#homepage .icony-aplikaci img{
+    width: 100px;
+}
+
+.ButtonSmall {
+    font-weight: 700;
+    padding: 2px 6px;
+    font-size: 10px;
+}
+
+.btn-color {
+    background-color: #e2efd0;
+}
+
+.dodano-color {
+    background-color: #ffb84d;
+}
+
+footer {
+    display: block;
+    color: white;
+    font-weight: 600;
+    background-color: #2980b9;
+    height: 60px;
+    width: 100%;
+    padding-left: 50px;
+}
+
+.zalomit 
+{
+    float:left;
+}
+
+.TextPodTlacitkem
+{
+    clear: both;
+    text-align: right;
+    font-size: smaller
+}
+
+TextPodTlacitkemAlignLeft {
+    clear: both;
+    text-align: left;
+    font-size: smaller
+}
+.TextPodTlacitkemItem {
+    clear: both;
+    font-size: smaller;
+    left: 24%;
+    position: relative;
+}
+
+#ui-datepicker-div {
+    background-color: white;
+}
+
+.mycontent-left {
+  /*border-right: 1px groove #333;*/
+}
+
+#RozuctovatTxtBox{
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: 15%;
+    margin-left: 5%;
+    margin-right: 0.4%;
+}
+
+.mena-cizy 
+{
+    background-color: lightskyblue;
+}
+
+.mena-error
+{
+    background-color: orangered;
+    color: white;
+}
+
+.VybrDodavatel 
+{
+    border: 2px solid #2980b9;
+}
+
+.CellColorBackground {
+    background-color: #e2efd0;
+}
+
+
+
+/*MEDIA*/
+
+@media only screen and (min-width: 1921px ) {
+    .wrapper {
+        padding: 20px;
+        width: 70%;
+        margin: auto;
+    }
+}
+
+@media only screen and (max-width: 1920px ) {
+    .wrapper {
+        padding: 20px;
+        width: 80%;
+        margin: auto;
+    }
+}
+
+@media only screen and (max-width: 1280px ) {
+    .wrapper {
+        padding: 20px;
+        width: 100%;
+        margin: auto;
+    }
+}

@@ -1,0 +1,210 @@
+﻿@viewModel ViewModels.PozadavkyViewModels.ObjednavkyTvorbaViewModel, JULI_IS
+@masterPage Views/app.dotmaster
+
+<dot:Content ContentPlaceHolderID="PageContent">
+    <div class="form wrapper" Validation.Enabled="false">
+        <h1>Tvorba objednávky</h1>
+
+
+        <%--<p>
+            Vypsat
+            <dot:RadioButton Checked="{value: JenPozadavky}" CheckedValue="{value: true}"
+                             GroupName="RadioGroup" Text=" požadavky" Changed="{command: ChangeObjStyle()}" />
+
+            <dot:RadioButton Checked="{value: JenPozadavky}" CheckedValue="{value: false}"
+                             GroupName="RadioGroup" Text=" všechny položky" Changed="{command: ChangeObjStyle()}" />
+        </p>--%>
+
+
+        <%--  ------------------------------- FILTRY ------------------------------------------ --%>
+        <div class="row">
+            <div class="col-sm-2">
+                <label class="control-label">Číslo požadavku</label>
+                <dot:ComboBox DataSource="{value: ListPozadavekFullId}"
+                              SelectedValue="{value: WhereFilterPozadavek}"
+                              class="form-control"
+                              RenderSettings.Mode="Server" />
+            </div>
+
+            <div class="col-sm-2">
+                <label class="control-label">Dodavatel</label>
+                <dot:ComboBox DataSource="{value: ListDodavatele}"
+                              SelectedValue="{value: WhereFilterDodavatel}"
+                              class="form-control"
+                              RenderSettings.Mode="Server" />
+            </div>
+
+            <div class="col-sm-2">
+                <label class="control-label">Založil</label>
+                <dot:ComboBox DataSource="{value: ListZalozil}"
+                              SelectedValue="{value: WhereFilterZalozil}"
+                              class="form-control"
+                              RenderSettings.Mode="Server" />
+            </div>
+
+            <div class="col-sm-2">
+                <label class="control-label">KST</label>
+                <dot:ComboBox DataSource="{value: ListKST}"
+                              SelectedValue="{value: WhereFilterKST}"
+                              class="form-control"
+                              RenderSettings.Mode="Server" />
+            </div>
+
+            <div class="col-sm-2">
+                <label class="control-label">Datum Od:</label>
+                <div>
+                    <dot:TextBox class="form-control datetimepicker" Text="{value: DatumOd}" FormatString="dd.MM.yyyy" ValueType="DateTime" />
+                </div>
+            </div>
+
+            <div class="col-sm-2">
+                <label class="control-label">Datum Do:</label>
+                <div>
+                    <dot:TextBox class="form-control datetimepicker" Text="{value: DatumDo}" FormatString="dd.MM.yyyy" ValueType="DateTime" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-2">
+                <dot:Button class="btn btn-success col-sm-10" Text="Filtr Pozadavek" Click="{command: SetFiltr("FullPozadavekID")}" />
+            </div>
+            <div class="col-sm-2">
+                <dot:Button class="btn btn-success col-sm-10" Text="Filtr Dodavatel" Click="{command: SetFiltr("FullDodavatelName")}" />
+            </div>
+            <div class="col-sm-2">
+                <dot:Button class="btn btn-success col-sm-10" Text="Filtr Zalozil" Click="{command: SetFiltr("Zalozil")}" />
+            </div>
+            <div class="col-sm-2">
+                <dot:Button class="btn btn-success col-sm-10" Text="Filtr KST" Click="{command: SetFiltr("KST")}" />
+            </div>
+            <div class="col-sm-2">
+                <dot:Button class="btn btn-success col-sm-10" Text="Filtr Datum" Click="{command: SetFiltr("Datum")}" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-3">
+                <label class="control-label">Obsah položky:</label>
+                <div>
+                    <dot:TextBox class="form-control" Text="{value: WhereFilterPolozkaLike}" ValueType="Text" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                <dot:Button class="btn btn-success col-sm-10" Text="Filtr obsah položky" Click="{command: SetFiltr("Polozka")}" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-2">
+                <dot:RouteLink class="btn btn-warning col-sm-8" Text="Reset filtrů" RouteName="objednavkyTvorba" />
+            </div>
+        </div>
+        <hr />
+        <%--  ------------------------------- FILTRY KONEC --------------------------------- --%>
+
+        <p>Počet položek: {{value: SeznamItemsGv.PagingOptions.TotalItemsCount}}</p>
+        <br />
+        <p Visible="{value: NothingFound}"> Nenalezeny žádné požadavky! </p>
+
+        <dot:GridView DataSource="{value: SeznamItemsGv}" class="table table-bordered">
+            <Columns>
+                <!--<dot:GridViewTextColumn ValueBinding="{value: ID}" HeaderText="ID" />-->
+
+                <dot:GridViewTextColumn ValueBinding="{value: FullPozadavekID}" HeaderText="Číslo požadavku" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Stredisko}" HeaderText="KST" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Zalozil}" HeaderText="Založil" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Popis}" HeaderText="Popis položky" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Mnozstvi}" HeaderText="Ks" AllowSorting="true" FormatString="N2" />
+                <dot:GridViewTextColumn ValueBinding="{value: CelkovaCena}" HeaderText="Celková cena" AllowSorting="true" FormatString="N2"/>
+                <dot:GridViewTextColumn ValueBinding="{value: Mena}" HeaderText="Měna" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: FullDodavatelName}" HeaderText="Dodavatel" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: DatumZalozeni}" HeaderText="Datum" FormatString="d" AllowSorting="true" />
+                <!--<dot:GridViewTextColumn ValueBinding="{value: TerminDodani}" HeaderText="Termín Dodání" FormatString="d" AllowSorting="true" />-->
+                <!--tlacitko pro editaci pozadavku-->
+                <dot:GridViewTemplateColumn HeaderText="detail">
+                    <ContentTemplate>
+                        <dot:RouteLink RouteName="PozadavekEdit" Param-Id="{value: PozadavekID}">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </dot:RouteLink>
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>
+
+                <!--tlacitko pro vymazani.-->
+                <dot:GridViewTemplateColumn HeaderText="Vymazat">
+                        <ContentTemplate>
+                            <dot:LinkButton class="glyphicon glyphicon-remove" Click="{command: _parent.DeleteItem(ID)}">
+                                <PostBack.Handlers>
+                                    <dot:ConfirmPostBackHandler Message="Opravdu vymazat položku z tvorby objednavek? Položka se vrátí zpět do požadavků!" />
+                                </PostBack.Handlers>
+                            </dot:LinkButton>
+                        </ContentTemplate>
+                    </dot:GridViewTemplateColumn>
+
+                <!--tlacitko pro pridani do obj.-->
+                <dot:GridViewTemplateColumn HeaderText="přidat do obj.">
+                    <ContentTemplate>
+                        <dot:CheckBox CheckedItems="{value: _parent.SeznamCheckedItems}" CheckedValue="{value: _this}" />
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>
+
+                <dot:GridViewTemplateColumn HeaderText="Tvorba">
+                    <ContentTemplate>
+                        <dot:Button Text="Vytvořit" Click="{command: _parent.CreateObj()}" class="btn btn-sm btn-success"></dot:Button>
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>
+
+                <!--tlacitko pro filtr-->
+                <%--<dot:GridViewTemplateColumn HeaderText="FILTR">
+                            <ContentTemplate>
+                                <FilterTemplate>
+                                    <dot:ComboBox DataSource="{value: _parent.SeznamObjednavek}"
+                                                  SelectedValue="{value: _parent.SelectedObjId}" />
+                                </FilterTemplate>
+                            </ContentTemplate>
+                </dot:GridViewTemplateColumn>--%>
+
+
+            </Columns>
+        </dot:GridView>
+
+        <dot:DataPager DataSet="{value: SeznamItemsGv}" class="pagination" />
+        <br /><hr />
+
+        <dot:Button Enabled="{value: !NothingFound}" class="btn btn-primary" Text="Vytvořit objednávku" Click="{command: CreateObj()}" />
+        <dot:Button Enabled="{value: !NothingFound}" class="btn btn-primary" Text="Přidat do existující objednávky" Click="{command: AddToObj = true}" />
+
+        <div Visible="{value: AddToObj}" class="form-group">
+            <br>
+            <label class="control-label">Vyberte č. objednávky</label>
+            <div>
+                <dot:ComboBox DataSource="{value: SeznamObjednavek}"
+                              SelectedValue="{value: SelectedObjId}"
+                              ValueMember="ID"
+                              DisplayMember="FullObjednavkaID"
+                              class="form-control" />
+            </div>
+            <!--<dot:RouteLink RouteName="DodavatelEdit" Param-Id=0
+                           class="btn btn-primary ButtonSmall" Text="Přidat dodavatele">
+            </dot:RouteLink>-->
+            <br>
+            <dot:Button Enabled="{value: AddToObj}" class="btn btn-primary" Text="Přidat" Click="{command: PridatDoObj()}" />
+        </div>
+
+        <p><br></p>
+        <p>{{value: Vysledek}}</p>
+
+    </div>
+
+    <script>
+        $.datetimepicker.setLocale('cs');
+        jQuery('.datetimepicker').datetimepicker({
+            lang: 'cs',
+            timepicker: false,
+            format: 'd.m.Y'
+        });
+    </script>
+
+</dot:Content>
+

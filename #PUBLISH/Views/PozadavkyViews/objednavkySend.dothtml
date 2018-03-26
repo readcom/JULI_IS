@@ -1,0 +1,124 @@
+﻿@viewModel ViewModels.PozadavkyViewModels.objednavkySendViewModel, JULI_IS
+@masterPage Views/app.dotmaster
+
+<dot:Content ContentPlaceHolderID="PageContent">
+    <div class="form wrapper">
+        <h1>Odeslání vytvořených objednávek</h1>
+
+        <%--<p class="alert alert-info">{{value: info}}</p>--%>
+
+   
+
+        <!--<p>
+            Vypsat
+            <dot:RadioButton Checked="{value: JenPozadavky}" CheckedValue="{value: true}"
+                             GroupName="RadioGroup" Text=" požadavky" Changed="{command: ChangeObjStyle()}" />
+
+            <dot:RadioButton Checked="{value: JenPozadavky}" CheckedValue="{value: false}"
+                             GroupName="RadioGroup" Text=" všechny položky" Changed="{command: ChangeObjStyle()}" />
+        </p>-->
+
+        <%--  ------------------------------- FILTRY ------------------------------------------ --%>
+        
+       
+
+
+        <p>Počet položek: {{value: SeznamObjednavekGV.PagingOptions.TotalItemsCount}}</p>
+        <br />
+        <p Visible="{value: NothingFound}"> Nenalezeny žádné objednávky! </p>
+
+        <dot:GridView DataSource="{value: SeznamObjednavekGV}" class="table table-bordered">
+            <Columns>                                
+                
+                <%--<dot:GridViewTextColumn ValueBinding="{value: ObjednavkaFullID}" HeaderText="Číslo objednávky" AllowSorting="true" />--%>
+                <dot:GridViewTemplateColumn HeaderText="Číslo objednávky" AllowSorting="true">
+                    <ContentTemplate>
+                        <dot:RouteLink RouteName="ObjednavkaEdit" Param-Id="{value: ID}">
+                            <strong style="color:black">{{value: FullObjednavkaID}}</strong>
+                        </dot:RouteLink>
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>
+
+                <dot:GridViewTextColumn ValueBinding="{value: Datum}" HeaderText="Datum" FormatString="d" AllowSorting="true" />  
+                <dot:GridViewTextColumn ValueBinding="{value: TerminDodani}" HeaderText="Termín Dodání" FormatString="d" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: FullDodavatelName}" HeaderText="Dodavatel" AllowSorting="true" /> 
+                <dot:GridViewTextColumn ValueBinding="{value: CelkovyPopis}" HeaderText="Popis objednávky" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: CelkovaCena}" HeaderText="Celková cena" AllowSorting="true" FormatString="N2" />                
+                <dot:GridViewTextColumn ValueBinding="{value: Mena}" HeaderText="Měna" AllowSorting="true" />
+                             
+
+                <dot:GridViewTemplateColumn HeaderText="Automaticky odeslat">
+                    <ContentTemplate>
+                        <dot:LinkButton Enabled="{value: !Objednano}" class="glyphicon glyphicon-ok" Click="{command: _parent.Objednat(ID)}">
+                            <PostBack.Handlers>
+                                <dot:ConfirmPostBackHandler Message="Opravdu objednávku ODESLAT dodavateli?" />
+                            </PostBack.Handlers>
+                        </dot:LinkButton>
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>
+
+                
+                    <dot:GridViewTemplateColumn HeaderText="Neodesílat" CssClass="{value: Neodesilat == true ? 'CellColorBackground' : ''}">
+                        <ContentTemplate>
+                            <dot:LinkButton Enabled="{value: !Objednano}" class="glyphicon glyphicon-remove"
+                                            Click="{command: _parent.Neodeslat(ID)}">
+                                <PostBack.Handlers>
+                                    <dot:ConfirmPostBackHandler Message="Opravdu se objednávka NEBUDE odesílat?" />
+                                </PostBack.Handlers>
+                            </dot:LinkButton>
+                        </ContentTemplate>
+                    </dot:GridViewTemplateColumn>
+                
+
+                <dot:GridViewTemplateColumn HeaderText="Před odesláním upravit">
+                    <ContentTemplate>
+                        <dot:LinkButton Enabled="{value: !Objednano}" class="glyphicon glyphicon-edit" Click="{command: _parent.Objednat(ID, true)}">                           
+                        </dot:LinkButton>
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>
+
+                <%--<dot:GridViewTemplateColumn HeaderText="Před odesláním upravit">
+                    <ContentTemplate>
+                        <dot:LinkButton Enabled="{value: !Objednano}" class="glyphicon glyphicon-edit" Click="{command:   _parent.zmenitEmail=true}">
+                        </dot:LinkButton>
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>
+                
+                <dot:GridViewTemplateColumn Visible="{value: zmenitEmail}" HeaderText="Zvolte email">
+                    <ContentTemplate>
+                        <dot:ComboBox DataSource="{value: _parent.EmailoveAdresy}" SelectedValue="{value: _parent.vybranyEmail}" SelectionChanged="{command: _parent.Upravit(ID)}" ></dot:ComboBox>
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>--%>
+
+                <!--ukazatel stavu objednavky-->
+                <%--<dot:GridViewTemplateColumn HeaderText="Objednáno">
+                    <ContentTemplate>
+                        <dot:CheckBox Checked="{value: Objednano}" Enabled="false" />
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>--%>
+                
+               
+
+            </Columns>
+        </dot:GridView>
+
+        <dot:DataPager DataSet="{value: SeznamItemsGv}" class="pagination" />
+        <br /><hr />
+
+    
+        <p><br></p>
+        <p>{{value: Vysledek}}</p>
+    
+    </div>
+
+    <script>
+        $.datetimepicker.setLocale('cs');
+        jQuery('.datetimepicker').datetimepicker({
+            lang: 'cs',
+            timepicker: false,
+            format: 'd.m.Y'
+        });
+    </script>
+
+</dot:Content>
+

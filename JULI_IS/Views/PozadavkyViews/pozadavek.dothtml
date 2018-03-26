@@ -1,0 +1,974 @@
+﻿@viewModel ViewModels.PozadavkyViewModels.PozadavekViewModel, JULI_IS
+@masterPage Views/app.dotmaster
+
+<dot:Content ContentPlaceHolderID="PageContent">
+
+    <link href="../Style/speech-input.css" rel="stylesheet" />
+
+
+    <!--<p Visible="{value: ConfirmText != null}" class="alert alert-success">{{value: ConfirmText}}</p>-->
+    <!--<p> KST: {{value: PozadavekData.KST}}</p>
+    <p> KST vyplneno: {{value: vyplnenoKST}}</p>
+    <p> investice: {{value: PozadavekData.CisloInvestice}}</p>-->
+    <div class="form wrapper" Validation.Enabled="false" Validator.InvalidCssClass="has-error" Validator.SetToolTipText="true" Validation.Target="{value: PozadavekData}">
+        <!--Validator.InvalidCssClass="has-error" Validator.SetToolTipText="true">-->
+        <h2 class="text-center">Detail požadavku</h2>
+        <%--Enabled="{value: PozadavekData.PodpisLevel < 3}"--%>
+        <dot:Button style="float:right" class="btn btn-primary" Text="Vytisknout požadavek" Click="{command: Tisk()}" />
+        <div>
+            <span style="text-align:left"><b>Neveřejný požadavek: </b></span>
+            <dot:CheckBox Checked="{value: PozadavekData.Neverejny}" />
+
+
+            <div style="text-align:right" class="TextPodTlacitkem">Vygeneruje se PDF soubor, který se zároveň uloží mezi přiložené soubory.</div>
+        </div>
+
+        <div class="form-group">
+
+            <!--cislo, nadpis, zadatel-->
+            <div class="row">
+                <div class="form-group col-sm-2">
+                    <!--Visible="{value: !NewPozadavek}">-->
+                    <label class="control-label">Požadavek číslo</label>
+                    <div>
+                        <dot:TextBox class="form-control" Text="{value: PozadavekData.FullPozadavekID}" readonly />
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-4">
+                    <label class="control-label">Celkový popis (nadpis) požadavku</label>
+                    <div>
+                        <dot:TextBox class="speech-input form-control" lang="cs" Text="{value: PozadavekData.Popis}" />
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-3">
+                    <label class="control-label">Založil</label>
+                    <div>
+                        <dot:TextBox class="form-control" Text="{value: PozadavekData.Zalozil}" />
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-3">
+                    <label class="control-label">V zastoupení (jméno.příjmení)</label>
+                    <div>
+                        <dot:TextBox class="form-control" Text="{value: PozadavekData.Zastoupeno}" />
+                    </div>
+                </div>
+            </div>
+
+            <!--KST, celkova cena, mena, zpusob platby-->
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label class="control-label">KST (pokud je jednotné pro celý požadavek)</label>
+                    <dot:ComboBox DataSource="{value: KSTlist}"
+                                  SelectedValue="{value: PozadavekData.KST}"
+                                  ValueMember="Cislo"
+                                  DisplayMember="FullName"
+                                  EmptyItemText="Vyberte KST ..."
+                                  class="form-control"
+                                  Enabled="{value: Editovatelny}" />
+                </div>
+
+
+                <div class="form-group col-sm-4">
+                    <label class="control-label">Celková cena</label>
+                    <dot:TextBox readonly Enabled="{value: !NewPozadavek}" class="form-control" Text="{value: PozadavekData.CelkovaCena}" FormatString="N2" ValueType="Number" />
+                </div>
+
+                <div class="form-group col-sm-2">
+                    <label class="control-label">Měna</label>
+                    <dot:ComboBox DataSource="{value: MenaList}"
+                                  SelectedValue="{value: PozadavekData.Mena}" class="{value: MenaClass}"
+                                  SelectionChanged="{command: ChangeMena()}"
+                                  Enabled="{value: Editovatelny}" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-sm-2">
+                    <label class="control-label">Způsob platby</label>
+                    <div>
+                        <dot:ComboBox 
+                                      DataSource="{value: ZpusobPlatbyLst}"
+                                      SelectedValue="{value: PozadavekData.ZpusobPlatbyId}"
+                                      ValueMember="id"
+                                      DisplayMember="text"
+                                      Enabled="{value: Editovatelny}"
+                                      class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-3" Visible="{value: (PozadavekData.ZpusobPlatbyId == 20)}">
+                    <label class="control-label">Vlastní text platby</label>
+                    <dot:TextBox class="form-control" Text="{value: PozadavekData.ZpusobPlatbyText}" Type="MultiLine" />
+                </div>
+                <div class="form-group col-sm-3">
+                    <label class="control-label">Číslo nabídky</label>
+                    <dot:TextBox class="form-control" Text="{value: PozadavekData.NabidkaCislo}" />
+                </div>
+                <div class="form-group col-sm-2">
+                    <dot:CheckBox style="margin-top: 40px;" Text=" Neuvedeno" Checked="{value: NabidkaNeuvedena}" Changed="{command: NabidkaNeuvedenaCheck()}">
+                    </dot:CheckBox>
+                </div>
+     
+                <div class="form-group col-sm-3">
+                    <dot:Button id="BtnNeodesilat" style="margin-top: 40px;" Text="Objednávku neodesílat" Click="{command: Neodesilat()}"></dot:Button>
+                    
+                </div>
+            </div>
+
+            <!--dodavatele-->
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label class="control-label">Vybraný dodavatel</label>
+                    <div>
+                        <dot:TextBox class="VybrDodavatel" Text="{value: SelectedDodavatel}"
+                                     Type="MultiLine" rows="6" style="width: 100%;"
+                                     readonly></dot:TextBox>
+                    </div>
+                </div>
+                <%--</div>
+
+                <div class="row">--%>
+                <%--<div class="form-group col-sm-6">
+                    <dot:UpdateProgress>
+                        <img src="~/Imgs/default.svg" />
+                    </dot:UpdateProgress>
+                    <dot:Button Enabled="{value: Editovatelny}" class="btn btn-sm btn-success" Text="Nahrát databázi dodavatelů" Click="{command: DodavateleInit()}" />
+
+                </div>--%>
+
+                <%--<div class="form-group col-sm-3">
+                    <label class="control-label">Název dodavatele</label>
+                    <div>
+                        <dot:ComboBox 
+                                      DataSource="{value: DodavateleS21}"
+                                      SelectedValue="{value: PozadavekData.DodavatelS21ID}"
+                                      ValueMember="Id"
+                                      EmptyItemText="Zvolte dodavatele ..."
+                                      DisplayMember="NazevCislo"
+                                      class="form-control" />
+                    </div>
+                </div>--%>
+
+                <div class="form-group col-sm-3">
+                    <label class="control-label">Název dodavatele</label>
+                    <div>
+                        <bp:ComboBox DataSource="{value: DodavateleS21List}"
+                                      SelectedValue="{value: DodavatelSelected}"                                      
+                                      Placeholder="Zvolte dodavatele ..."
+                                      class="ComboBoxStyle" />
+                    </div>
+                </div>
+
+
+
+                <%--<div class="form-group col-sm-3">
+                    <label class="control-label">Číslo dodavatele</label>
+                    <div>
+                        <dot:ComboBox 
+                                      DataSource="{value: DodavateleS21ByNumb}"
+                                      SelectedValue="{value: PozadavekData.DodavatelS21ID}"
+                                      ValueMember="Id"
+                                      EmptyItemText="Zvolte dodavatele ..."
+                                      DisplayMember="CisloNazev"
+                                      class="form-control" />
+                    </div>
+                </div>--%>
+
+                <div class="form-group col-sm-6">
+                    <dot:Button Enabled="{value: Editovatelny}" class="btn btn-primary" Text="Přiřadit dodavatele k požadavku" Click="{command: LoadDodavatele(DodavatelSelected)}" />
+                    <dot:Button Enabled="{value: Editovatelny}" class="btn btn-primary" Text="Nový / Edit dodavatele" Click="{command: EditDodavatel()}" />
+                    <p class="TextPodTlacitkemAlignLeft">po výběru dodavatele klikněte na toto tlačítko pro přiřazení dodavatele k požadavku</p>
+                </div>
+
+            </div>
+
+            <%--<p> pozadavekdata.s21id:  {{value: PozadavekData.DodavatelS21ID}}</p>--%>
+
+            <!--investice, plan, konta-->
+            <hr>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="col-sm-4">
+                        <dot:RadioButton Checked="{value: PozadavekData.InvesticeNeplanovana}"
+                                         CheckedItem="{value: InvesticeVyber}" CheckedValue="{value: 1}"
+                                         Changed="{command: InvesticeChanged()}"
+                                         GroupName="investice">
+                            Modelové zařízení
+                        </dot:RadioButton>
+                    </div>
+                    <div class="col-sm-4">
+                        <dot:RadioButton Checked="{value: PozadavekData.InvesticePlanovana}"
+                                         CheckedItem="{value: InvesticeVyber}" CheckedValue="{value: 2}"
+                                         Changed="{command: InvesticeChanged()}"
+                                         GroupName="investice"
+                                         Enabled="{value: Editovatelny}">
+                            Investice
+                        </dot:RadioButton>
+                    </div>
+                    <div class="col-sm-4">
+                        <dot:RadioButton Checked="{value: PozadavekData.NakupOstatni}"
+                                         CheckedItem="{value: InvesticeVyber}" CheckedValue="{value: 3}"
+                                         Changed="{command: InvesticeChanged()}"
+                                         GroupName="investice"
+                                         Enabled="{value: Editovatelny}">
+                            Ostatní nákupy
+                        </dot:RadioButton>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="col-sm-12" Visible="{value: PozadavekData.InvesticePlanovana}">
+                        <label class="control-label">Zvolte číslo investice</label>
+                        <div>
+                            <dot:ComboBox DataSource="{value: Investice}"
+                                          SelectedValue="{value: PozadavekData.CisloInvestice}"
+                                          ValueMember="INV_NUM"
+                                          DisplayMember="CisloANazev"
+                                          class="form-control"
+                                          EmptyItemText="Zvolte číslo investice ..."
+                                          Enabled="{value: Editovatelny}" />
+                        </div>
+                    </div>
+                    <div class="col-sm-12" Visible="{value: (PozadavekData.NakupOstatni || PozadavekData.InvesticeNeplanovana)}">
+                        <label class="control-label">Zvolte konto:</label>
+                        <dot:ComboBox DataSource="{value: InvList}"
+                                      SelectedValue="{value: PozadavekData.CisloKonta}"
+                                      ValueMember="Cislo"
+                                      DisplayMember="FullName"
+                                      EmptyItemText="Zvolte číslo konta ..."
+                                      class="form-control"
+                                      Enabled="{value: Editovatelny}" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row"></div>
+
+
+            <hr><br />
+
+            <p>Počet položek: <strong>{{value: PozadavekData.PocetPolozek}}</strong></p>
+            <!--List of ITEMS-->
+            <dot:GridView DataSource="{value: SeznamItemsGridViewDataSet}" class="table table-bordered" Validation.Enabled="false">
+                <Columns>
+                    <dot:GridViewTextColumn ValueBinding="{value: ID}" HeaderText="ID" />
+                    <!--<dot:GridViewTextColumn ValueBinding="{value: CisloRadku}" HeaderText="č." AllowSorting="true" />-->
+                    <dot:GridViewTextColumn ValueBinding="{value: Popis}" HeaderText="Popis požadavku" AllowSorting="true" />
+                    <dot:GridViewTextColumn ValueBinding="{value: Jednotka}" HeaderText="Jednotka" AllowSorting="true" />
+                    <dot:GridViewTextColumn ValueBinding="{value: Mnozstvi}" HeaderText="Množství" FormatString="N2" />
+                    <dot:GridViewTextColumn ValueBinding="{value: CenaZaJednotku}" FormatString="N2" HeaderText="Jednotková cena" />
+                    <dot:GridViewTextColumn ValueBinding="{value: CelkovaCena}" HeaderText="Celková cena" FormatString="N2" />
+                    <%--<dot:GridViewTextColumn ValueBinding="{value: DatumZalozeni}" HeaderText="Datum založení" FormatString="d" AllowSorting="true" />--%>
+                    <dot:GridViewTextColumn ValueBinding="{value: TerminDodani}" HeaderText="Termín dodání" FormatString="d" AllowSorting="true" />
+                    <dot:GridViewTextColumn ValueBinding="{value: InterniPoznamka}" HeaderText="Interní poznámka" />
+
+
+                    <dot:GridViewTemplateColumn HeaderText="KST / Konto">
+                        <ContentTemplate>
+                            <dot:Literal Text="{value:  (KST + ' / ' + CisloKonta)}" />
+                        </ContentTemplate>
+                    </dot:GridViewTemplateColumn>
+
+                    <dot:GridViewTemplateColumn HeaderText="Objednávka">
+                        <ContentTemplate>
+
+                            <dot:RouteLink Text="{value: ObjednavkaFullID}" RouteName="ObjednavkaEdit" Param-Id="{value: ObjednavkaID}" />
+                            <%--<dot:LinkButton  Click="{command: _parent.LinkToPozadavek(PozadavekID)}" Text="{value: PozadavekID}" >
+
+                        </dot:LinkButton>--%>
+                        </ContentTemplate>
+                    </dot:GridViewTemplateColumn>
+                    <%--<dot:GridViewTextColumn ValueBinding="{value: ObjednavkaFullID}" HeaderText="Číslo objednávky" AllowSorting="true" />--%>
+                    <!--tlacitko pro editaci polozky-->
+
+                    <dot:GridViewTemplateColumn HeaderText="Detail">
+                        <ContentTemplate>
+                            <!--<dot:RouteLink RouteName="ItemEdit" Param-Id="{value: ID}">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </dot:RouteLink>-->
+                            <dot:LinkButton class="glyphicon glyphicon-edit" Click="{command: _parent.EditItem(ID)}">
+
+                            </dot:LinkButton>
+                        </ContentTemplate>
+                    </dot:GridViewTemplateColumn>
+                    <!--tlacitko pro smazani polozky-->
+                    <dot:GridViewTemplateColumn HeaderText="Výmaz">
+                        <ContentTemplate>
+                            <dot:LinkButton Visible="{value: _parent.Editovatelny}" class="glyphicon glyphicon-remove" Click="{command: _parent.DeleteItem(ID)}">
+                                <PostBack.Handlers>
+                                    <dot:ConfirmPostBackHandler Message="Opravdu vymazat položku z požadavku? Dojde i ke smazání připojených souborů!" />
+                                </PostBack.Handlers>
+                            </dot:LinkButton>
+                        </ContentTemplate>
+                    </dot:GridViewTemplateColumn>
+
+                </Columns>
+            </dot:GridView>
+
+            <dot:DataPager DataSet="{value: SeznamItemsGridViewDataSet}" class="pagination" Validation.Enabled="false" />
+            <br />
+
+
+            <dot:Button Enabled="{value: Editovatelny}" class="btn btn-primary" Text="Přidat položku" Click="{command: EditItem(0)}" />
+
+            <!--<dot:RouteLink RouteName="ItemEdit" Param-Id=0
+                           class="btn btn-primary" Text="Přidat položku">
+            </dot:RouteLink>-->
+            <!--END of List of ITEMS-->
+        </div>
+
+        <hr>
+
+        <!--poznamka-->
+        <div class="form-group">
+            <label class="control-label">Poznámka</label>
+            <div>
+                <dot:TextBox class="form-control speech-input" lang="cs" Text="{value: PozadavekData.Poznamka}" />
+            </div>
+        </div>
+
+        <hr />
+
+
+        <!--prehled nahranych souboru k pozadavku-->
+        <h2>Přiložené soubory:</h2>
+
+        <dot:FileUpload AllowMultipleFiles="true" UploadedFiles="{value: UploadedFiles}"
+                        UploadCompleted="{command: FilesUploadedComplete()}"
+                        UploadButtonText="Nahrát soubory (pro výběr více souborů podržte klávesu CTRL)"
+                        UploadErrorMessageText="Chyba během nahrávání souborů!"
+                        SuccessMessageText="Soubory byly v pořádku nahrány."
+                        <!--Visible="{value: Editovatelny}"-->
+                         />
+
+        <table class="table table-bordered" Validation.Enabled="false">
+            <thead>
+                <tr>
+                    <th>Jméno souboru</th>
+                    <th>Popis</th>
+                    <%--<th>Uložit popis</th>--%>
+                    <th>Vymazat soubor</th>
+                </tr>
+            </thead>
+            <dot:Repeater DataSource="{value: Files}" WrapperTagName="tbody">
+                <tr>
+                    <td><dot:RouteLink RouteName="FileDownload" Param-Id="{value: ID}" Text="{value: FileName}" /></td>
+                    <td>
+                        <dot:TextBox class="form-control" Text="{value: Description}"
+                                     ></dot:TextBox>  <%--Changed="{command:  _parent.FileDescrptChange = true}"--%>
+                    </td>
+
+                    <%--<td>
+                        <dot:LinkButton class="glyphicon glyphicon-ok" Text="" Click="{command: _parent.SaveDescription(Description, ID)}">
+                        </dot:LinkButton>
+                    </td>--%>
+
+                    <td Visible="{value: _parent.Editovatelny}">
+                        <dot:LinkButton class="glyphicon glyphicon-remove" Text="" Click="{command: _parent.DeleteFile(ID)}">
+                            <PostBack.Handlers>
+                                <dot:ConfirmPostBackHandler Message="Opravdu soubor vymazat?" />
+                            </PostBack.Handlers>
+                        </dot:LinkButton>
+                    </td>
+                </tr>
+            </dot:Repeater>
+        </table>
+
+        <hr />
+
+        <p>
+            Požadavek založen dne
+            <dot:Literal Text="{value: PozadavekData.Datum}" FormatString="d.M.yyyy H:mm" />
+            uživatelem: {{value: PozadavekData.Zalozil}}
+        </p>
+        <br />
+        <div Visible="{value: PozadavekData.Zamitnuto}">
+            <p> Požadavek byl ZAMÍTNUT!</p>
+            <p>
+                Dne:
+                <dot:Literal Text="{value: PozadavekData.ZamitnutoDne}" FormatString="d.M.yyyy H:mm" />
+            </p>
+            <p>
+                Důvod:
+                <dot:Literal Text="{value: PozadavekData.DuvodZamitnutiText}" />
+            </p>
+            <p> Požadavek můžete poslat znovu na schválení!</p>
+            <hr />
+        </div>
+
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <p>
+                        <b>Odesláno ke schválení: </b>
+                        {{value: PozadavekData.Level1Odeslano ? "Odesláno": "Neodesláno"}}
+                    </p>
+                    <div Visible="{value: PozadavekData.Level1Odeslano}">
+                        <p>Schvalovatel: {{value: PozadavekData.Level1OdeslanoJmeno}}</p>
+                        <p>
+                            Dne:
+                            <dot:Literal Text="{value: PozadavekData.Level1OdeslanoDne}" FormatString="d.M.yyyy H:mm" />
+                        </p>
+
+                    </div>
+                </div>
+                <div class="form-group col-sm-4" Visible="{value: PozadavekData.Level1Schvaleno}">
+
+                    <p>
+                        <b>Podepsáno vedoucím: </b>
+                        {{value: PozadavekData.Level1Schvaleno ? "Podepsáno": "Nepodepsáno"}}
+                    </p>
+                    <p>Jméno: {{value: PozadavekData.Level1SchvalovatelJmeno}}</p>
+                    <p>
+                        Datum:
+                        <dot:Literal Text="{{value: PozadavekData.Level1SchvalenoDne}}" FormatString="d.M.yyyy H:mm" />
+                    </p>
+
+
+
+                </div>
+                <div class="form-group col-sm-4" Visible="{value: PozadavekData.Level2Schvaleno}">
+                    <p>
+                        <b>
+                            Podepsáno ředitel nebo controling a odesláno na objednání:<b>
+                                {{value: PozadavekData.Level2Schvaleno ? "ANO": "NE"}}
+                    </p>
+                    <p>Jméno: {{value: PozadavekData.Level2SchvalovatelJmeno}}</p>
+                    <p>
+                        Datum:
+                        <dot:Literal Text="{{value: PozadavekData.Level2SchvalenoDne}}" FormatString="d.M.yyyy H:mm" />
+                    </p>
+
+
+                </div>
+
+            </div>
+
+
+
+                <div Visible="{value: PozadavekData.Level3Schvaleno}">
+                    <p><b>Vytvořena objednávka:<b> {{value: PozadavekData.Level3Schvaleno ? "Vytvořena": "Nevytvořena"}} </p>
+                    <p>Jméno: {{value: PozadavekData.Level2SchvalovatelJmeno}}</p>
+                    <p>
+                        Datum:
+                        <dot:Literal Text="{{value: PozadavekData.Level2SchvalenoDne}}" FormatString="d.M.yyyy H:mm" />
+                    </p>
+
+
+                </div>
+            <hr />
+
+                <!--<h2>Objednáno:</h2>
+        <p> {{value: PozadavekData.Level1Schvaleno ? "Podepsáno": "Nepodepsáno"}}</p>
+        <p Visible="{value: PozadavekData.Level1Schvaleno}">Jméno: {{value: PozadavekData.Level1SchvalovatelID}}</p>
+        <p Visible="{value: PozadavekData.Level1Schvaleno}">Datum: {{value: PozadavekData.Level1SchvalenoDne}}</p>
+        <hr />
+        <h2>Podepsáno vedoucím nákupu:</h2>
+        <p> {{value: PozadavekData.Level3Schvaleno ? "Podepsáno": "Nepodepsáno"}}</p>
+        <p Visible="{value: PozadavekData.Level3Schvaleno}">Jméno: {{value: PozadavekData.Level3SchvalovatelID}}</p>
+        <p Visible="{value: PozadavekData.Level3Schvaleno}">Datum: {{value: PozadavekData.Level3SchvalenoDne}}</p>-->
+                <!--<dot:ValidationSummary IncludeErrorsFromChildren="true" />-->
+                <!--ulozeni a schvaleni pozadavku-->
+                <div class="text-center">
+                    <dot:Button Enabled="{value: Editovatelny}" class="btn btn-primary" Text="Uložit" Click="{command: SavePozadavek()}" />
+                    <dot:RouteLink Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-default" Text="Zrušit" RouteName="Default" />
+
+                    <dot:Button Visible="{value: !PozadavekData.Level1Odeslano}" class="btn btn-warning scrolldown" Text="Odeslat požadavek na schválení" Click="{command: Instance1Pripravit()}" />
+
+
+                    <dot:Button Visible="{value: ZrusitelnyPodpis}" class="btn btn-danger" Text="Vrátit podpisy (vrácení požadavku)" Click="{command: ZrusitPodpisyPotvrzeni()}" />
+                    <div Visible="{value: OdeslatNaSchvaleni}" style="float:right;margin-right: 34%;">
+
+                        <label class="control-label">Prosím vyberte vedoucího pro schválení požadavku:</label>
+                        <div>
+                            <dot:ComboBox DataSource="{value: Schvalovatele}"
+                                          SelectedValue="{value: PozadavekData.SchvalovatelID}"
+                                          ValueMember="ID"
+                                          DisplayMember="Jmeno"
+                                          class="form-control" />
+                        </div> <br />
+
+                        <dot:Button Visible="{value: OdeslatNaSchvaleni}" class="btn btn-warning" Text="Odeslat" Click="{command: OdeslatNaPodpis(PozadavekData.PodpisLevel+1)}" />
+
+                    </div>
+
+                    <%--<dot:Button Visible="{value: Podepsatelny}" class="btn btn-success" Text="Požadavek schválit (podepsat)" Click="{command: PozadavekPodepsat()}" />--%>
+                    <dot:Button Visible="{value: Podepsatelny}" class="btn btn-success" Text="Požadavek schválit (podepsat)" Click="{command: PozadavekPodepsat()}" />
+                </div>
+
+                <%--<dot:Button class="btn btn-primary" Text="podpis" Click="{command: PozadavekPodepsat()}" />--%>
+    </div>
+
+    <!--modalni okno - detail polozky-->
+    <div class="modal fade" ID="item-detail" role="dialog" data-id="item-detail" Validator.InvalidCssClass="has-error" Validator.SetToolTipText="true" Validation.Enabled="false" Validation.Target="{value: ItemData}">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+                    <h4 class="modal-title">Detail položky požadavku: {{value: ItemData.FullPozadavekID}}</h4>
+                    <p style="float:left">Celkový počet položek současného požadavku: <strong>{{value: PozadavekData.PocetPolozek}}</strong></p>
+                    <p style="float:right">
+                        Vytvořil: <strong>{{value: PozadavekData.Zalozil}}</strong>
+                        dne
+                        <dot:Literal Text="{{value: ItemData.DatumZalozeni}}" FormatString="d.M.yyyy H:mm" />
+                    </p>
+                </div>
+                <div class="modal-body">
+                    <p Visible="{value: ConfirmText != null}" class="alert alert-success">{{value: ConfirmText}}</p>
+                    <p Visible="{value: AlertText != null}" class="alert alert-danger">{{value: AlertText}}</p>
+
+                    <div class="row">
+                        <div class="form-group col-sm-12">
+                            <label class="control-label">Popis</label>
+                            <dot:TextBox class="form-control speech-input" ID="txtItemPopis" Text="{value: ItemData.Popis}"
+                                         Type="MultiLine" lang="cs" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-sm-2" Validator.Value="{value: ItemData.Jednotka}">
+                            <label class="control-label">Jednotka</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: ItemData.Jednotka}" required="required" Changed="{command: ClearAlerts()}" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">Množství</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: ItemData.Mnozstvi}" Changed="{command: Prepocitat()}" ValueType="Number" FormatString="N2" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <label class="control-label">Cena za jednotku</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: ItemData.CenaZaJednotku}" Changed="{command: Prepocitat()}" ValueType="Number" FormatString="N2" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <label class="control-label">Celková cena</label>
+                            <div>
+                                <dot:TextBox readonly class="form-control" Text="{value: CelkovaCenaMena}" />
+                            </div>
+                        </div>
+                        <!--<div class="form-group col-sm-2">
+                            <label class="control-label">Měna</label>
+                            <div>
+                                <dot:ComboBox DataSource="{value: MenaList}"
+                                              SelectedValue="{value: ItemData.Mena}" class="form-control" />
+
+                            </div>
+                        </div>-->
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">Termín dodání</label>
+                            <div>
+                                <dot:TextBox class="form-control datetimepicker" Text="{value: ItemData.TerminDodani}" FormatString="dd.MM.yyyy" ValueType="DateTime" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label class="control-label">KST</label>
+                            <!--<div Validator.Value="{value: ItemData.KST}">-->
+                            <dot:ComboBox DataSource="{value: KSTlist}"
+                                          SelectedValue="{value: ItemData.KST}"
+                                          ValueMember="Cislo"
+                                          DisplayMember="FullName"
+                                          EmptyItemText="Vyberte KST ..."
+                                          class="form-control"
+                                              <!--SelectionChanged="{command: ChangedKST()}"-->
+                                              />
+                        </div>
+
+
+                        <div class="col-sm-3">
+                            <label class="control-label">Typ investice</label>
+                            <div>
+                                <dot:RadioButton Checked="{value: ItemData.InvesticeNeplanovana}"
+                                                 CheckedItem="{value: InvesticeVyber}" CheckedValue="{value: 1}"
+                                                 Changed="{command: InvesticeItemChanged()}"
+                                                 GroupName="ItemInvestice">
+                                    Modelové zařízení
+                                </dot:RadioButton>
+                                <dot:RadioButton Checked="{value: ItemData.InvesticePlanovana}"
+                                                 CheckedItem="{value: InvesticeVyber}" CheckedValue="{value: 2}"
+                                                 Changed="{command: InvesticeItemChanged()}"
+                                                 GroupName="ItemInvestice">
+                                    Plánovaná investice &emsp;
+                                </dot:RadioButton>
+                                <dot:RadioButton Checked="{value: ItemData.NakupOstatni}"
+                                                 CheckedItem="{value: InvesticeVyber}" CheckedValue="{value: 3}"
+                                                 Changed="{command: InvesticeItemChanged()}"
+                                                 GroupName="ItemInvestice">
+                                    Ostatní nákupy
+                                </dot:RadioButton>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-5" Visible="{value: ItemData.InvesticePlanovana}">
+                            <label class="control-label">Zvolte číslo investice</label>
+                            <div>
+                                <dot:ComboBox DataSource="{value: Investice}"
+                                              SelectedValue="{value: ItemData.CisloInvestice}"
+                                              ValueMember="INV_NUM"
+                                              DisplayMember="CisloANazev"
+                                              class="form-control"
+                                              EmptyItemText="Zvolte číslo investice ..." />
+                            </div>
+                        </div>
+                        <div class="col-sm-5" Visible="{value: (ItemData.NakupOstatni || ItemData.InvesticeNeplanovana)}">
+                            <label class="control-label">Zvolte konto:</label>
+                            <dot:ComboBox DataSource="{value: InvList}"
+                                          SelectedValue="{value: ItemData.CisloKonta}"
+                                          ValueMember="Cislo"
+                                          DisplayMember="FullName"
+                                          EmptyItemText="Zvolte číslo konta ..."
+                                          class="form-control" />
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">Interní poznámka</label>
+                                <div>
+                                    <dot:TextBox class="form-control" Text="{value: ItemData.InterniPoznamka}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="form-group col-sm-3">
+                            <label class="control-label">Číslo nabídky &nbsp;</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: ItemData.NabidkaCislo}" />
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-4">
+                            <label class="control-label">Poptány nejméně tři společnosti? &nbsp;</label>
+                            <dot:CheckBox Checked="{value: ItemData.Poptany3Firmy}" />
+                            ANO
+                            <%--<span Visible="{value: ItemData.Poptany3Firmy}"> ANO</span>--%>
+                            <dot:CheckBox Checked="{value: !ItemData.Poptany3Firmy}" />
+                            NE
+                        </div>
+                        <div class="form-group col-sm-5">
+                            <label class="control-label">Zdůvodnění</label>
+                            <div>
+                                <dot:ComboBox DataSource="{value: ItemData.Poptany3Firmy ? DuvodyPoptavky : DuvodyNepoptani}"
+                                              SelectionChanged="{command: DuvodChange()}"
+                                              SelectedValue="{value: ItemData.DuvodID}"
+                                              ValueMember="ID"
+                                              DisplayMember="Text"
+                                              class="form-control" />
+
+
+                                <div Visible="{value: JinyDuvod}">
+                                    <p><br>Prosím popište důvod:</p>
+                                    <dot:TextBox class="form-control" Text="{value: ItemData.Duvod}" />
+                                </div>
+                            </div>
+                            <p Visible="{value: DuvodHvezdicka}"><span style="color: red"> * </span>Jiný materiál nebo systém jiného Dodavatel by byly pro JULI Motorenwerk zcela nevyhovující a nekompatibilní z pohledu již zavedené současné i budoucí výroby nebo provozu JULI Motorenwerk</p>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <hr />
+                        <!--<dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-primary" Text="Přidat položku" Click="{command: AddItem()}" />-->
+                        <!--<dot:RouteLink class="btn btn-default" Text="Zrušit" RouteName="PozadavekEdit" Param-Id="{value: ItemData.PozadavekID}" />-->
+
+                        <dot:Button Enabled="{value: (ZbytekRozuctovani == 0)}" class="btn btn-default" Click="{command: CloseModal("item-detail")}" Text="Ukončit" />
+                        <dot:Button Enabled="{value: (Editovatelny && !Rozuctovani)}" class="btn btn-primary" Text="Uložit" Click="{command: SaveItem()}" />
+                        <dot:Button Enabled="{value: (Editovatelny && !Rozuctovani)}" class="btn btn-primary" Text="{value: SaveButtonText}" Click="{command: SaveItemAndNew()}" />
+
+                        <dot:TextBox Visible="{value: Editovatelny}" ID="RozuctovatTxtBox" Text="{value: RozuctovatItems}" ValueType="Number" FormatString="N2" />
+                        <dot:Button Visible="{value: Editovatelny}" class="btn btn-warning" Text="Rozúčtovat" Click="{command: Rozuctovat()}" />
+                        <p Visible="{value: Editovatelny}" class="TextPodTlacitkemItem">zadejte množství, které patří k této položce, ze zbylého množství bude vytvořena nová položka</p>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <!--<p Visible="{value: ConfirmText != null}" class="alert alert-success">{{value: ConfirmText}}</p>-->
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--modalni okno - detail dodavatele-->
+    <div class="modal fade" ID="dodavatel-detail" role="dialog" data-id="dodavatel-detail" Validation.Enabled="false" Validator.InvalidCssClass="has-error" Validator.SetToolTipText="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Detail dodavatele</h4>
+                </div>
+                <div class="modal-body">
+                    <p Visible="{value: ConfirmText != null}" class="alert alert-success">{{value: ConfirmText}}</p>
+                    <p Visible="{value: AlertText != null}" class="alert alert-danger">{{value: AlertText}}</p>
+
+
+                    <div class="row">
+                        <div class="form-group col-sm-5">
+                            <label class="control-label">Název dodavatele</label>
+                            <div>                  
+                                    <bp:ComboBox DataSource="{value: DodavateleS21List}"
+                                                 SelectedValue="{value: DodavatelSelected}"
+                                                 Placeholder="Zvolte dodavatele ..."
+                                                 class="ComboBoxStyle" />
+                            </div>
+
+                              
+
+                              
+            
+                            <!--<dot:RouteLink RouteName="DodavatelEdit" Param-Id=0
+                                           class="btn btn-primary ButtonSmall" Text="Přidat dodavatele">
+                            </dot:RouteLink>-->
+                        </div>
+
+                        <%--<div class="col-sm-2"> </div>
+
+                        <div class="form-group col-sm-5">
+                            <label class="control-label">Číslo dodavatele</label>
+                            <div>
+                                <dot:ComboBox 
+                                              DataSource="{value: DodavateleS21ByNumb}"
+                                              SelectedValue="{value: PozadavekData.DodavatelS21ID}"
+                                              ValueMember="Id"
+                                              EmptyItemText="Zvolte dodavatele ..."
+                                              DisplayMember="CisloNazev"
+                                              class="form-control" />
+                            </div>                            
+                        </div>--%>
+                    </div>
+
+                    <div>
+                        <dot:Button class="btn btn-primary" Text="Načíst dodavatele z S21" Click="{command: LoadDodavatele(DodavatelSelected, true)}" />
+                        <dot:Button class="btn btn-primary" Text="Nový dodavatel" Click="{command: DodavatelReset()}" />
+                    </div>
+
+                    <hr>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label class="control-label">Název dodavatele</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: DodavatelS21.SNAM05}" />
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">Číslo dodavatele</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: DodavatelS21.SUPN05}" />
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">Měna</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: DodavatelS21.CURN05}" />
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">Kód země</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: DodavatelS21.COCD05}" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-5 mycontent-left">
+                            <label class="control-label">Ulice</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: DodavatelS21.SAD105}" />
+                            </div>
+                        </div>
+
+                        <!--<div class="col-sm-2">
+                        </div>-->
+
+                        <div class="col-sm-5">
+                            <label class="control-label">Kontaktní osoba</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: (Osoba.CNTN1A + (Osoba.GTX11A == "" ? "" : (' (' + Osoba.GTX11A + ')')))}" />   <!--jmeno-->
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5 mycontent-left">
+                            <label class="control-label">Ulice / Město</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: DodavatelS21.SAD205}" />
+                            </div>
+                        </div>
+
+                        <!--<div class="col-sm-2">
+                        </div>-->
+
+                        <div class="col-sm-5">
+                            <label class="control-label">Společnost</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: Osoba.CRNM1A}" /> <!--firma-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5 mycontent-left">
+                            <label class="control-label">Ulice / Město</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: DodavatelS21.SAD305}" />
+                            </div>
+                        </div>
+
+                        <!--<div class="col-sm-2">
+                        </div>-->
+
+                        <div class="col-sm-5">
+                            <label class="control-label">Telefon</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: Osoba.OFNB1A}" /> <!--telefon-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label class="control-label">Město</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: DodavatelS21.SAD405}" />
+                            </div>
+                        </div>
+
+                        <!--<div class="col-sm-2">
+                        </div>-->
+
+                        <div class="col-sm-5">
+                            <label class="control-label">Fax</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: Osoba.PFNB1A}" />  <!--fax-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label class="control-label">Město</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: DodavatelS21.SAD505}" />
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <div>
+                                <label class="control-label">Email</label>
+                                <dot:TextBox class="form-control" Text="{value: Osoba.EMIL1A}" />  <!--email-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="control-label">PSČ</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: DodavatelS21.PSC}" />
+                            </div>
+                        </div>
+
+                        <div class="col-sm-5 col-sm-offset-2">
+                            <div>
+                                <label class="control-label">Email dodavatele</label>
+                                <dot:TextBox class="form-control" Text="{value: DodavatelS21.WURL05}" />  <!--email-->
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+
+                    <div class="text-center">
+                        <!--<dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-primary" Text="Přidat položku" Click="{command: AddItem()}" />-->
+                        <!--<dot:RouteLink class="btn btn-default" Text="Zrušit" RouteName="PozadavekEdit" Param-Id="{value: ItemData.PozadavekID}" />-->
+                        <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-primary" Text="Uložit" Click="{command: SaveDodavatelModal()}" />
+                        <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-default" Click="{command: CloseModal("dodavatel-detail")}" Text="Zrušit" />
+                    </div>
+                    <!--<br />-->
+                    <!--<p Visible="{value: ConfirmText != null}" class="alert alert-success">{{value: ConfirmText}}</p>
+                    <p Visible="{value: AlertText != null}" class="alert alert-danger">{{value: AlertText}}</p>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--modalni okno - potvrzeni-->
+    <div class="modal fade" ID="confirm" role="dialog" data-id="confirm" Validation.Enabled="false" Validator.InvalidCssClass="has-error" Validator.SetToolTipText="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Potvrzení</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <p Visible="{value: ConfirmText != null}" class="alert alert-success">{{value: ConfirmText}}</p>
+                    <p Visible="{value: AlertText != null}" class="alert alert-danger">{{value: AlertText}}</p>
+
+
+                    <p><strong>POŽADAVEK JE UŽ ODESLÁN NEBO TAKÉ PODEPSÁN!!</strong></p>
+                    <p>Uložením požadavku přestane platit jeho schválení a bude nutné ho odeslat znovu na podpis!</p>
+                    <p>Opravdu požadavek uložit?</p>
+
+                </div>
+                <div class="modal-footer">
+
+                    <div class="text-center">
+                        <!--<dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-primary" Text="Přidat položku" Click="{command: AddItem()}" />-->
+                        <!--<dot:RouteLink class="btn btn-default" Text="Zrušit" RouteName="PozadavekEdit" Param-Id="{value: ItemData.PozadavekID}" />-->
+                        <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-primary" Text="Uložit" Click="{command: ZrusitPodpisy()}" />
+                        <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-default" Text="Zrušit" Click="{command: CloseModal("confirm")}" />
+                        <!--<dot:RouteLink RouteName="PozadavekEdit" Param-Id="{value: PozadavekData.ID}">
+                           class="btn btn-primary" Text="Přidat položku">
+                        </dot:RouteLink>-->
+
+                    </div>
+                    <!--<br />-->
+                    <!--<p Visible="{value: ConfirmText != null}" class="alert alert-success">{{value: ConfirmText}}</p>
+                    <p Visible="{value: AlertText != null}" class="alert alert-danger">{{value: AlertText}}</p>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $.datetimepicker.setLocale('cs');
+        jQuery('.datetimepicker').datetimepicker({
+            lang: 'cs',
+            timepicker: false,
+            format: 'd.m.Y'
+        });
+    </script>
+
+    <script>
+        $(".scrolldown").click(function() {
+            $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+            return false;
+        });
+    </script>
+
+    <script src="../Scripts/speech-input.js"></script>
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    <%--<dot:RequiredResource Name="bootstrap" />--%>
+
+</dot:Content>
+

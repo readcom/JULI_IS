@@ -1,0 +1,23 @@
+﻿@viewModel ViewModels.PozadavkyViewModels.logout, JULI_IS
+@masterPage Views/app.dotmaster
+
+<dot:Content ContentPlaceHolderID="PageContent">
+
+
+    <script type="text/javascript">
+
+        try {
+            document.execCommand("ClearAuthenticationCache");
+            //window.location.href = window.location.protocol.replace(/\:/g, '') + "://" + window.location.host + "/_layouts/customlogin14.aspx";
+        }
+        catch (e) { }
+
+        window.open('', '_self', '');
+        window.close();
+
+     </script>
+
+    <h1>PROSÍM ZAVŘETE OKNO PROHLÍŽEČE!!</h1>
+
+</dot:Content>
+

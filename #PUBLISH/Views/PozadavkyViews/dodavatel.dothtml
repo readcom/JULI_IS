@@ -1,0 +1,80 @@
+﻿@viewModel ViewModels.PozadavkyViewModels.DodavatelViewModel, JULI_IS
+@masterPage Views/app.dotmaster
+
+<dot:Content ContentPlaceHolderID="PageContent">
+
+    <h2 class="text-center">Detail Dodavatel</h2>
+    <div class="form wrapper">
+
+        <div class="form-group">
+            <label class="control-label">JULI číslo:</label>
+            <div>
+                <dot:TextBox class="form-control" Text="{value: DodavatelData.JULINumber}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Název Dodavatel:</label>
+            <div>
+                <dot:TextBox class="form-control" Text="{value: DodavatelData.Nazev}" />
+            </div>
+        </div>
+
+         <div class="form-group">
+            <label class="control-label">Adresa - řádek 1:</label>
+            <div>
+                <dot:TextBox class="form-control" Text="{value: DodavatelData.Adresa}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Adresa - řádek 2:</label>
+            <div>
+                <dot:TextBox class="form-control" Text="{value: DodavatelData.Adresa2}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Adresa - řádek 3:</label>
+            <div>
+                <dot:TextBox class="form-control" Text="{value: DodavatelData.Adresa3}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Adresa - dodatek:</label>
+            <div>
+                <dot:TextBox class="form-control" Text="{value: DodavatelData.AdresaDodatek}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Měna:</label>
+            <div>
+                <dot:TextBox class="form-control" Text="{value: DodavatelData.Mena}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Země:</label>
+            <div>
+                <dot:TextBox class="form-control" Text="{value: DodavatelData.Zeme}" />
+            </div>
+        </div>
+      
+        <div class="form-group">
+            <label class="control-label">Telefon:</label>
+            <div>
+                <dot:TextBox class="form-control" Text="{value: DodavatelData.Telefon}" />
+            </div>
+        </div>
+
+    </div>
+    
+    <div class="text-center">
+        <dot:Button class="btn btn-primary" Text="Save" Click="{command: Save()}" />        
+        <dot:RouteLink class="btn btn-default" Text="Cancel" RouteName="Default" />
+    </div>
+
+</dot:Content>
+

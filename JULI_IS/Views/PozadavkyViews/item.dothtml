@@ -1,0 +1,247 @@
+﻿@viewModel ViewModels.PozadavkyViewModels.ItemViewModel, JULI_IS
+@masterPage Views/app.dotmaster
+
+<dot:Content ContentPlaceHolderID="PageContent">
+    
+    <h2 class="text-center">Detail položky požadavku: {{value: ItemData.FullPozadavekID}}</h2>
+
+    <div class="form wrapper">
+  
+            <div class="row">
+                <div class="form-group col-sm-12">
+                    <label class="control-label">Popis</label>
+                    <dot:TextBox class="form-control" Text="{value: ItemData.Popis}" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-sm-2">
+                    <label class="control-label">Jednotka</label>
+                    <div>
+                        <dot:TextBox class="form-control" Text="{value: ItemData.Jednotka}" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label class="control-label">Cena za jednotku</label>
+                    <div>
+                        <dot:TextBox class="form-control" Text="{value: ItemData.CenaZaJednotku}" Changed="{command: Prepocitat()}" ValueType="Number" FormatString="N2" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label class="control-label">Množství</label>
+                    <div>
+                        <dot:TextBox class="form-control" Text="{value: ItemData.Mnozstvi}" Changed="{command: Prepocitat()}" ValueType="Number" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label class="control-label">Celková cena</label>
+                    <div>
+                        <dot:TextBox readonly class="form-control" Text="{value: ItemData.CelkovaCena}" FormatString="N2" ValueType="Number" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label class="control-label">Měna</label>
+                    <div>
+                        <dot:ComboBox DataSource="{value: MenaList}"
+                                      SelectedValue="{value: ItemData.Mena}" class="form-control" />
+
+                    </div>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label class="control-label">Termín dodání</label>
+                    <div>
+                        <dot:TextBox id="datetimepicker" class="form-control" Text="{value: ItemData.TerminDodani}" FormatString="d" ValueType="DateTime" Type="Date" />                        
+                    </div>
+                </div>
+             </div>
+
+
+
+            <!--<div class="form-group">
+        <label class="control-label">Dodavatel</label>
+        <div>
+            <dot:ComboBox DataSource="{value: Dodavatel}"
+                          SelectedValue="{value: ItemData.DodavatelID}"
+                          ValueMember="ID"
+                          DisplayMember="Nazev"
+                          class="form-control" />
+        </div>
+        <dot:RouteLink RouteName="DodavatelEdit" Param-Id=0
+                       class="btn btn-primary ButtonSmall" Text="Přidat Dodavatel">
+        </dot:RouteLink>-->
+            <!--<dot:Button Click="{command: PridatDodavatel()}"
+        class="btn btn-primary ButtonSmall" Text="Přidat"></dot:Button>-->
+            <!--</div>-->
+            <!--<div class="form-group">
+            <label class="control-label">Datum objednání</label>
+            <div>
+                <dot:TextBox class="form-control" Text="{value: ItemData.DatumObjednani}" FormatString="d" ValueType="DateTime" Type="Date" />
+            </div>
+        </div>-->
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="control-label">Interní poznámka</label>
+                        <div>
+                            <dot:TextBox class="form-control" Text="{value: ItemData.InterniPoznamka}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label">Poptány nejméně tři společnosti? &nbsp;</label>
+                        <dot:CheckBox Checked="{value: ItemData.Poptany3Firmy}" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Zdůvodnění</label>
+                        <div>
+                            <dot:ComboBox DataSource="{value: ItemData.Poptany3Firmy ? DuvodyPoptavky : DuvodyNepoptani}"
+                                          SelectionChanged="{command: DuvodChange()}"
+                                          SelectedValue="{value: ItemData.DuvodID}"
+                                          ValueMember="ID"
+                                          DisplayMember="Text"
+                                          class="form-control" />
+
+
+                            <div Visible="{value: JinyDuvod}">
+                                <p><br>Prosím popište důvod:</p>
+                                <dot:TextBox class="form-control" Text="{value: ItemData.Duvod}" />
+                            </div>
+                        </div>
+                        <p Visible="{value: DuvodHvezdicka}"><span style="color: red"> * </span>Jiný materiál nebo systém jiného Dodavatel by byly pro JULI Motorenwerk zcela nevyhovující a nekompatibilní z pohledu již zavedené současné i budoucí výroby nebo provozu JULI Motorenwerk</p>
+                    </div>
+
+
+
+                <!--prehled nahranych souboru k pozadavku-->
+                <!--<div class="wrapper">
+                    <h2>Přiložené soubory:</h2>
+
+                    <dot:FileUpload AllowMultipleFiles="true" UploadedFiles="{value: UploadedFiles}"
+                                    UploadCompleted="{command: FilesUploadedComplete()}"
+                                    UploadButtonText="Nahrát soubory (pro výběr více souborů podržte klávesu CTRL)"
+                                    SuccessMessageText="Soubory byly v pořádku nahrány." />
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Jméno souboru</th>
+                                <th>Popis</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <dot:Repeater DataSource="{value: Files}" WrapperTagName="tbody">
+                            <tr>
+                                <td><dot:RouteLink RouteName="FileDownload" Param-Id="{value: ID}" Text="{value: FileName}" /></td>
+                                <td>
+                                    <dot:TextBox class="form-control" Text="{value: Description}"
+                                                 Changed="{command:  _parent.FileDescrptChange = true}"></dot:TextBox>
+                                </td>
+                                <td>
+                                    <div>
+                                        <dot:LinkButton class="glyphicon glyphicon-remove" Text="" Click="{command: _parent.DeleteFile(ID)}">
+         
+                                            <PostBack.Handlers>
+                                                <dot:ConfirmPostBackHandler Message="Opravdu soubor vymazat?" />
+                                            </PostBack.Handlers>
+                                        </dot:LinkButton>
+                                    </div>
+                                </td>
+                            </tr>
+                        </dot:Repeater>
+                    </table>-->
+
+
+                    <!--tlacitka pro pridani souboru-->
+                    <div class="text-center">                        
+                        <!--<dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-primary" Text="Přidat položku" Click="{command: AddItem()}" />-->
+
+                        <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-primary" Text="Uložit" Click="{command: Save()}" />
+                        <dot:RouteLink class="btn btn-default" Text="Zrušit" RouteName="PozadavekEdit" Param-Id="{value: ItemData.PozadavekID}" />
+
+
+                        <!--<dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-primary" Text="Odeslat požadavek na schválení" Click="{command: Instance1Pripravit()}" />
+                    <div Visible="{value: OdeslatNaSchvaleni}">
+                        <p><br></p>
+                        <label class="control-label">Prosím vyberte vedoucího pro schválení požadavku:</label>
+                        <div>
+                            <dot:ComboBox DataSource="{value: Schvalovatele}"
+                                          SelectedValue="{value: ItemData.Level1SchvalovatelID}"
+                                          ValueMember="ID"
+                                          DisplayMember="Jmeno"
+                                          class="form-control" />
+                        </div>
+                        <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-primary" Text="Odeslat" Click="{command: Instance1Odeslat()}" />
+                    </div>
+                    <p>{{value: Vysledek}}</p>-->
+
+                    </div>
+                </div>
+                <!--
+            <!-- user detail popup
+            <div class="modal fade" tabindex="-1" role="dialog" data-id="user-detail">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title"><span class="glyphicon glyphicon-user"></span> User Details</h4>
+                        </div>
+                        <div class="modal-body">
+                            1
+                            <div class="alert alert-danger" Visible="{value: UserAlertText != null}">{{value: UserAlertText}}</div>
+                            <form class="settings-form form-horizontal" >
+
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">User Role</label>
+                                    <div class="col-md-8">
+                                        <label class="radio-inline">
+                                            <dot:RadioButton CheckedValue="User" />
+                                            User
+                                        </label>
+                                        <label class="radio-inline">
+                                            <dot:RadioButton  CheckedValue="Admin" />
+                                            Admin
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="pull-left">
+                                <dot:LinkButton Text="Delete User">
+                                    <PostBack.Handlers>
+                                        <dot:ConfirmPostBackHandler Message="Do you really want to remove this user?" />
+                                    </PostBack.Handlers>
+                                </dot:LinkButton>
+                            </div>
+                            <dot:Button class="btn btn-primary" ButtonTagName="button">
+                                <span class="glyphicon glyphicon-floppy-disk"></span> Save Changes
+                            </dot:Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <dot:RequiredResource Name="bootstrap" />
+            <dot:RequiredResource Name="bootstrap-confirm" />
+            <dot:RequiredResource Name="autoHideAlert" />
+            -->
+
+
+    <script>
+        $.datetimepicker.setLocale('cs');
+        jQuery('#datetimepicker').datetimepicker({
+            lang: 'cs',
+            timepicker: false,
+            format: 'd.m.Y'
+        });
+    </script>
+    <dot:RequiredResource Name="bootstrap" />
+</dot:Content>
+

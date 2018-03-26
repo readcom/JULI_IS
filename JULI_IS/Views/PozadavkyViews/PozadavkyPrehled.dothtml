@@ -1,0 +1,87 @@
+﻿@viewModel ViewModels.PozadavkyViewModels.PozadavkyPrehledViewModel, JULI_IS
+@masterPage Views/app.dotmaster
+
+
+<dot:Content ContentPlaceHolderID="PageContent">
+    <div class="form-group wrapper">
+        <h1>Celkový přehled požadavků</h1>
+        <p>
+            Vypsat požadavky pouze pro
+            <dot:RadioButton Checked="{value: CurrentUserOnly}" CheckedValue="{value: true}"
+                             GroupName="RadioGroup" Text=" aktuálního uživatele" Changed="{command: ChangeCurrentUser()}" 
+                             Validation.Enabled="false"
+                             />
+
+            <dot:RadioButton Checked="{value: CurrentUserOnly}" CheckedValue="{value: false}"
+                             GroupName="RadioGroup" Text=" všechny" Changed="{command: ChangeCurrentUser()}" 
+                             Validation.Enabled="false"
+                             />
+        </p>
+
+       
+        <p>Pocet pozadavku: {{value: SeznamPozadavkuGV.PagingOptions.TotalItemsCount}}</p>
+        <br />
+        <p Visible="{value: NothingFound}"> Nenalezeny žádné požadavky! </p>
+
+
+        <dot:GridView DataSource="{value: SeznamPozadavkuGV}" class="table table-bordered">
+            <Columns>                
+               
+                <dot:GridViewTemplateColumn HeaderText="Číslo požadavku" AllowSorting="true">
+                    <ContentTemplate>
+                        <dot:RouteLink RouteName="PozadavekEdit" Param-Id="{value: ID}">
+                            <strong style="color:black">{{value: (FullPozadavekID  == null) ? IDstr  : FullPozadavekID}}</strong>
+                        </dot:RouteLink>
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>
+                <dot:GridViewTextColumn ValueBinding="{value: PocetPolozek}" HeaderText="Položek" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Popis}" HeaderText="Popis požadavku" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: CelkovaCena}" HeaderText="Celková cena" FormatString="N2" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Mena}" HeaderText="Měna" AllowSorting="true" />                
+                <!--<dot:GridViewTextColumn ValueBinding="{value: PocetPolozek}" HeaderText="Počet položek" AllowSorting="true" />-->
+                <dot:GridViewTextColumn ValueBinding="{value: Zalozil}" HeaderText="Založil" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Datum}" HeaderText="Datum" FormatString="d" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: DodavatelName}" HeaderText="Dodavatel" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Stav}" HeaderText="Stav" AllowSorting="true" />
+                        
+                 <!--tlacitko pro editaci pozadavku-->
+                <dot:GridViewTemplateColumn HeaderText="detail">
+                    <ContentTemplate>
+                        <dot:RouteLink RouteName="PozadavekEdit" Param-Id="{value: ID}">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </dot:RouteLink>
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>
+                <!--tlacitko pro smazani pozadavku-->                             
+                
+                <dot:GridViewTemplateColumn HeaderText="vymazat" > <%--Visible="{value: Level1Odeslano}"--%>
+                    <ContentTemplate>
+                        <dot:LinkButton class="glyphicon glyphicon-remove" Click="{command: _parent.DeletePozadavek(ID, Level1Odeslano)}">
+                            <PostBack.Handlers>
+                                <dot:ConfirmPostBackHandler Message="Opravdu vymazat požadavek? Dojde i ke smazání připojených souborů" />
+                            </PostBack.Handlers>
+                        </dot:LinkButton>
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>
+            </Columns>
+        </dot:GridView>
+
+        <dot:DataPager DataSet="{value: SeznamPozadavkuGV}" class="pagination" />
+        <br />
+
+       
+        <dot:RouteLink RouteName="PozadavekEdit" Param-Id=0
+                       class="btn btn-primary" Text="Nový požadavek">
+        </dot:RouteLink>
+
+    </div>
+
+    <script>
+        $.datetimepicker.setLocale('cs');
+        jQuery('.datetimepicker').datetimepicker({
+            lang: 'cs',
+            timepicker: false,
+            format: 'd.m.Y'
+        });
+    </script>
+</dot:Content>

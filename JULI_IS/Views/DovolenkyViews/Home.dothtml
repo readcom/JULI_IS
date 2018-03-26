@@ -1,0 +1,44 @@
+﻿@viewModel ViewModels.DovolenkyViewModels.HomeViewModel, JULI_IS
+@masterPage Views/DovolenkyApp.dotmaster
+
+<dot:Content ContentPlaceHolderID="PageContent">
+    <section ID="homepage">
+        <div class="form-group wrapper">
+            <div class="container">
+
+                <dot:RouteLink RouteName="PozadavekEdit" Param-Id=0
+                               class="btn btn-primary" Text="Nová dovolenka">
+                </dot:RouteLink>
+                <hr />
+                <h1>Novinky:</h1>
+                <div class="container jumbotron">
+                    <ul>
+                        <li>START</li>                   
+                    </ul>
+                </div>
+                <hr />
+                <div class="row icony-aplikaci">
+                    <div class="col-sm-2">                        
+         
+                        <dot:RouteLink RouteName="Default">
+                            <img src="~/Imgs/pozadavky-ico.ico" /> 
+                        </dot:RouteLink>
+                        <p>Požadavky / Objednávky</p>
+                        
+
+                    </div>
+                    <div class="col-sm-2">
+
+                        <dot:RouteLink RouteName="DovolenkyHome">
+                            <img src="~/Imgs/pozadavky-ico.ico" />
+                        </dot:RouteLink>
+                        <p>Dovolené</p>
+                    </div>
+                </div>                
+                <hr />
+
+
+            </div>
+        </div>
+    </section>
+</dot:Content>

@@ -1,0 +1,82 @@
+﻿@viewModel ViewModels.PozadavkyViewModels.PozadaveknewViewModel, JULI_IS
+@masterPage Views/app.dotmaster
+
+<dot:Content ContentPlaceHolderID="PageContent">
+
+    <h1>Vytvoreni noveho pozadavku</h1>
+
+    <h2 class="text-center">Detail požadavku</h2>
+
+    <div class="form wrapper" Validator.InvalidCssClass="has-error" Validator.SetToolTipText="true" >
+
+        <div class="form-group">
+            <label class="control-label">Title</label>            
+            <div Validator.Value="{value: PozadavekData.Popis}">
+                <dot:TextBox class="form-control" Text="{value: PozadavekData.Popis}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Jednotka</label>
+            <div Validator.Value="{value: PozadavekData.Jednotka}">
+                <dot:TextBox class="form-control" Text="{value: PozadavekData.Jednotka}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Cena za jednotku</label>
+            <div>
+                <dot:TextBox class="form-control" Text="{value: PozadavekData.CenaZaJednotku}" Changed="{command: Prepocitat()}" ValueType="Number" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Množství</label>
+            <div>
+                <dot:TextBox class="form-control" Text="{value: PozadavekData.Mnozstvi}" Changed="{command: Prepocitat()}" ValueType="Number" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Celková cena</label>
+            <div>
+                <dot:TextBox class="form-control" Text="{value: PozadavekData.CelkovaCena}" ValueType="Number" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Měna</label>
+            <div>               
+                <dot:ComboBox DataSource="{value: MenaList}"
+                              SelectedValue="{value: PozadavekData.Mena}" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Dodavatel</label>
+            <div>
+                <dot:ComboBox DataSource="{value: Dodavatel}"
+                              SelectedValue="{value: PozadavekData.DodavatelID}"
+                              ValueMember="ID"
+                              DisplayMember="Nazev"
+                              class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Datum objednání</label>
+            <div>
+                <dot:TextBox class="form-control" Text="{value: PozadavekData.DatumObjednani}" FormatString="d" ValueType="DateTime" Type="Date" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Termín dodání</label>
+            <div>
+                <dot:TextBox class="form-control" Text="{value: PozadavekData.TerminDodani}" FormatString="d" ValueType="DateTime" Type="Date" />
+            </div>
+        </div>
+
+    </div>
+
+    <dot:ValidationSummary IncludeErrorsFromChildren="true" />
+
+    <div class="text-center">
+        <dot:Button class="btn btn-primary" Text="Save" Click="{command: SaveNewPozadavek()}" />
+        <dot:RouteLink class="btn btn-default" Text="Cancel" RouteName="PozadavkyList" Param-Id="{value: PozadavekData.ItemId}" />
+    </div>
+
+</dot:Content>
+

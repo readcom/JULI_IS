@@ -1,0 +1,113 @@
+﻿@viewModel ViewModels.DovolenkyAppViewModel, JULI_IS
+
+<!DOCTYPE html>
+
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" type="text/css" href="~/Style/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Style/Default.css" />
+    <link rel="stylesheet" type="text/css" href="~/Style/Main.css" />
+    <link href="../Style/fa/font-awesome.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/Style/jquery.datetimepicker.css">
+    <script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
+    <!--<script src="~/Scripts/jquery-ui.min.js"></script>-->
+    <!--<script src="~/Scripts/bootstrap.min.js"></script>-->
+    
+
+    <title>Dovolenky</title>
+</head>
+<body>
+    <header ID="dovolenky">
+        
+        <dot:RouteLink RouteName="Default">
+            <h1><span class="glyphicon glyphicon-list-alt"></span> Dovolenky</h1>
+        </dot:RouteLink>
+        
+        <!--<dot:LinkButton class="header-item" Click="{command: ShowDemandPopup(null)}" Validation.Enabled="false">
+            <span class="glyphicon glyphicon-plus"></span> Nový požadavek
+        </dot:LinkButton>-->
+
+        
+        <dot:RouteLink RouteName="PozadavkyPrehled" class="{value: 'header-item ' + (ActivePage == 'newdemand' ? 'header-item-active' : '')}">
+            <span class="fa fa-tasks"></span> Celkový přehled
+        </dot:RouteLink>
+
+        <dot:RouteLink RouteName="PolozkyPrehled" class="{value: 'header-item ' + (ActivePage == 'newdemand' ? 'header-item-active' : '')}">
+            <span class="fa fa-tasks"></span> Přehled požadavků
+        </dot:RouteLink>
+
+        <dot:RouteLink RouteName="DodavatelePrehled" class="{value: 'header-item ' + (ActivePage == 'manager' ? 'header-item-active' : '')}">
+            <span class="fa fa-address-card-o"></span> Správa Dodavatelů
+        </dot:RouteLink>
+
+        <dot:RouteLink Visible="{value: CanSignPozadavky}" RouteName="sign" Text="Podpis požadavků" class="{value: 'header-item ' + (ActivePage == 'sign' ? 'header-item-active' : '')}">
+            <span class="glyphicon glyphicon-pencil"></span> Podpis požadavků
+        </dot:RouteLink>
+
+        <dot:RouteLink Visible="{value: CanSignObjednavky}" RouteName="SignObjednavky" Text="Podpis objednávek" class="{value: 'header-item ' + (ActivePage == 'SignObjednavky' ? 'header-item-active' : '')}">
+            <span class="glyphicon glyphicon-pencil"></span> Podpis objednávek
+        </dot:RouteLink> 
+
+        <dot:RouteLink Visible="{value: CanMakeObjednavky}" RouteName="objednavkyTvorba" Text="Tvorba objednávek" class="{value: 'header-item ' + (ActivePage == 'objednavkyTvorba' ? 'header-item-active' : '')}">
+            <span class="glyphicon glyphicon-edit"></span> Tvorba objednávek z požadavků
+        </dot:RouteLink>
+
+        <dot:RouteLink RouteName="objednavkyPrehled" Text="Tvorba objednávek" class="{value: 'header-item ' + (ActivePage == 'objednavkyPrehled' ? 'header-item-active' : '')}">
+            <span class="glyphicon glyphicon-list"></span> Přehled objednávek
+        </dot:RouteLink>        
+
+        <dot:RouteLink Visible="{value: CanMakeObjednavky}" RouteName="objednavkySend" Text="Odeslání objednávek" class="{value: 'header-item ' + (ActivePage == 'objednavkySend' ? 'header-item-active' : '')}">
+            <span class="fa fa-envelope-o"></span> Odeslání objednávek
+        </dot:RouteLink>  
+
+        <dot:RouteLink RouteName="PrijemZbozi" class="{value: 'header-item ' + (ActivePage == 'PrijemZbozi' ? 'header-item-active' : '')}">
+            <span class="fa fa-home"></span> Příjem zboží
+        </dot:RouteLink> 
+
+        <!--Visible="{value: ActiveUser=="marek.novak"}"-->
+        <dot:RouteLink Visible="{value: (ActiveUser=="marek.novak" || ActiveUser=="lukas.grundel")}" RouteName="temp" Text="Temp" class="{value: 'header-item ' + (ActivePage == 'temp' ? 'header-item-active' : '')}">
+            <span class="glyphicon glyphicon-pencil"></span>Temp (pokusy)
+        </dot:RouteLink>
+
+        <span class="glyphicon glyphicon-user header-item" style="float:right"> {{value: ActiveUser}}</span>
+
+        <dot:RouteLink RouteName="logout" Text="Log off"  class="header-item" >
+            <span class="glyphicon glyphicon-log-out"></span> LOG-OUT
+        </dot:RouteLink>
+        
+        <!--<a class="header-item" href="" onclick="closeme();">close</a>-->        
+
+
+</header>
+
+    <article>
+        <p Visible="{value: Test == true}" class="alert alert-success">{{value: TestModeText}}</p>
+        <p Visible="{value: ConfirmText != null}" class="alert alert-success">{{value: ConfirmText}}</p>
+        <p Visible="{value: AlertText != null}" class="alert alert-danger">{{value: AlertText}}</p>
+
+        <!-- obsah dalsich stranek -->
+
+        <dot:ContentPlaceHolder ID="PageContent">
+            <p>zavedeni Hlavni page se nezdarilo!!</p>
+        </dot:ContentPlaceHolder>
+
+        <p Visible="{value: ConfirmText != null}" class="alert alert-success">{{value: ConfirmText}}</p>
+        <p Visible="{value: AlertText != null}" class="alert alert-danger">{{value: AlertText}}</p>
+    </article>
+
+      <p>{{value: Text}}</p>
+
+    <footer>
+
+    </footer>
+
+    <!--<dot:RequiredResource Name="bootstrap" />
+    <dot:RequiredResource Name="Default" />
+    <dot:RequiredResource Name="Main" />-->
+</body>
+</html>
+
+
