@@ -77,21 +77,39 @@ namespace ViewModels.PozadavkyViewModels
                 string objId = ObjednavkyService.GeObjNumber(objednavka.FullObjednavkaID);
                 ConfirmText = MailServices.SendMail(email, $"OBJEDNÁVKA / ORDER {objId} – JULI Motorenwerk, s.r.o.",               
                     "Dobrý den,<br><br>" +
-                    "V příloze Vám zasíláme naši objednávku.<br>" +
-                    "Prosíme potvrzení objednávky zaslat na: objednavky@juli.cz<br><br>" +
+                    "v příloze Vám zasíláme naši objednávku.<br>" +
+                    "Prosíme potvrzení objednávky zaslat na: objednavky@juli.cz<br>" +
+                    "Elektronické faktury zasílejte na email: faktury@juli.cz<br>" +
+                    "<br>" +
                     "Enclosed find our order.<br>" +
-                    "Please order confirmation send to: objednavky@juli.cz<br><br>" +
+                    "Please order confirmation send to: objednavky@juli.cz<br>" +
+                    "E-invoices send to: faktury@juli.cz<br>" +
+                    "<br>" +
+                    "<span style='color:red'>UPOZORNĚNÍ: Faktury posílejte výhradně na mailovou adresu: faktury@juli.cz</span><br>" +
+                    "Jinak nemůžeme garantovat řádné zpracování Vašich faktur.<br><br>" +
                     "*** Automaticky generovaná zpráva. ***<br>" +
                     "*** This is an automatically generated email. *** "
                     , prilohy, "objednavky"); //"objednavky"
 
                 if (ConfirmText == "Email byl odeslán. ")
                 {
+                    
+
                     objednavka.Odeslano = true;
                     objednavka.OdeslanoDne = DateTime.Now;
                     objednavka.Dokonceno = true;
                     objednavka.DokoncenoDne = DateTime.Now;
                     ObjednavkyService.SaveObj(objednavka);
+
+                    List<PozadavekDTO> pozadavky = ObjednavkyService.GetListPozadavkyByObj(id);
+                    foreach (var item in pozadavky)
+                    {
+
+                        PozadavekDTO pozadavek = PozadavkyService.GetPozadavekById(item.ID);
+                        pozadavek.Stav = "Dokončeno";
+                        PozadavkyService.PozadavekSave(pozadavek);
+                    }
+
                 }
             }
             catch (Exception ex)

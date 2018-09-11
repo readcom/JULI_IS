@@ -3,6 +3,7 @@ using Pozadavky.Data;
 using Pozadavky.DTO;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace Pozadavky.Services
                                  ID = (int?)i.ID ?? 0,
                                  PozadavekID = p.ID,
                                  FullPozadavekID = p.FullPozadavekID,
-                                 Zalozil = (p.Zastoupeno == null) ? p.Zalozil : p.Zastoupeno,
+                                 Zalozil = string.IsNullOrEmpty(p.Zastoupeno) ? p.Zalozil : p.Zastoupeno,
                                  Popis = i.Popis,
                                  DatumZalozeni = i.DatumZalozeni,
                                  InterniPoznamka = i.InterniPoznamka,
@@ -79,7 +80,7 @@ namespace Pozadavky.Services
                                  DodavatelID = i.DodavatelID,
                                  OrigItemID = i.OrigItemID,
                                  FullPozadavekID = p.FullPozadavekID,
-                                 Zalozil = (p.Zastoupeno == null) ? p.Zalozil : p.Zastoupeno,
+                                 Zalozil = string.IsNullOrEmpty(p.Zastoupeno) ? p.Zalozil : p.Zastoupeno,
                                  Popis = i.Popis ?? "",
                                  DatumZalozeni = i.DatumZalozeni,
                                  InterniPoznamka = i.InterniPoznamka ?? "",
@@ -117,7 +118,7 @@ namespace Pozadavky.Services
                                  DodavatelID = i.DodavatelID,
                                  OrigItemID = i.OrigItemID,
                                  FullPozadavekID = p.FullPozadavekID,
-                                 Zalozil = (p.Zastoupeno == null) ? p.Zalozil : p.Zastoupeno,
+                                 Zalozil = string.IsNullOrEmpty(p.Zastoupeno) ? p.Zalozil : p.Zastoupeno,
                                  Popis = i.Popis ?? "",
                                  DatumZalozeni = i.DatumZalozeni,
                                  InterniPoznamka = i.InterniPoznamka ?? "",
@@ -186,7 +187,7 @@ namespace Pozadavky.Services
                                  PozadavekID = i.PozadavekID,
                                  DodavatelID = i.DodavatelID,
                                  FullPozadavekID = p.FullPozadavekID,
-                                 Zalozil = (p.Zastoupeno == null) ? p.Zalozil : p.Zastoupeno,
+                                 Zalozil = string.IsNullOrEmpty(p.Zastoupeno) ? p.Zalozil : p.Zastoupeno,
                                  Popis = i.Popis ?? "",
                                  DatumZalozeni = i.DatumZalozeni,
                                  InterniPoznamka = i.InterniPoznamka ?? "",
@@ -260,9 +261,8 @@ namespace Pozadavky.Services
                                  DodavatelID = i.DodavatelID,
                                  OrigItemID = i.OrigItemID,
                                  Zalozil = p.Zalozil,
-                                 Zastoupeno = (p.Zastoupeno == null) ? p.Zalozil : p.Zastoupeno,
+                                 Zastoupeno = string.IsNullOrEmpty(p.Zastoupeno) ? p.Zalozil : p.Zastoupeno,
                                  Popis = i.Popis ?? "",
-
                                  InterniPoznamka = i.InterniPoznamka ?? "",
                                  Jednotka = i.Jednotka,
                                  Mnozstvi = i.Mnozstvi,
@@ -292,51 +292,118 @@ namespace Pozadavky.Services
         {
             using (var db = new PozadavkyContext(DtbConxString))
             {
-                var query = (from i in db.ObjItems
-                             join o in db.Objednavky on i.ObjednavkaID equals o.ID
-                             join p in db.Pozadavky on i.PozadavekID equals p.ID
-                             from d in db.Dodavatele.Where(dod => dod.Id == o.DodavatelID).DefaultIfEmpty()
-                             where i.Smazano == false && o.Smazano == false && o.Zamitnuto == false
-                             select new ObjItemsDTO()
-                             {
-                                 ID = i.ID,
-                                 IDstr = o.ID.ToString(),                                
-                                 PozadavekID = i.PozadavekID,
-                                 FullPozadavekID = p.FullPozadavekID,
-                                 DatumZalozeni = o.Datum.Value,
-                                 DodavatelID = i.DodavatelID,
-                                 OrigItemID = i.OrigItemID,
-                                 Zalozil = p.Zalozil,
-                                 Zastoupeno = (p.Zastoupeno == null) ? p.Zalozil : p.Zastoupeno,
-                                 Popis = i.Popis ?? "",
-                                 HlavniRada = o.HlavniRada,
-                                 InterniPoznamka = i.InterniPoznamka ?? "",
-                                 Jednotka = i.Jednotka,
-                                 Mnozstvi = i.Mnozstvi,
-                                 CenaZaJednotku = i.CenaZaJednotku,
-                                 CelkovaCena = i.CelkovaCena,
-                                 TerminDodani = i.TerminDodani ?? DateTime.Now,
-                                 ObjednavkaID = i.ObjednavkaID ?? 0,
-                                 FullDodavatelName = d.SNAM05 + " | " + d.SUPN05,
-                                 ObjednavkaFullID = (o.FullObjednavkaID == null || o.FullObjednavkaID == "") ? o.ID.ToString() : o.FullObjednavkaID,
-                                 Mena = o.Mena,
-                                 Objednano = o.Objednano,
-                                 Specha = i.Specha,
-                                 Neobjednavat = i.Neobjednavat,
-                                 Schvaleno = o.Schvaleno,
-                                 Zamitnuto = o.Zamitnuto,
-                                 NabidkaCislo = i.NabidkaCislo,
-                                 Dodano = i.Dodano,
-                                 // objednano = odeslano na schvaleni
-                                 Stav = (
-                                    (o.Stornovano) ? "Storno" :
-                                    (o.Dokonceno & i.Dodano) ? "Zboží dodáno" :
-                                    (o.Dokonceno & o.Odeslano & o.AvizoDoruceni) ? "Avízo zasláno" :
-                                    (o.Dokonceno & o.Odeslano) ? "Objednávka odeslána" : 
-                                    (o.Dokonceno & o.Neodesilat) ? "Objednávku neodesílat" : 
-                                    (o.Objednano && !o.Schvaleno) ? "Odesláno na schválení" : 
-                                    o.Schvaleno ? "Schváleno" : o.Zamitnuto ? "Zamítnuto" : "Koncept")
-                             });
+                bool NeverejnyPristup = false;
+                IQueryable<ObjItemsDTO> query;
+
+                var User = UserServices.GetActiveUser();
+
+                if (!string.IsNullOrEmpty(User))
+                {
+                    List<UsersDTO> ActivUsers = UserServices.GetUsersByUserName(User);
+                    foreach (var user in ActivUsers)
+                    {
+                        if (user.NeverejnyPristup == true) NeverejnyPristup = true;
+                    }
+                }
+
+                if (NeverejnyPristup)
+                {
+
+                    query = (from i in db.ObjItems
+                                 join o in db.Objednavky on i.ObjednavkaID equals o.ID
+                                 join p in db.Pozadavky on i.PozadavekID equals p.ID
+                                 from d in db.Dodavatele.Where(dod => dod.Id == o.DodavatelID).DefaultIfEmpty()
+                                 where i.Smazano == false && o.Smazano == false && o.Zamitnuto == false
+                                 select new ObjItemsDTO()
+                                 {
+                                     ID = i.ID,
+                                     IDstr = o.ID.ToString(),
+                                     PozadavekID = i.PozadavekID,
+                                     FullPozadavekID = p.FullPozadavekID,
+                                     DatumZalozeni = o.Datum.Value,
+                                     DodavatelID = i.DodavatelID,
+                                     OrigItemID = i.OrigItemID,
+                                     Zalozil = p.Zalozil,
+                                     Zastoupeno = string.IsNullOrEmpty(p.Zastoupeno) ? p.Zalozil : p.Zastoupeno,
+                                     Popis = i.Popis ?? "",
+                                     HlavniRada = o.HlavniRada,
+                                     InterniPoznamka = i.InterniPoznamka ?? "",
+                                     Jednotka = i.Jednotka,
+                                     Mnozstvi = i.Mnozstvi,
+                                     CenaZaJednotku = i.CenaZaJednotku,
+                                     CelkovaCena = i.CelkovaCena,
+                                     TerminDodani = i.TerminDodani ?? DateTime.Now,
+                                     ObjednavkaID = i.ObjednavkaID ?? 0,
+                                     FullDodavatelName = d.SNAM05 + " | " + d.SUPN05,
+                                     ObjednavkaFullID = (o.FullObjednavkaID == null || o.FullObjednavkaID == "") ? o.ID.ToString() : o.FullObjednavkaID,
+                                     Mena = o.Mena,
+                                     Objednano = o.Objednano,
+                                     Specha = i.Specha,
+                                     Neobjednavat = i.Neobjednavat,
+                                     Schvaleno = o.Schvaleno,
+                                     Zamitnuto = o.Zamitnuto,
+                                     NabidkaCislo = i.NabidkaCislo,
+                                     Dodano = i.Dodano,
+                                     // objednano = odeslano na schvaleni
+                                     Stav = (
+                                        (o.Stornovano) ? "Storno" :
+                                        (o.Dokonceno & i.Dodano) ? "Zboží dodáno" :
+                                        (o.Dokonceno & o.Odeslano & o.AvizoDoruceni) ? "Avízo zasláno" :
+                                        (o.Dokonceno & o.Odeslano) ? "Objednávka odeslána" :
+                                        (o.Dokonceno & o.Neodesilat) ? "Objednávku neodesílat" :
+                                        (o.Objednano && !o.Schvaleno) ? "Odesláno na schválení" :
+                                        o.Schvaleno ? "Schváleno" : o.Zamitnuto ? "Zamítnuto" : "Koncept")
+                                 });
+                }
+                else
+                {
+                    query = (from i in db.ObjItems
+                                 join o in db.Objednavky on i.ObjednavkaID equals o.ID
+                                 join p in db.Pozadavky on i.PozadavekID equals p.ID
+                                 from d in db.Dodavatele.Where(dod => dod.Id == o.DodavatelID).DefaultIfEmpty()
+                                 where i.Smazano == false && o.Smazano == false && o.Zamitnuto == false && p.Neverejny == false
+                                 select new ObjItemsDTO()
+                                 {
+                                     ID = i.ID,
+                                     IDstr = o.ID.ToString(),
+                                     PozadavekID = i.PozadavekID,
+                                     FullPozadavekID = p.FullPozadavekID,
+                                     DatumZalozeni = o.Datum.Value,
+                                     DodavatelID = i.DodavatelID,
+                                     OrigItemID = i.OrigItemID,
+                                     Zalozil = p.Zalozil,
+                                     Zastoupeno = string.IsNullOrEmpty(p.Zastoupeno) ? p.Zalozil : p.Zastoupeno,
+                                     Popis = i.Popis ?? "",
+                                     HlavniRada = o.HlavniRada,
+                                     InterniPoznamka = i.InterniPoznamka ?? "",
+                                     Jednotka = i.Jednotka,
+                                     Mnozstvi = i.Mnozstvi,
+                                     CenaZaJednotku = i.CenaZaJednotku,
+                                     CelkovaCena = i.CelkovaCena,
+                                     TerminDodani = i.TerminDodani ?? DateTime.Now,
+                                     ObjednavkaID = i.ObjednavkaID ?? 0,
+                                     FullDodavatelName = d.SNAM05 + " | " + d.SUPN05,
+                                     ObjednavkaFullID = (o.FullObjednavkaID == null || o.FullObjednavkaID == "") ? o.ID.ToString() : o.FullObjednavkaID,
+                                     Mena = o.Mena,
+                                     Objednano = o.Objednano,
+                                     Specha = i.Specha,
+                                     Neobjednavat = i.Neobjednavat,
+                                     Schvaleno = o.Schvaleno,
+                                     Zamitnuto = o.Zamitnuto,
+                                     NabidkaCislo = i.NabidkaCislo,
+                                     Dodano = i.Dodano,
+                                     // objednano = odeslano na schvaleni
+                                     Stav = (
+                                        (o.Stornovano) ? "Storno" :
+                                        (o.Dokonceno & i.Dodano) ? "Zboží dodáno" :
+                                        (o.Dokonceno & o.Odeslano & o.AvizoDoruceni) ? "Avízo zasláno" :
+                                        (o.Dokonceno & o.Odeslano) ? "Objednávka odeslána" :
+                                        (o.Dokonceno & o.Neodesilat) ? "Objednávku neodesílat" :
+                                        (o.Objednano && !o.Schvaleno) ? "Odesláno na schválení" :
+                                        o.Schvaleno ? "Schváleno" : o.Zamitnuto ? "Zamítnuto" : "Koncept")
+                                 });
+                }
+
 
                 var list = query;
 
@@ -389,7 +456,7 @@ namespace Pozadavky.Services
                                  DodavatelID = i.DodavatelID,
                                  OrigItemID = i.OrigItemID,
                                  Zalozil = p.Zalozil,
-                                 Zastoupeno = (p.Zastoupeno == null) ? p.Zalozil : p.Zastoupeno,
+                                 Zastoupeno = string.IsNullOrEmpty(p.Zastoupeno) ? p.Zalozil : p.Zastoupeno,
                                  Popis = i.Popis ?? "",
                                  HlavniRada = o.HlavniRada,
                                  InterniPoznamka = i.InterniPoznamka ?? "",
@@ -452,57 +519,122 @@ namespace Pozadavky.Services
             }
         }
 
-        public static void FillGridViewObjednavkyWithItemsFilteredSchvalene(GridViewDataSet<ObjItemsDTO> datagv, string column = "", string filter = "", DateTime? datumod = null, DateTime? datumdo = null)
+        public static void FillGridViewObjednavkyWithItemsFilteredSchvalene(GridViewDataSet<ObjItemsDTO> datagv, string column = "", string filter = "", DateTime? datumod = null, DateTime? datumdo = null, string User = null, List<int> UserLevels = null)
         {
             using (var db = new PozadavkyContext(DtbConxString))
             {
-                var query = (from i in db.ObjItems
-                             join o in db.Objednavky on i.ObjednavkaID equals o.ID
-                             join p in db.Pozadavky on i.PozadavekID equals p.ID
-                             from d in db.Dodavatele.Where(dod => dod.Id == o.DodavatelID).DefaultIfEmpty()
-                             where i.Smazano == false && o.Smazano == false && (o.Schvaleno == true || (o.Schvaleno == false && o.Zamitnuto == true))
-                             select new ObjItemsDTO()
-                             {
-                                 ID = i.ID,
-                                 IDstr = o.ID.ToString(),
-                                 PozadavekID = i.PozadavekID,
-                                 FullPozadavekID = p.FullPozadavekID,
-                                 DatumZalozeni = o.Datum.Value,
-                                 DodavatelID = i.DodavatelID,
-                                 OrigItemID = i.OrigItemID,
-                                 Zalozil = p.Zalozil,
-                                 Zastoupeno = (p.Zastoupeno == null) ? p.Zalozil : p.Zastoupeno,
-                                 Popis = i.Popis ?? "",
-                                 HlavniRada = o.HlavniRada,
-                                 InterniPoznamka = i.InterniPoznamka ?? "",
-                                 Jednotka = i.Jednotka,
-                                 Mnozstvi = i.Mnozstvi,
-                                 CenaZaJednotku = i.CenaZaJednotku,
-                                 CelkovaCena = i.CelkovaCena,
-                                 TerminDodani = i.TerminDodani ?? DateTime.Now,
-                                 ObjednavkaID = i.ObjednavkaID ?? 0,
-                                 FullDodavatelName = d.SNAM05 + " | " + d.SUPN05,
-                                 ObjednavkaFullID = (o.FullObjednavkaID == null || o.FullObjednavkaID == "") ? o.ID.ToString() : o.FullObjednavkaID,
-                                 Mena = o.Mena,
-                                 Objednano = o.Objednano,
-                                 Specha = i.Specha,
-                                 Neobjednavat = i.Neobjednavat,
-                                 Schvaleno = o.Schvaleno,
-                                 Zamitnuto = o.Zamitnuto,
-                                 NabidkaCislo = i.NabidkaCislo,
-                                 Dodano = i.Dodano,
-                                 // objednano = odeslano na schvaleni
-                                 Stav = (
-                                    (o.Stornovano) ? "Storno" :
-                                    (o.Dokonceno & i.Dodano) ? "Zboží dodáno" :
-                                    (o.Dokonceno & o.Odeslano & o.AvizoDoruceni) ? "Avízo zasláno" :
-                                    (o.Dokonceno & o.Odeslano) ? "Objednávka odeslána" :
-                                    (o.Dokonceno & o.Neodesilat) ? "Objednávku neodesílat" :
-                                    (o.Objednano && !o.Schvaleno && !o.Zamitnuto) ? "Odesláno na schválení" :
-                                    o.Schvaleno ? "Schváleno" : o.Zamitnuto ? "Zamítnuto" : "Koncept")
-                             });
+                IQueryable<ObjItemsDTO> query;
 
-                var list = query;
+                bool NeverejnyPristup = false;
+
+                if (!string.IsNullOrEmpty(User))
+                {
+                    List<UsersDTO> ActivUsers = UserServices.GetUsersByUserName(User);
+                    foreach (var user in ActivUsers)
+                    {
+                        if (user.NeverejnyPristup == true) NeverejnyPristup = true;
+                    }
+                }
+
+                if ((UserLevels != null && (UserLevels.Contains(3) || UserLevels.Contains(4))) || NeverejnyPristup)                    
+                {
+                     query = (from i in db.ObjItems
+                                 join o in db.Objednavky on i.ObjednavkaID equals o.ID
+                                 join p in db.Pozadavky on i.PozadavekID equals p.ID
+                                 from d in db.Dodavatele.Where(dod => dod.Id == o.DodavatelID).DefaultIfEmpty()
+                                 where i.Smazano == false && o.Smazano == false && (o.Schvaleno == true || (o.Schvaleno == false && o.Zamitnuto == true))
+                                 select new ObjItemsDTO()
+                                 {
+                                     ID = i.ID,
+                                     IDstr = o.ID.ToString(),
+                                     PozadavekID = i.PozadavekID,
+                                     FullPozadavekID = p.FullPozadavekID,
+                                     DatumZalozeni = o.Datum.Value,
+                                     DodavatelID = i.DodavatelID,
+                                     OrigItemID = i.OrigItemID,
+                                     Zalozil = p.Zalozil,
+                                     Zastoupeno = string.IsNullOrEmpty(p.Zastoupeno) ? p.Zalozil : p.Zastoupeno,
+                                     Popis = i.Popis ?? "",
+                                     HlavniRada = o.HlavniRada,
+                                     InterniPoznamka = i.InterniPoznamka ?? "",
+                                     Jednotka = i.Jednotka,
+                                     Mnozstvi = i.Mnozstvi,
+                                     CenaZaJednotku = i.CenaZaJednotku,
+                                     CelkovaCena = i.CelkovaCena,
+                                     TerminDodani = i.TerminDodani ?? DateTime.Now,
+                                     ObjednavkaID = i.ObjednavkaID ?? 0,
+                                     FullDodavatelName = d.SNAM05 + " | " + d.SUPN05,
+                                     ObjednavkaFullID = (o.FullObjednavkaID == null || o.FullObjednavkaID == "") ? o.ID.ToString() : o.FullObjednavkaID,
+                                     Mena = o.Mena,
+                                     Objednano = o.Objednano,
+                                     Specha = i.Specha,
+                                     Neobjednavat = i.Neobjednavat,
+                                     Schvaleno = o.Schvaleno,
+                                     Zamitnuto = o.Zamitnuto,
+                                     NabidkaCislo = i.NabidkaCislo,
+                                     Dodano = i.Dodano,
+                                     // objednano = odeslano na schvaleni
+                                     Stav = (
+                                        (o.Stornovano) ? "Storno" :
+                                        (o.Dokonceno & i.Dodano) ? "Zboží dodáno" :
+                                        (o.Dokonceno & o.Odeslano & o.AvizoDoruceni) ? "Avízo zasláno" :
+                                        (o.Dokonceno & o.Odeslano) ? "Objednávka odeslána" :
+                                        (o.Dokonceno & o.Neodesilat) ? "Objednávku neodesílat" :
+                                        (o.Objednano && !o.Schvaleno && !o.Zamitnuto) ? "Odesláno na schválení" :
+                                        o.Schvaleno ? "Schváleno" : o.Zamitnuto ? "Zamítnuto" : "Koncept")
+                                 });
+                }
+                else
+                {
+                     query = (from i in db.ObjItems
+                                 join o in db.Objednavky on i.ObjednavkaID equals o.ID
+                                 join p in db.Pozadavky on i.PozadavekID equals p.ID
+                                 from d in db.Dodavatele.Where(dod => dod.Id == o.DodavatelID).DefaultIfEmpty()
+                                 where i.Smazano == false && o.Smazano == false && (o.Schvaleno == true || (o.Schvaleno == false && o.Zamitnuto == true)) && p.Neverejny == false
+                                 select new ObjItemsDTO()
+                                 {
+                                     ID = i.ID,
+                                     IDstr = o.ID.ToString(),
+                                     PozadavekID = i.PozadavekID,
+                                     FullPozadavekID = p.FullPozadavekID,
+                                     DatumZalozeni = o.Datum.Value,
+                                     DodavatelID = i.DodavatelID,
+                                     OrigItemID = i.OrigItemID,
+                                     Zalozil = p.Zalozil,
+                                     Zastoupeno = string.IsNullOrEmpty(p.Zastoupeno) ? p.Zalozil : p.Zastoupeno,
+                                     Popis = i.Popis ?? "",
+                                     HlavniRada = o.HlavniRada,
+                                     InterniPoznamka = i.InterniPoznamka ?? "",
+                                     Jednotka = i.Jednotka,
+                                     Mnozstvi = i.Mnozstvi,
+                                     CenaZaJednotku = i.CenaZaJednotku,
+                                     CelkovaCena = i.CelkovaCena,
+                                     TerminDodani = i.TerminDodani ?? DateTime.Now,
+                                     ObjednavkaID = i.ObjednavkaID ?? 0,
+                                     FullDodavatelName = d.SNAM05 + " | " + d.SUPN05,
+                                     ObjednavkaFullID = (o.FullObjednavkaID == null || o.FullObjednavkaID == "") ? o.ID.ToString() : o.FullObjednavkaID,
+                                     Mena = o.Mena,
+                                     Objednano = o.Objednano,
+                                     Specha = i.Specha,
+                                     Neobjednavat = i.Neobjednavat,
+                                     Schvaleno = o.Schvaleno,
+                                     Zamitnuto = o.Zamitnuto,
+                                     NabidkaCislo = i.NabidkaCislo,
+                                     Dodano = i.Dodano,
+                                     // objednano = odeslano na schvaleni
+                                     Stav = (
+                                        (o.Stornovano) ? "Storno" :
+                                        (o.Dokonceno & i.Dodano) ? "Zboží dodáno" :
+                                        (o.Dokonceno & o.Odeslano & o.AvizoDoruceni) ? "Avízo zasláno" :
+                                        (o.Dokonceno & o.Odeslano) ? "Objednávka odeslána" :
+                                        (o.Dokonceno & o.Neodesilat) ? "Objednávku neodesílat" :
+                                        (o.Objednano && !o.Schvaleno && !o.Zamitnuto) ? "Odesláno na schválení" :
+                                        o.Schvaleno ? "Schváleno" : o.Zamitnuto ? "Zamítnuto" : "Koncept")
+                                 });
+                }
+
+
+                IQueryable<ObjItemsDTO> list;
 
                 switch (column)
                 {
@@ -548,7 +680,7 @@ namespace Pozadavky.Services
                              {
                                  ID = (int?)i.ID ?? 0,
                                  FullPozadavekID = p.FullPozadavekID,
-                                 Zalozil = (p.Zastoupeno == null) ? p.Zalozil : p.Zastoupeno,
+                                 Zalozil = string.IsNullOrEmpty(p.Zastoupeno) ? p.Zalozil : p.Zastoupeno,
                                  Popis = i.Popis,
                                  DatumZalozeni = i.DatumZalozeni,
                                  InterniPoznamka = i.InterniPoznamka,
@@ -599,7 +731,7 @@ namespace Pozadavky.Services
             data.SortingOptions.SortDescending = true;
         }
 
-        public static void FillGridViewItemsByUser(GridViewDataSet<ItemsDTO> dataSet, string name = "", string column = "", string filter = "", DateTime? datumod = null, DateTime? datumdo = null)
+        public static void FillGridViewItemsByUser(GridViewDataSet<ItemsDTO> dataSet, string name = "", string column = "", string filter = "", DateTime? datumod = null, DateTime? datumdo = null, bool InteliSearchDodavatele = true)
         {
             using (var db = new PozadavkyContext(DtbConxString))
             {
@@ -613,7 +745,7 @@ namespace Pozadavky.Services
                     //             select new ItemsDTO()
                     //             {
                     //                 ID = (int?)i.ID ?? 0,
-                    //                 Zalozil = (p.Zastoupeno == null) ? p.Zalozil : p.Zastoupeno,
+                    //                 Zalozil = string.IsNullOrEmpty(p.Zastoupeno) ? p.Zalozil : p.Zastoupeno,
                     //                 DatumZalozeni = i.DatumZalozeni,
                     //                 InterniPoznamka = i.InterniPoznamka,
                     //                 Jednotka = i.Jednotka,
@@ -630,13 +762,13 @@ namespace Pozadavky.Services
                                  join p in db.Pozadavky on i.PozadavekID equals p.ID
                                  from d in db.Dodavatele.Where(dod => dod.Id == p.DodavatelID).DefaultIfEmpty()
                                  from o in db.Objednavky.Where(obj => obj.ID == i.ObjednavkaID).DefaultIfEmpty()
-                                 where i.Smazano == false && p.Neverejny == false && p.Zalozil == name
+                                 where i.Smazano == false && p.Zalozil == name
                                  select new ItemsDTO()
                                  {
                                      ID = (int?)i.ID ?? 0,
                                      PozadavekID = p.ID,
                                      FullPozadavekID = p.FullPozadavekID,
-                                     Zalozil = (p.Zastoupeno == null) ? p.Zalozil : p.Zastoupeno,
+                                     Zalozil = string.IsNullOrEmpty(p.Zastoupeno) ? p.Zalozil : p.Zastoupeno,
                                      Popis = i.Popis,
                                      DatumZalozeni = i.DatumZalozeni,
                                      InterniPoznamka = i.InterniPoznamka,
@@ -664,7 +796,10 @@ namespace Pozadavky.Services
                             list = query.Where(w => w.FullPozadavekID == filter);
                             break;
                         case "FullDodavatelName":
-                            list = query.Where(w => w.FullDodavatelName.Contains(filter.Substring(0, 5)));
+                            if (InteliSearchDodavatele)
+                                list = query.Where(w => w.FullDodavatelName.Contains(filter.Substring(0, 5)));
+                            else
+                                list = query.Where(w => w.FullDodavatelName == filter);
                             break;
                         case "DodavatelNumber":
                             list = query.Where(w => w.FullDodavatelNumber == filter);
@@ -702,7 +837,7 @@ namespace Pozadavky.Services
                     //             select new ItemsDTO()
                     //             {
                     //                 ID = (int?)i.ID ?? 0,
-                    //                 Zalozil = (p.Zastoupeno == null) ? p.Zalozil : p.Zastoupeno,
+                    //                 Zalozil = string.IsNullOrEmpty(p.Zastoupeno) ? p.Zalozil : p.Zastoupeno,
                     //                 DatumZalozeni = i.DatumZalozeni,
                     //                 InterniPoznamka = i.InterniPoznamka,
                     //                 Jednotka = i.Jednotka,
@@ -726,7 +861,7 @@ namespace Pozadavky.Services
                                      ID = (int?)i.ID ?? 0,
                                      PozadavekID = p.ID,
                                      FullPozadavekID = p.FullPozadavekID,
-                                     Zalozil = (p.Zastoupeno == null) ? p.Zalozil : p.Zastoupeno,
+                                     Zalozil = string.IsNullOrEmpty(p.Zastoupeno) ? p.Zalozil : p.Zastoupeno,
                                      Popis = i.Popis,
                                      DatumZalozeni = i.DatumZalozeni,
                                      InterniPoznamka = i.InterniPoznamka,
@@ -754,7 +889,10 @@ namespace Pozadavky.Services
                             list = query.Where(w => w.FullPozadavekID == filter);
                             break;
                         case "FullDodavatelName":
-                            list = query.Where(w => w.FullDodavatelName.Contains(filter.Substring(0, 5)));            
+                            if (InteliSearchDodavatele)
+                                list = query.Where(w => w.FullDodavatelName.Contains(filter.Substring(0, 5)));
+                            else
+                                list = query.Where(w => w.FullDodavatelName == filter);
                             break;
                         case "DodavatelNumber":
                             list = query.Where(w => w.FullDodavatelNumber == filter);
@@ -1055,7 +1193,7 @@ namespace Pozadavky.Services
                                  ID = i.ID,
                                  CisloRadku = i.CisloRadku,
                                  Popis = i.Popis,
-                                 Zalozil = (p.Zastoupeno == null) ? p.Zalozil : p.Zastoupeno,
+                                 Zalozil = string.IsNullOrEmpty(p.Zastoupeno) ? p.Zalozil : p.Zastoupeno,
                                  DatumZalozeni = i.DatumZalozeni,
                                  InterniPoznamka = i.InterniPoznamka,
                                  Jednotka = i.Jednotka,
@@ -1282,7 +1420,7 @@ namespace Pozadavky.Services
                 item.Mnozstvi = data.Mnozstvi;
                 item.CenaZaJednotku = data.CenaZaJednotku;
                 item.CelkovaCena = data.CelkovaCena;
-                item.TerminDodani = data.TerminDodani ?? DateTime.Now;
+                item.TerminDodani = data.TerminDodani;
                 item.DodavatelID = data.DodavatelID;
                 item.ObjednavkaID = data.ObjednavkaID ?? 0;
                 item.Poptany3Firmy = data.Poptany3Firmy;

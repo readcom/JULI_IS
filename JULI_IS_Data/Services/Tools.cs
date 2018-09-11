@@ -12,7 +12,8 @@ using System.Threading;
 using DotVVM.Framework.Hosting;
 using DotVVM.Framework.ViewModel;
 using Microsoft.Owin;
-
+using System.Reflection;
+using System.IO;
 
 namespace Pozadavky.Services
 {
@@ -55,7 +56,13 @@ namespace Pozadavky.Services
             return cookie == null ? null : cookie.Value;
         }
 
-
+        public static string ReadTextResourceFromAssembly(string name)
+        {
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name))
+            {
+                return new StreamReader(stream).ReadToEnd();
+            }
+        }
 
     }
 }

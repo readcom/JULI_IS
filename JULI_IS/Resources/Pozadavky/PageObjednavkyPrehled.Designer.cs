@@ -22,24 +22,24 @@ namespace JULI_IS.Resources.Pozadavky {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Texty {
+    public class PageObjednavkyPrehled {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Texty() {
+        internal PageObjednavkyPrehled() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("JULI_IS.Resources.Pozadavky.Texty", typeof(Texty).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("JULI_IS.Resources.Pozadavky.PageObjednavkyPrehled", typeof(PageObjednavkyPrehled).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,12 +51,48 @@ namespace JULI_IS.Resources.Pozadavky {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opravdu zrušit koncept objednávky a vrátit VŠECHNY položky do tvorby objednávek?.
+        /// </summary>
+        public static string DeleteConfirm {
+            get {
+                return ResourceManager.GetString("DeleteConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Přehled vytvořených objednávek.
+        /// </summary>
+        public static string Nadpis {
+            get {
+                return ResourceManager.GetString("Nadpis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nenalezeny žádné objednávky!.
+        /// </summary>
+        public static string NoPolozky {
+            get {
+                return ResourceManager.GetString("NoPolozky", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vrátit do tvorby objednávek.
+        /// </summary>
+        public static string Vratit {
+            get {
+                return ResourceManager.GetString("Vratit", resourceCulture);
             }
         }
     }

@@ -1,25 +1,26 @@
 ﻿@viewModel ViewModels.PozadavkyViewModels.SignObjednavkyViewModel, JULI_IS
 @masterPage Views/app.dotmaster
+@import JULI_IS.Resources.Pozadavky
 
 <dot:Content ContentPlaceHolderID="PageContent">
     <div class="form wrapper">
-        <h1>Podpis objednávek</h1>
+        <h1>{{resource: PageObjednavkySign.Nadpis}}</h1>
 
-        <p>Počet objednávek: {{value: SeznamObjednavekGv.PagingOptions.TotalItemsCount}}</p>
+        <p>{{resource: PageObjednavkySign.PocetObj}} {{value: SeznamObjednavekGv.PagingOptions.TotalItemsCount}}</p>
         <br />
-        <p Visible="{value: NothingFound}"> Nenalezeny žádné objednávky! </p>
+        <p Visible="{value: NothingFound}">{{resource: PageObjednavkySign.NoPolozky}</p>
 
         <dot:GridView DataSource="{value: SeznamObjednavekGv}" class="table table-bordered">
             <Columns>
                 <!--<dot:GridViewTextColumn ValueBinding="{value: ID}" HeaderText="ID" />-->
-                <dot:GridViewTextColumn ValueBinding="{value: FullObjednavkaID}" HeaderText="Číslo objednávky" AllowSorting="true" />               
-                <dot:GridViewTextColumn ValueBinding="{value: FullDodavatelName}" HeaderText="Dodavatel" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: CelkovyPopis}" HeaderText="Popis objednávky" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: CelkovaCena}" HeaderText="Celková cena" FormatString="N2" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: Mena}" HeaderText="Měna" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: Datum}" HeaderText="Datum vytvoření" FormatString="d" AllowSorting="true" />
-
-                <dot:GridViewTextColumn ValueBinding="{value: TerminDodani}" HeaderText="Termín Dodání" FormatString="d" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: FullObjednavkaID}" HeaderText="{{resource: Grid.ObjCislo}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: FullDodavatelName}" HeaderText="{{resource: Grid.Dodavatel}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: CelkovyPopis}" HeaderText="{{resource: Grid.PopisObj}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: CelkovaCena}" HeaderText="{{resource: Grid.CelkovaCena}}" AllowSorting="true" FormatString="N2" />
+                <dot:GridViewTextColumn ValueBinding="{value: Mena}" HeaderText="{{resource: Grid.Mena}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Datum}" HeaderText="{{resource: Grid.DatumVytv}}" FormatString="d" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: TerminDodani}" HeaderText="{{resource: Grid.TerminDodani}}" FormatString="d" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Datum}" HeaderText="{{resource: Grid.Datum}}" FormatString="d" AllowSorting="true" />
 
                 <!--tlacitko pro editaci pozadavku-->
                 <dot:GridViewTemplateColumn HeaderText="detail">
@@ -31,22 +32,22 @@
                 </dot:GridViewTemplateColumn>
 
                 <!--tlacitko pro schvaleni pozadavku-->
-                <dot:GridViewTemplateColumn HeaderText="schválit">
+                <dot:GridViewTemplateColumn HeaderText="{{resource: Grid.Schvalit}}">
                     <ContentTemplate>
                         <dot:LinkButton class="glyphicon glyphicon-ok" Click="{command: _parent.ObjednavkaSchvalit(ID)}">
                             <PostBack.Handlers>
-                                <dot:ConfirmPostBackHandler Message="Opravdu objednávku schválit?" />
+                                <dot:ConfirmPostBackHandler Message="{{resource: PageObjednavkySign.SchvalitConfirm}}" />
                             </PostBack.Handlers>
                         </dot:LinkButton>
                     </ContentTemplate>
                 </dot:GridViewTemplateColumn>
 
                 <!--tlacitko pro neschvaleni pozadavku-->
-                <dot:GridViewTemplateColumn HeaderText="zamítnout">
+                <dot:GridViewTemplateColumn HeaderText="{{resource: Grid.Zamitnout}">
                     <ContentTemplate>
                         <dot:LinkButton class="glyphicon glyphicon-remove" Click="{command: _parent.ObjednavkaPokusOZamitnuti(ID)}">
                             <PostBack.Handlers>
-                                <dot:ConfirmPostBackHandler Message="Opravdu objednávku zamítnout?" />
+                                <dot:ConfirmPostBackHandler Message="{{resource: PageObjednavkySign.ZamitnoutConfirm}}" />
                             </PostBack.Handlers>
                         </dot:LinkButton>
                     </ContentTemplate>
@@ -61,26 +62,26 @@
 
         <div Visible="{value: ObjednavkaZamitana}">
             <br>
-            <label class="control-label">Prosím vyberte důvod zamítnutí objednávky nebo zadejte vlastní:</label>
-            
-                <dot:ComboBox DataSource="{value: DuvodyZamitnuti}"
-                              SelectionChanged="{command: DuvodChange()}"
-                              SelectedValue="{value: ZamitanaObjednavkaData.DuvodZamitnutiID}"
-                              ValueMember="ID"
-                              DisplayMember="Text"
-                              class="form-control" />
+            <label class="control-label">{{resource: PageObjednavkySign.DuvodZamitnuti}}</label>
+
+            <dot:ComboBox DataSource="{value: DuvodyZamitnuti}"
+                          SelectionChanged="{command: DuvodChange()}"
+                          SelectedValue="{value: ZamitanaObjednavkaData.DuvodZamitnutiID}"
+                          ValueMember="ID"
+                          DisplayMember="Text"
+                          class="form-control" />
 
 
-                <div Visible="{value: JinyDuvod}">
-                    <p><br>Prosím popište důvod:</p>
-                    <dot:TextBox class="form-control" Text="{value: ZamitanaObjednavkaData.DuvodZamitnutiText}" />
-                </div>
+            <div Visible="{value: JinyDuvod}">
+                <p><br>{{resource: PageObjednavkySign.DuvodZamitnutiPopis}}</p>
+                <dot:TextBox class="form-control" Text="{value: ZamitanaObjednavkaData.DuvodZamitnutiText}" />
+            </div>
             <br />
             <dot:Button Visible="{value: ObjednavkaZamitana}" class="btn btn-primary" Text="Zamítnout" Click="{command: ObjednavkuZamitnout()}" />
         </div>
         <p><br></p>
         <p>{{value: Vysledek}}</p>
-    
+
     </div>
 </dot:Content>
 

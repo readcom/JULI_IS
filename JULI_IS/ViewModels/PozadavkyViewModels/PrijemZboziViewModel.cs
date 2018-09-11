@@ -178,6 +178,7 @@ namespace ViewModels.PozadavkyViewModels
 
                 if (ObjednavkyOnly)
                 {
+                    
                     ObjednavkyService.FillGridViewObjednavky(SeznamObjednavekGV);
                     ListObj = SeznamObjednavekGV.Items.ToList();
                     ObjednavkyService.GridViewSetSortByID(SeznamObjednavekGV);
@@ -192,6 +193,7 @@ namespace ViewModels.PozadavkyViewModels
                     ListZalozil = ListZalozil.Distinct().OrderBy(o => o).ToList();
                     ListZalozil.RemoveAll(item => item == null);
 
+                    ObjednavkyService.FillGridViewObjednavky(SeznamObjednavekGV);
                     //ListObj.ForEach(p => ListKST.Add(p.Stav));
                     //ListKST = ListKST.Distinct().OrderBy(o => o).ToList();
 
@@ -223,28 +225,29 @@ namespace ViewModels.PozadavkyViewModels
                     ListHlavniRada = ListHlavniRada.Distinct().OrderBy(o => o).ToList();
                 }
 
-
-
-
-            }
-
-            if (ObjednavkyOnly)
-            {
-                if (SetDatum)
-                    ObjednavkyService.FillGridViewObjednavkyFiltered(SeznamObjednavekGV, "", "", DatumOd, DatumDo);
-                else
-                    ObjednavkyService.FillGridViewObjednavkyFiltered(SeznamObjednavekGV, ColumnFilter, WhereFilter);
-
             }
             else
             {
-                if (SetDatum)
-                    ItemsService.FillGridViewObjednavkyWithItemsFiltered(SeznamItemsGv, "", "", DatumOd, DatumDo);
-                else
-                    ItemsService.FillGridViewObjednavkyWithItemsFiltered(SeznamItemsGv, ColumnFilter, WhereFilter);
+                if (ObjednavkyOnly)
+                {
+                    if (SetDatum)
+                        ObjednavkyService.FillGridViewObjednavkyFiltered(SeznamObjednavekGV, "", "", DatumOd, DatumDo);
+                    else
+                        ObjednavkyService.FillGridViewObjednavkyFiltered(SeznamObjednavekGV, ColumnFilter, WhereFilter);
 
-                NothingFound = SeznamItemsGv.PagingOptions.TotalItemsCount == 0;
+                }
+                else
+                {
+                    if (SetDatum)
+                        ItemsService.FillGridViewObjednavkyWithItemsFiltered(SeznamItemsGv, "", "", DatumOd, DatumDo);
+                    else
+                        ItemsService.FillGridViewObjednavkyWithItemsFiltered(SeznamItemsGv, ColumnFilter, WhereFilter);
+
+                    NothingFound = SeznamItemsGv.PagingOptions.TotalItemsCount == 0;
+                }
             }
+
+           
 
             NothingFound = SeznamObjednavekGV.PagingOptions.TotalItemsCount == 0;
 

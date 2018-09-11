@@ -1,50 +1,50 @@
 ﻿@viewModel ViewModels.PozadavkyViewModels.PozadavkyPrehledViewModel, JULI_IS
 @masterPage Views/app.dotmaster
-
+@import JULI_IS.Resources.Pozadavky
+<%--@import Grid=JULI_IS.Resources.Pozadavky.Grid--%>
 
 <dot:Content ContentPlaceHolderID="PageContent">
     <div class="form-group wrapper">
-        <h1>Celkový přehled požadavků</h1>
+        <h1>{{resource: PagePozadavky.PrehledPozadavku}}</h1>
+        <hr />
         <p>
-            Vypsat požadavky pouze pro
+            {{resource: PagePozadavky.VypsatPouze}} &nbsp;
             <dot:RadioButton Checked="{value: CurrentUserOnly}" CheckedValue="{value: true}"
-                             GroupName="RadioGroup" Text=" aktuálního uživatele" Changed="{command: ChangeCurrentUser()}" 
-                             Validation.Enabled="false"
-                             />
+                             GroupName="RadioGroup" Text="" Changed="{command: ChangeCurrentUser()}"
+                             Validation.Enabled="false" /> {{resource: PagePozadavky.AktUziv}} &nbsp;
 
             <dot:RadioButton Checked="{value: CurrentUserOnly}" CheckedValue="{value: false}"
-                             GroupName="RadioGroup" Text=" všechny" Changed="{command: ChangeCurrentUser()}" 
-                             Validation.Enabled="false"
-                             />
+                             GroupName="RadioGroup" Text="" Changed="{command: ChangeCurrentUser()}"
+                             Validation.Enabled="false" /> {{resource: PagePozadavky.Vsechny}}
         </p>
 
-       
-        <p>Pocet pozadavku: {{value: SeznamPozadavkuGV.PagingOptions.TotalItemsCount}}</p>
+
+        <p>{{resource: PagePozadavky.Pocet}}: {{value: SeznamPozadavkuGV.PagingOptions.TotalItemsCount}}</p>
         <br />
-        <p Visible="{value: NothingFound}"> Nenalezeny žádné požadavky! </p>
+        <p Visible="{value: NothingFound}"> {{resource: PagePozadavky.NoPozadavky}} </p>
 
 
         <dot:GridView DataSource="{value: SeznamPozadavkuGV}" class="table table-bordered">
-            <Columns>                
-               
-                <dot:GridViewTemplateColumn HeaderText="Číslo požadavku" AllowSorting="true">
+            <Columns>
+
+                <dot:GridViewTemplateColumn HeaderText="{{resource: Grid.PozCislo}}" AllowSorting="true">
                     <ContentTemplate>
                         <dot:RouteLink RouteName="PozadavekEdit" Param-Id="{value: ID}">
                             <strong style="color:black">{{value: (FullPozadavekID  == null) ? IDstr  : FullPozadavekID}}</strong>
                         </dot:RouteLink>
                     </ContentTemplate>
                 </dot:GridViewTemplateColumn>
-                <dot:GridViewTextColumn ValueBinding="{value: PocetPolozek}" HeaderText="Položek" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: Popis}" HeaderText="Popis požadavku" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: CelkovaCena}" HeaderText="Celková cena" FormatString="N2" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: Mena}" HeaderText="Měna" AllowSorting="true" />                
+                <dot:GridViewTextColumn ValueBinding="{value: PocetPolozek}" HeaderText="{{resource: Grid.PocetPolozek}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Popis}" HeaderText="{{resource: Grid.Popis}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: CelkovaCena}" HeaderText="{{resource: Grid.CelkovaCena}}" FormatString="N2" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Mena}" HeaderText="{{resource: Grid.Mena}}" AllowSorting="true" />
                 <!--<dot:GridViewTextColumn ValueBinding="{value: PocetPolozek}" HeaderText="Počet položek" AllowSorting="true" />-->
-                <dot:GridViewTextColumn ValueBinding="{value: Zalozil}" HeaderText="Založil" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: Datum}" HeaderText="Datum" FormatString="d" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: DodavatelName}" HeaderText="Dodavatel" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: Stav}" HeaderText="Stav" AllowSorting="true" />
-                        
-                 <!--tlacitko pro editaci pozadavku-->
+                <dot:GridViewTextColumn ValueBinding="{value: Zalozil}" HeaderText="{{resource: Grid.Zalozil}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Datum}" HeaderText="{{resource: Grid.Datum}}" FormatString="d" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: DodavatelName}" HeaderText="{{resource: Grid.Dodavatel}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Stav}" HeaderText="{{resource: Grid.Stav}}" AllowSorting="true" />
+
+                <!--tlacitko pro editaci pozadavku-->
                 <dot:GridViewTemplateColumn HeaderText="detail">
                     <ContentTemplate>
                         <dot:RouteLink RouteName="PozadavekEdit" Param-Id="{value: ID}">
@@ -52,13 +52,14 @@
                         </dot:RouteLink>
                     </ContentTemplate>
                 </dot:GridViewTemplateColumn>
-                <!--tlacitko pro smazani pozadavku-->                             
-                
-                <dot:GridViewTemplateColumn HeaderText="vymazat" > <%--Visible="{value: Level1Odeslano}"--%>
+                <!--tlacitko pro smazani pozadavku-->
+
+                <dot:GridViewTemplateColumn HeaderText="{{resource: Grid.Vymazat}}">
+                    <%--Visible="{value: Level1Odeslano}"--%>
                     <ContentTemplate>
                         <dot:LinkButton class="glyphicon glyphicon-remove" Click="{command: _parent.DeletePozadavek(ID, Level1Odeslano)}">
                             <PostBack.Handlers>
-                                <dot:ConfirmPostBackHandler Message="Opravdu vymazat požadavek? Dojde i ke smazání připojených souborů" />
+                                <dot:ConfirmPostBackHandler Message="{{resource: Global.DeletePozadavek}}" />
                             </PostBack.Handlers>
                         </dot:LinkButton>
                     </ContentTemplate>
@@ -69,9 +70,9 @@
         <dot:DataPager DataSet="{value: SeznamPozadavkuGV}" class="pagination" />
         <br />
 
-       
+
         <dot:RouteLink RouteName="PozadavekEdit" Param-Id=0
-                       class="btn btn-primary" Text="Nový požadavek">
+                       class="btn btn-primary" Text="{{resource: PagePozadavky.NovyPoz}}">
         </dot:RouteLink>
 
     </div>

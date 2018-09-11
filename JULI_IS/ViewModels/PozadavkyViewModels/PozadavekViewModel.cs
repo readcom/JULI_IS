@@ -493,6 +493,8 @@ namespace ViewModels.PozadavkyViewModels
         {
             var items = SeznamItemsGridViewDataSet.Items.ToList();
 
+
+            // doplneni KST
             if (!string.IsNullOrEmpty(PozadavekData.KST))
             {
                 foreach (var item in items)
@@ -506,16 +508,15 @@ namespace ViewModels.PozadavkyViewModels
                 }
             }
 
+            // doplneni nabidky do polozek pokud nemaji
             if (!string.IsNullOrEmpty(PozadavekData.NabidkaCislo))
             {
                 foreach (var item in items)
-                {
-                    if (string.IsNullOrEmpty(item.NabidkaCislo))
-                    {
-                        var itm = ItemsService.GetItemById(item.ID);
+                {                                       
+                    var itm = ItemsService.GetItemById(item.ID);
+                    if (string.IsNullOrEmpty(itm.NabidkaCislo))
                         itm.NabidkaCislo = PozadavekData.NabidkaCislo;
-                        ItemsService.ItemSave(itm);
-                    }
+                    ItemsService.ItemSave(itm);                    
                 }
             }
 
@@ -581,7 +582,7 @@ namespace ViewModels.PozadavkyViewModels
                 var items = SeznamItemsGridViewDataSet.Items.ToList();
                 if (items.Count == 0) throw new ValidationException("items");
 
-                if (string.IsNullOrEmpty(PozadavekData.KST))
+                if (string.IsNullOrEmpty(PozadavekData.KST) && !PozadavekData.InvesticePlanovana)
                 {
                     foreach (var item in items)
                     {
@@ -592,7 +593,8 @@ namespace ViewModels.PozadavkyViewModels
                     PozadavekData.KST = items.First().KST;
                 }
 
-                if (string.IsNullOrEmpty(PozadavekData.NabidkaCislo))
+                NabidkaNeuvedenaCheck();
+                if (string.IsNullOrEmpty(PozadavekData.NabidkaCislo) && NabidkaNeuvedena == false)
                 {
                     foreach (var item in items)
                     {
@@ -888,7 +890,7 @@ namespace ViewModels.PozadavkyViewModels
                     ItemData.Zalozil = UserServices.GetActiveUser();
                     ItemData.DatumZalozeni = DateTime.Now;
                     // ItemData.DatumObjednani = DateTime.Now;
-                    ItemData.TerminDodani = (DateTime.Now.AddDays(7));
+                    // ItemData.TerminDodani = (DateTime.Now.AddDays(7));
                     ItemData.KST = LastKST;
                     ItemData.InvesticeNeplanovana = LastInvesticeNeplanovana;
                     ItemData.InvesticePlanovana = LastInvesticePlanovana;
@@ -1141,6 +1143,7 @@ namespace ViewModels.PozadavkyViewModels
                     PozadavekData.Zalozil = UserServices.GetActiveUser();
                     PozadavekData.Datum = DateTime.Now;
                     PozadavekData.NakupOstatni = true;
+                    PozadavekData.Stav = "Koncept";
                     SavePozadavek();
 
                     Context.RedirectToRoute("PozadavekEdit", new { Id = PozadavekData.ID });
@@ -1148,58 +1151,75 @@ namespace ViewModels.PozadavkyViewModels
                 }
                 else
                 {
-                    //Dodavatel = new DodavateleDTO();
-                    PozadavekData = PozadavkyService.GetPozadavekById(PozadavekId.Value);
+                    try
+                    {
+                        //Dodavatel = new DodavateleDTO();
+                        PozadavekData = PozadavkyService.GetPozadavekById(PozadavekId.Value);
 
-                    //PozadavkyService.LastS21DodId = PozadavekData.DodavatelS21ID;
-                    //if (PozadavekData.FullPozadavekID == null) PozadavekData.FullPozadavekID = PozadavekData.ID.ToString();
-                    if (PozadavekData.InvesticeNeplanovana) InvesticeVyber = 1;
-                    else if (PozadavekData.InvesticePlanovana) InvesticeVyber = 2;
-                    else if (PozadavekData.NakupOstatni) InvesticeVyber = 3;
+                        //PozadavkyService.LastS21DodId = PozadavekData.DodavatelS21ID;
+                        //if (PozadavekData.FullPozadavekID == null) PozadavekData.FullPozadavekID = PozadavekData.ID.ToString();
+                        if (PozadavekData.InvesticeNeplanovana) InvesticeVyber = 1;
+                        else if (PozadavekData.InvesticePlanovana) InvesticeVyber = 2;
+                        else if (PozadavekData.NakupOstatni) InvesticeVyber = 3;
 
-                    vyplnenoKST = (PozadavekData.KST != null) ? true : false;
+                        vyplnenoKST = (PozadavekData.KST != null) ? true : false;
 
-                    //VlastniPlatba = (PozadavekData.ZpusobPlatbyId == 6);
+                        //VlastniPlatba = (PozadavekData.ZpusobPlatbyId == 6);
 
-                    // kdo chce nahravat dodavatele na startu         
-                    UsersDTO user = UserServices.GetUsersByUserName(UserServices.GetActiveUser()).FirstOrDefault();
-                    // ZMENA if (user != null && user.NacitatDodavatele == true)
+                        // kdo chce nahravat dodavatele na startu         
+                        UsersDTO user = UserServices.GetUsersByUserName(UserServices.GetActiveUser()).FirstOrDefault();
+                        // ZMENA if (user != null && user.NacitatDodavatele == true)
                         DodavateleInit();
 
-                    if (PozadavekData.DodavatelID != 0)
-                    {
-                        DodavatelS21 = DodavatelService.GetDodavatelByIdAsS21(PozadavekData.DodavatelID);
-                        PozadavekData.DodavatelS21ID = DodavatelS21.Id;
+                        if (PozadavekData.DodavatelID != 0)
+                        {
+                            DodavatelS21 = DodavatelService.GetDodavatelByIdAsS21(PozadavekData.DodavatelID);
+                            PozadavekData.DodavatelS21ID = DodavatelS21.Id;
 
-                        SelectedDodavatel = DodavatelS21.SNAM05 + ", " + DodavatelS21.SUPN05
-                            + "\n"
-                            + (String.IsNullOrEmpty(DodavatelS21.SAD105) ? "" : DodavatelS21.SAD105 + ", ")
-                            + (String.IsNullOrEmpty(DodavatelS21.SAD205) ? "" : DodavatelS21.SAD205 + ", ")
-                            + (String.IsNullOrEmpty(DodavatelS21.SAD305) ? "" : DodavatelS21.SAD305 + ", ")
-                            + (String.IsNullOrEmpty(DodavatelS21.SAD405) ? "" : DodavatelS21.SAD405 + ", ")
-                            + (String.IsNullOrEmpty(DodavatelS21.SAD505) ? "" : DodavatelS21.SAD505 + ", ")
-                            + (String.IsNullOrEmpty(DodavatelS21.PSC) ? "" : "\nPSÈ: " + DodavatelS21.PSC)
-                            + $"\nmìna: {DodavatelS21.CURN05}"
-                           + ""
-                           ;
-                        SelectedDodavatel += $"\nemail: { DodavatelS21.WURL05}\n";
+                            SelectedDodavatel = DodavatelS21.SNAM05 + ", " + DodavatelS21.SUPN05
+                                + "\n"
+                                + (String.IsNullOrEmpty(DodavatelS21.SAD105) ? "" : DodavatelS21.SAD105 + ", ")
+                                + (String.IsNullOrEmpty(DodavatelS21.SAD205) ? "" : DodavatelS21.SAD205 + ", ")
+                                + (String.IsNullOrEmpty(DodavatelS21.SAD305) ? "" : DodavatelS21.SAD305 + ", ")
+                                + (String.IsNullOrEmpty(DodavatelS21.SAD405) ? "" : DodavatelS21.SAD405 + ", ")
+                                + (String.IsNullOrEmpty(DodavatelS21.SAD505) ? "" : DodavatelS21.SAD505 + ", ")
+                                + (String.IsNullOrEmpty(DodavatelS21.PSC) ? "" : "\nPSÈ: " + DodavatelS21.PSC)
+                                + $"\nmìna: {DodavatelS21.CURN05}"
+                               + ""
+                               ;
+                            SelectedDodavatel += $"\nemail: { DodavatelS21.WURL05}\n";
 
-                        SelectedDodavatel += DodavatelS21.CNTN1A ?? "";
+                            SelectedDodavatel += DodavatelS21.CNTN1A ?? "";
 
-                        Osoba.CNTN1A = DodavatelS21.CNTN1A;
-                        Osoba.EMIL1A = DodavatelS21.EMIL1A;
-                        Osoba.GTX11A = DodavatelS21.GTX11A;
+                            Osoba.CNTN1A = DodavatelS21.CNTN1A;
+                            Osoba.EMIL1A = DodavatelS21.EMIL1A;
+                            Osoba.GTX11A = DodavatelS21.GTX11A;
+                        }
+
+                        if (PozadavekData.Mena == "CZK") MenaClass = "form-control";
+                        if (PozadavekData.Mena != "CZK") MenaClass = "form-control mena-cizy";
+                        if (DodavatelS21.CURN05 != PozadavekData.Mena) MenaClass = "form-control mena-error";
+
+                        if (PozadavekData.Level2Schvaleno && PozadavekData.Level2SchvalovatelID != 0)
+                        {
+                            PozadavekData.Level2SchvalovatelJmeno =
+                                UserServices.GetUserById(PozadavekData.Level2SchvalovatelID).Jmeno;
+                        }
                     }
-
-                    if (PozadavekData.Mena == "CZK") MenaClass = "form-control";
-                    if (PozadavekData.Mena != "CZK") MenaClass = "form-control mena-cizy";
-                    if (DodavatelS21.CURN05 != PozadavekData.Mena) MenaClass = "form-control mena-error";
-
-                    if (PozadavekData.Level2Schvaleno)
+                    catch (Exception ex)
                     {
-                        PozadavekData.Level2SchvalovatelJmeno =
-                            UserServices.GetUserById(PozadavekData.Level2SchvalovatelID).Jmeno;
+                        AlertText = "Chyba pøi naèítání požadavku: ";
+
+                        if (ex.InnerException == null) AlertText += ex.Message;
+                        else
+                        {
+                            AlertText += ex.InnerException.Message;
+                            if (ex.InnerException.InnerException.Message != null)
+                                AlertText += ex.InnerException.InnerException.Message;
+                        }
                     }
+                    
+
 
                 }
 
@@ -1227,68 +1247,83 @@ namespace ViewModels.PozadavkyViewModels
             //    ? (UserServices.GetActiveUserLevels().Contains(1) || UserServices.GetActiveUserLevels().Contains(2))
             //    : PozadavekData.PodpisLevel == 2 ? UserServices.GetActiveUserLevels().Contains(2) : false;
 
-            NadrizenyUzivatel = false;
-
-            switch (PozadavekData.PodpisLevel)
+            try
             {
-                case 1:
-                    if (UserServices.GetActiveUserLevels().Contains(2)) NadrizenyUzivatel = true;
-                    if (UserServices.GetActiveUserLevels().Contains(1) && PozadavekData.Level2Schvaleno == false) NadrizenyUzivatel = true;
-                    break;
-                case 2:
-                    if (UserServices.GetActiveUserLevels().Contains(2) && PozadavekData.Level2Schvaleno == false) NadrizenyUzivatel = true;
-                    break;
+                NadrizenyUzivatel = false;
+
+                switch (PozadavekData.PodpisLevel)
+                {
+                    case 1:
+                        if (UserServices.GetActiveUserLevels().Contains(2)) NadrizenyUzivatel = true;
+                        if (UserServices.GetActiveUserLevels().Contains(1) && PozadavekData.Level2Schvaleno == false) NadrizenyUzivatel = true;
+                        break;
+                    case 2:
+                        if (UserServices.GetActiveUserLevels().Contains(2) && PozadavekData.Level2Schvaleno == false) NadrizenyUzivatel = true;
+                        break;
+                }
+
+                Editovatelny =
+                    (UserServices.GetActiveUserLevels().Contains(99)) ||
+                    (UploadedFiles.IsBusy == false && PozadavekData.Zamitnuto == false
+                     && (PozadavekData.Level1Schvaleno == false || NadrizenyUzivatel == true));
+
+
+                ZrusitelnyPodpis = (PozadavekData.Level1Odeslano && Editovatelny);
+
+                Podepsatelny = ZrusitelnyPodpis && (UserServices.GetUsersByUserName(UserServices.GetActiveUser()).Select(i => i.ID).Contains(PozadavekData.SchvalovatelID) && PozadavekData.PodpisLevel == 1)
+                    || (PozadavekData.PodpisLevel == 2 && UserServices.GetActiveUserLevels().Contains(2));
+
+                //PozadavekData = PozadavkyService.GetPozadavekById(PozadavekId.Value);
+                // PozadavekData.DodavatelS21ID = PozadavkyService.LastS21DodId;
+                ItemsService.FillGridViewItemsByPozadavekId(SeznamItemsGridViewDataSet, PozadavekId.Value);
+                Files = FilesService.GetFilesListByPozadavekID(PozadavekData.ID);
+                PozadavekData.CelkovaCena = ItemsService.GetCelkovaCenaByPozadavekId(PozadavekId.Value);
+
+                if (SeznamItemsGridViewDataSet.Items.Count() > 0)
+                    LastItemId = SeznamItemsGridViewDataSet.Items.Last().ID;
+
+                PozadavekData.PocetPolozek = ItemsService.GetPocetItemsByPozadavekId(PozadavekData.ID);
+
+                if (PozadavekData.Level1Odeslano)
+                {
+                    PozadavekData.Level1OdeslanoJmeno =
+                    UserServices.GetUserById(PozadavekData.SchvalovatelID).Jmeno;
+                }
+
+                if (PozadavekData.Level1Schvaleno && PozadavekData.Level1SchvalovatelID != 0)
+                {
+                    PozadavekData.Level1SchvalovatelJmeno =
+                    UserServices.GetUserById(PozadavekData.Level1SchvalovatelID).Jmeno;
+                }
+
+                if (!Editovatelny)
+                {
+                    AlertText += " POZOR: Zmìny mùže provádìt pouze schvalovatel požadavku!";
+                }
+
+                if (PozadavekData.PodpisLevel >= 3)
+                {
+                    AlertText += " POZOR: Požadavek byl schválen, další zmìny nejsou možné!";
+                }
+
+                if (PozadavekData.Zamitnuto)
+                {
+                    AlertText += " POZOR: Požadavek ZAMÍTNUT, požadavek není možné dále upravovat.!";
+                }
             }
-
-            Editovatelny =
-                (UserServices.GetActiveUserLevels().Contains(99)) ||
-                (UploadedFiles.IsBusy == false && PozadavekData.Zamitnuto == false
-                 && (PozadavekData.Level1Schvaleno == false || NadrizenyUzivatel == true));
-                  
-
-            ZrusitelnyPodpis = (PozadavekData.Level1Odeslano && Editovatelny);
-
-            Podepsatelny = ZrusitelnyPodpis && (UserServices.GetUsersByUserName(UserServices.GetActiveUser()).Select(i => i.ID).Contains(PozadavekData.SchvalovatelID) && PozadavekData.PodpisLevel == 1)
-                || (PozadavekData.PodpisLevel == 2 && UserServices.GetActiveUserLevels().Contains(2));
-
-            //PozadavekData = PozadavkyService.GetPozadavekById(PozadavekId.Value);
-            // PozadavekData.DodavatelS21ID = PozadavkyService.LastS21DodId;
-            ItemsService.FillGridViewItemsByPozadavekId(SeznamItemsGridViewDataSet, PozadavekId.Value);
-            Files = FilesService.GetFilesListByPozadavekID(PozadavekData.ID);
-            PozadavekData.CelkovaCena = ItemsService.GetCelkovaCenaByPozadavekId(PozadavekId.Value);
-
-            if (SeznamItemsGridViewDataSet.Items.Count() > 0)
-            LastItemId = SeznamItemsGridViewDataSet.Items.Last().ID;
-
-            PozadavekData.PocetPolozek = ItemsService.GetPocetItemsByPozadavekId(PozadavekData.ID);
-
-            if (PozadavekData.Level1Odeslano)
+            catch (Exception ex)
             {
-                PozadavekData.Level1OdeslanoJmeno =
-                UserServices.GetUserById(PozadavekData.SchvalovatelID).Jmeno;
-            }
+                AlertText += "Chyba pøi naèítání požadavku: ";
 
-            if (PozadavekData.Level1Schvaleno)
-            {
-                PozadavekData.Level1SchvalovatelJmeno =
-                UserServices.GetUserById(PozadavekData.Level1SchvalovatelID).Jmeno;
+                if (ex.InnerException == null) AlertText += ex.Message;
+                else
+                {
+                    AlertText += ex.InnerException.Message;
+                    if (ex.InnerException.InnerException.Message != null)
+                        AlertText += ex.InnerException.InnerException.Message;
+                }
             }
-
-            if (!Editovatelny)
-            {
-                AlertText += " POZOR: Zmìny mùže provádìt pouze schvalovatel požadavku!";
-            }
-
-            if (PozadavekData.PodpisLevel >= 3)
-            {
-                AlertText += " POZOR: Požadavek byl schválen, další zmìny nejsou možné!";
-            }
-
-            if (PozadavekData.Zamitnuto)
-            {
-                AlertText += " POZOR: Požadavek ZAMÍTNUT, požadavek není možné dále upravovat.!";
-            }
-
+            
             return base.PreRender();
         }
 

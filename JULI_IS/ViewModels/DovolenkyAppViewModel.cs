@@ -113,7 +113,7 @@ namespace ViewModels
                     CanSignObjednavky = ActiveUserLevel.Contains(4);
                     CanMakeObjednavky = ActiveUserLevel.Contains(3);
                     CanSignPozadavky = (ActiveUserLevel.Contains(1) || ActiveUserLevel.Contains(2));
-                    Text = $"Uzivatel: {ActiveUser}, Level: ";
+                    Text = $"User: {ActiveUser}, Level: ";
                     ActiveUserLevel.ForEach(e => Text += e + ", ");
                     UserLever = ActiveUserLevel.Max();
                 }

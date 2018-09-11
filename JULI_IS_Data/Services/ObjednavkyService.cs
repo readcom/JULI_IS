@@ -274,11 +274,21 @@ namespace Pozadavky.Services
 
         public static void CelkovaCenaPrepocitat(int ObjId)
         {
+
             using (var db = new PozadavkyContext(DtbConxString))
             {
-                var suma = (from i in db.ObjItems
-                             where i.ObjednavkaID == ObjId
-                             select i.CelkovaCena).Sum();
+
+                float suma = 0;
+                try
+                {
+                    suma = (from i in db.ObjItems
+                                where i.ObjednavkaID == ObjId
+                                select i.CelkovaCena).Sum();
+                }
+                catch (Exception e)
+                {
+                    suma = 0;
+                }
                     
                 var obj = db.Objednavky.Find(ObjId);
                 obj.CelkovaCena = suma;
@@ -303,10 +313,25 @@ namespace Pozadavky.Services
         {
             using (var db = new PozadavkyContext(DtbConxString))
             {
-                db.Database.Log = str => Logger.Log(str);
+                //db.Database.Log = str => Logger.Log(str);
 
-                //db.Objednavky.ProjectTo<ObjednavkyDTO>().ToList();
-                var query = (from o in db.Objednavky
+                bool NeverejnyPristup = false;
+                IQueryable<ObjednavkaDTO> query;
+                var User = UserServices.GetActiveUser();
+
+                if (!string.IsNullOrEmpty(User))
+                {
+                    List<UsersDTO> ActivUsers = UserServices.GetUsersByUserName(User);
+                    foreach (var user in ActivUsers)
+                    {
+                        if (user.NeverejnyPristup == true) NeverejnyPristup = true;
+                    }
+                }
+
+                if (NeverejnyPristup)
+                {
+                    //db.Objednavky.ProjectTo<ObjednavkyDTO>().ToList();
+                    query = (from o in db.Objednavky
                              join i in db.ObjItems on o.ID equals i.ObjednavkaID
                              join p in db.Pozadavky on i.PozadavekID equals p.ID
                              //join i in db.ObjItems on new { ID = o.ID } equals new { ID = i.ObjednavkaID }
@@ -353,18 +378,68 @@ namespace Pozadavky.Services
 
                              });
 
-                             //select new ObjednavkyDTO()
-                             //{
-                             //    ID = o.ID,
-                             //    FullObjednavkaID = o.Datum.Value.Year.ToString() + o.ID.ToString(),
-                             //    FullDodavatelName = d.Nazev + " | " + d.JULINumber.ToString(),
-                             //    PozadavekZalozil = p.Zalozil,
-                             //    CelkovyPopis = o.CelkovyPopis,
-                             //    CelkovaCena = o.CelkovaCena,
-                             //    Mena = i.Mena,
-                             //    Datum = o.Datum,
-                             //    TerminDodani = i.TerminDodani
-                             //});
+                    //select new ObjednavkyDTO()
+                    //{
+                    //    ID = o.ID,
+                    //    FullObjednavkaID = o.Datum.Value.Year.ToString() + o.ID.ToString(),
+                    //    FullDodavatelName = d.Nazev + " | " + d.JULINumber.ToString(),
+                    //    PozadavekZalozil = p.Zalozil,
+                    //    CelkovyPopis = o.CelkovyPopis,
+                    //    CelkovaCena = o.CelkovaCena,
+                    //    Mena = i.Mena,
+                    //    Datum = o.Datum,
+                    //    TerminDodani = i.TerminDodani
+                    //});
+                }
+                else
+                {
+                    query = (from o in db.Objednavky
+                             join i in db.ObjItems on o.ID equals i.ObjednavkaID
+                             join p in db.Pozadavky on i.PozadavekID equals p.ID
+                             //join i in db.ObjItems on new { ID = o.ID } equals new { ID = i.ObjednavkaID }
+                             //join p in db.Pozadavky on new { ID = i.PozadavekID } equals new { ID = p.ID }
+                             //join d in db.Dodavatele on new { ID = Convert.ToInt32(p.DodavatelID) } equals new { ID = d.ID } into d_join
+                             //from d in d_join.DefaultIfEmpty()
+                             from d in db.Dodavatele.Where(dod => dod.Id == p.DodavatelID).DefaultIfEmpty()
+                             where o.Smazano == false && p.Neverejny == false
+                             group new { o, i, p, d } by new
+                             {
+                                 o.ID,
+                                 o.CelkovyPopis,
+                                 o.CelkovaCena,
+                                 o.Datum,
+                                 o.Objednano,
+                                 o.DatumObjednani,
+                                 o.Mena,
+                                 o.DodavatelID,
+                                 o.FullObjednavkaID,
+                                 o.PocetPolozek,
+                                 o.AvizoDoruceni,
+                                 o.DatumDodani,
+                                 p.Zalozil
+                             } into g
+                             orderby
+                               g.Key.ID descending
+                             select new ObjednavkaDTO()
+                             {
+                                 ID = g.Key.ID,
+                                 FullObjednavkaID = string.IsNullOrEmpty(g.Key.FullObjednavkaID) ? g.Key.ID.ToString() : g.Key.FullObjednavkaID,
+                                 FullDodavatelName = (g.Min(p => p.d.SNAM05) + " | " + g.Min(p => p.d.SUPN05)),
+                                 CelkovyPopis = g.Key.CelkovyPopis,
+                                 CelkovaCena = g.Key.CelkovaCena,
+                                 Datum = g.Key.Datum,
+                                 Objednano = g.Key.Objednano,
+                                 DatumObjednani = g.Key.DatumObjednani,
+                                 Mena = g.Key.Mena,  //g.Min(p => p.i.Mena),
+                                 TerminDodani = (DateTime?)g.Min(p => p.i.TerminDodani),
+                                 DodavatelID = g.Key.DodavatelID, //(int?)g.Min(p => p.p.DodavatelID)
+                                 PocetPolozek = g.Key.PocetPolozek,
+                                 AvizoDoruceni = g.Key.AvizoDoruceni,
+                                 DatumDodani = g.Key.DatumDodani,
+                                 PozadavekZalozil = g.Key.Zalozil
+
+                             });
+                }
 
                 dataSet.LoadFromQueryable(query);
             }
@@ -408,7 +483,25 @@ namespace Pozadavky.Services
         {
             using (var db = new PozadavkyContext(DtbConxString))
             {
-                var query = (from o in db.Objednavky
+
+                bool NeverejnyPristup = false;
+                IQueryable<ObjednavkaDTO> query;
+
+                var User = UserServices.GetActiveUser();
+
+                if (!string.IsNullOrEmpty(User))
+                {
+                    List<UsersDTO> ActivUsers = UserServices.GetUsersByUserName(User);
+                    foreach (var user in ActivUsers)
+                    {
+                        if (user.NeverejnyPristup == true) NeverejnyPristup = true;
+                    }
+                }
+
+                if (NeverejnyPristup)
+                {
+
+                    query = (from o in db.Objednavky
                              join i in db.ObjItems on o.ID equals i.ObjednavkaID
                              join p in db.Pozadavky on i.PozadavekID equals p.ID
                              //join i in db.ObjItems on new { ID = o.ID } equals new { ID = i.ObjednavkaID }
@@ -454,6 +547,57 @@ namespace Pozadavky.Services
                                  PozadavekZalozil = g.Key.Zalozil
 
                              });
+                }
+                else
+                {
+                    query = (from o in db.Objednavky
+                             join i in db.ObjItems on o.ID equals i.ObjednavkaID
+                             join p in db.Pozadavky on i.PozadavekID equals p.ID
+                             //join i in db.ObjItems on new { ID = o.ID } equals new { ID = i.ObjednavkaID }
+                             //join p in db.Pozadavky on new { ID = i.PozadavekID } equals new { ID = p.ID }
+                             //join d in db.Dodavatele on new { ID = Convert.ToInt32(p.DodavatelID) } equals new { ID = d.ID } into d_join
+                             //from d in d_join.DefaultIfEmpty()
+                             from d in db.Dodavatele.Where(dod => dod.Id == p.DodavatelID).DefaultIfEmpty()
+                             where o.Smazano == false && p.Neverejny == false
+                             group new { o, i, p, d } by new
+                             {
+                                 o.ID,
+                                 o.CelkovyPopis,
+                                 o.CelkovaCena,
+                                 o.Datum,
+                                 o.Objednano,
+                                 o.DatumObjednani,
+                                 o.Mena,
+                                 o.DodavatelID,
+                                 o.FullObjednavkaID,
+                                 o.PocetPolozek,
+                                 o.AvizoDoruceni,
+                                 o.DatumDodani,
+                                 p.Zalozil
+                             } into g
+                             orderby
+                               g.Key.ID descending
+                             select new ObjednavkaDTO()
+                             {
+                                 ID = g.Key.ID,
+                                 FullObjednavkaID = string.IsNullOrEmpty(g.Key.FullObjednavkaID) ? g.Key.ID.ToString() : g.Key.FullObjednavkaID,
+                                 FullDodavatelName = (g.Min(p => p.d.SNAM05) + " | " + g.Min(p => p.d.SUPN05)),
+                                 CelkovyPopis = g.Key.CelkovyPopis,
+                                 CelkovaCena = g.Key.CelkovaCena,
+                                 Datum = g.Key.Datum,
+                                 Objednano = g.Key.Objednano,
+                                 DatumObjednani = g.Key.DatumObjednani,
+                                 Mena = g.Key.Mena,  //g.Min(p => p.i.Mena),
+                                 TerminDodani = (DateTime?)g.Min(p => p.i.TerminDodani),
+                                 DodavatelID = g.Key.DodavatelID, //(int?)g.Min(p => p.p.DodavatelID)
+                                 PocetPolozek = g.Key.PocetPolozek,
+                                 AvizoDoruceni = g.Key.AvizoDoruceni,
+                                 DatumDodani = g.Key.DatumDodani,
+                                 PozadavekZalozil = g.Key.Zalozil
+
+                             });
+                }
+
 
                 var list = query;
 
@@ -782,6 +926,7 @@ namespace Pozadavky.Services
                              where i.ObjednavkaID == objId
                              select new PozadavekDTO
                              {
+                                ID = p.ID,
                                 Zalozil = p.Zalozil,
                                 Level1SchvalovatelID = p.Level1SchvalovatelID ?? 0,
                                 Level2SchvalovatelID = p.Level2SchvalovatelID ?? 0,
@@ -877,6 +1022,9 @@ namespace Pozadavky.Services
                             );
                     }
 
+                    PozadavekDTO pozadavek = PozadavkyService.GetPozadavekById(item.ID);
+                    pozadavek.Stav = "Schvalovaní objednávky";
+                    PozadavkyService.PozadavekSave(pozadavek);                                          
                 }
 
                 // info schvalovateli objednavky
@@ -913,7 +1061,7 @@ namespace Pozadavky.Services
             {
                 var obj = db.Objednavky.Find(data.ID);
                 
-                obj.FullObjednavkaID = obj.FullObjednavkaID;
+                //obj.FullObjednavkaID = obj.FullObjednavkaID;
 
                 obj.SchvalovatelID = schvalovatel.ID;
                 obj.Schvaleno = false;
@@ -996,7 +1144,7 @@ namespace Pozadavky.Services
             {
                 var obj = db.Objednavky.Find(data.ID);
 
-                obj.FullObjednavkaID = obj.FullObjednavkaID;
+                //obj.FullObjednavkaID = obj.FullObjednavkaID;
 
                 obj.SchvalovatelID = schvalovatel.ID;
                 obj.Schvaleno = true;
@@ -1026,7 +1174,7 @@ namespace Pozadavky.Services
                     string email = item.Zalozil + "@juli.cz";
                     if (Constants.Test == true) email = "marek.novak@juli.cz";
 
-                    vysledek = MailServices.SendMail(email,
+                    vysledek += MailServices.SendMail(email,
 
                     $"Objednávka č. {obj.FullObjednavkaID} byla schválena!",
 
@@ -1036,6 +1184,11 @@ namespace Pozadavky.Services
                     $"v {obj.SchvalenoDne:HH:mm}" + " hodin" 
                    // + $"<br>  mail pro uživatele: {item.Zalozil}@juli.cz"
                     );
+
+                    PozadavekDTO pozadavek = PozadavkyService.GetPozadavekById(item.ID);
+                    pozadavek.Stav = "Objednávka schválena";
+
+                    PozadavkyService.PozadavekSave(pozadavek);
                 }
 
             }

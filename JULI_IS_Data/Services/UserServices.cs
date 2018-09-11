@@ -179,7 +179,8 @@ namespace Pozadavky.Services
                                 Email = sch.Email,
                                 Uroven = sch.Uroven,
                                 OdesilatMaily = sch.OdesilatMaily,
-                                NacitatDodavatele = sch.NacitatDodavatele
+                                NacitatDodavatele = sch.NacitatDodavatele,
+                                NeverejnyPristup =  sch.NeverejnyPristup
                             }).ToList();
 
                 return schv;

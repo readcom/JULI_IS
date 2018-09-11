@@ -1,22 +1,23 @@
 ﻿@viewModel ViewModels.PozadavkyViewModels.DodavatelePrehledViewModel, JULI_IS
 @masterPage Views/app.dotmaster
+@import JULI_IS.Resources.Pozadavky
 
 <dot:Content ContentPlaceHolderID="PageContent">
 
     <div class="wrapper">
 
-        <h1>Přehled Dodavatelů</h1>
+        <h1>{{resource: PageDodavatele.Prehled}}</h1>
 
 
         <dot:GridView DataSource="{value: GridViewSeznamDodavatelu}" class="table table-bordered">
             <Columns>
-                <dot:GridViewTextColumn ValueBinding="{value: SUPN05}" HeaderText="Číslo" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: SNAM05}" HeaderText="Název" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: SAD105}" HeaderText="Adresa" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: SAD205}" HeaderText="Adresa" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: SAD305}" HeaderText="Adresa" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: SAD405}" HeaderText="Adresa" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: SAD505}" HeaderText="Adresa" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: SUPN05}" HeaderText="{{resource: Grid.Cislo}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: SNAM05}" HeaderText="{{resource: Grid.Nazev}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: SAD105}" HeaderText="{{resource: Grid.Adresa}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: SAD205}" HeaderText="{{resource: Grid.Adresa}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: SAD305}" HeaderText="{{resource: Grid.Adresa}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: SAD405}" HeaderText="{{resource: Grid.Adresa}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: SAD505}" HeaderText="{{resource: Grid.Adresa}}" AllowSorting="true" />
                 <!--tlacitko pro editaci Dodavatel-->
                 <!--<dot:GridViewTemplateColumn HeaderText="">
                     <ContentTemplate>
@@ -43,7 +44,7 @@
                        class="btn btn-primary" Text="Nový Dodavatel">
         </dot:RouteLink>-->
 
-        <p>Editace dodavatelů je možná pouze v systému S21</p>
+        <p>{{resource: PageDodavatele.EditS21}}</p>
     </div>
 
 </dot:Content>

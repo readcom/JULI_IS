@@ -15,10 +15,20 @@ namespace ViewModels.PozadavkyViewModels
     {
 
     
-        public override Task PreRender()
-        {
-            return base.PreRender();
-        }
+        //public override Task PreRender()
+        //{
+        //    return base.PreRender();
+        //}
+
+        //public override Task Init()
+        //{
+        //    if (!string.IsNullOrEmpty(CookiesServices.GetCookieValue("jazyk")))
+        //    {
+        //        Context.ChangeCurrentCulture(CookiesServices.GetCookieValue("jazyk"));
+        //    }
+       
+        //    return base.Init();
+        //}
     }
 }
 

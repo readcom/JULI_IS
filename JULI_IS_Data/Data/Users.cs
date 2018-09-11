@@ -33,5 +33,6 @@ namespace Pozadavky.Data
         
         public bool OdesilatMaily { get; set; }
         public bool NacitatDodavatele { get; set; }
+        public bool NeverejnyPristup { get; set; }
     }
 }

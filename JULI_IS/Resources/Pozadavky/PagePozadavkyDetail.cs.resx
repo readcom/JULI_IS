@@ -1,0 +1,312 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddItem" xml:space="preserve">
+    <value>Přidat položku</value>
+  </data>
+  <data name="BtnTisk" xml:space="preserve">
+    <value>Požadavek vytisknut</value>
+  </data>
+  <data name="CelkovaCena" xml:space="preserve">
+    <value>Celková cena</value>
+  </data>
+  <data name="Datum" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="DeleteItemConfirm" xml:space="preserve">
+    <value>Opravdu vymazat položku z požadavku?</value>
+  </data>
+  <data name="Dne" xml:space="preserve">
+    <value>Dne</value>
+  </data>
+  <data name="Duvod" xml:space="preserve">
+    <value>Důvod</value>
+  </data>
+  <data name="EditDodavatele" xml:space="preserve">
+    <value>Nový / Edit dodavatele</value>
+  </data>
+  <data name="EditDodavatelePopis" xml:space="preserve">
+    <value>po výběru dodavatele klikněte na tlačítko pro přiřazení dodavatele k požadavku</value>
+  </data>
+  <data name="fileDeleteConfirm" xml:space="preserve">
+    <value>Opravdu soubor vymazat?</value>
+  </data>
+  <data name="fileSuccessMessageText" xml:space="preserve">
+    <value>Soubory byly v pořádku nahrány</value>
+  </data>
+  <data name="fileUploadButtonText" xml:space="preserve">
+    <value>Nahrát soubory (pro výběr více souborů podržte klávesu CTRL)</value>
+  </data>
+  <data name="fileUploadErrorMessageText" xml:space="preserve">
+    <value>Chyba během nahrávání souborů</value>
+  </data>
+  <data name="Jmeno" xml:space="preserve">
+    <value>Jméno</value>
+  </data>
+  <data name="kst" xml:space="preserve">
+    <value>KST (pokud je jednotné pro celý požadavek)</value>
+  </data>
+  <data name="kstVyber" xml:space="preserve">
+    <value>Vyberte KST</value>
+  </data>
+  <data name="mena" xml:space="preserve">
+    <value>Měna</value>
+  </data>
+  <data name="NabidkaCislo" xml:space="preserve">
+    <value>Číslo nabídky</value>
+  </data>
+  <data name="nadpis" xml:space="preserve">
+    <value>Detail požadavku</value>
+  </data>
+  <data name="NazevDodavatele" xml:space="preserve">
+    <value>Název dodavatele</value>
+  </data>
+  <data name="Neodeslano" xml:space="preserve">
+    <value>Neodesláno</value>
+  </data>
+  <data name="Nepodepsano" xml:space="preserve">
+    <value>Nepodepsáno</value>
+  </data>
+  <data name="neuvedeno" xml:space="preserve">
+    <value>Neuvedeno</value>
+  </data>
+  <data name="neverejny" xml:space="preserve">
+    <value>Neveřejný požadavek</value>
+  </data>
+  <data name="ObjNeodesilat" xml:space="preserve">
+    <value>Objednávku neodesílat</value>
+  </data>
+  <data name="Odeslano" xml:space="preserve">
+    <value>Odesláno</value>
+  </data>
+  <data name="OdeslanoVedouci" xml:space="preserve">
+    <value>Odesláno ke schválení</value>
+  </data>
+  <data name="PDFgen" xml:space="preserve">
+    <value>Vygeneruje se PDF soubor, který se zároveň uloží mezi přiložené soubory.</value>
+  </data>
+  <data name="PlatbaVlastniText" xml:space="preserve">
+    <value>Vlastní text platby</value>
+  </data>
+  <data name="Podepsano" xml:space="preserve">
+    <value>Podepsáno</value>
+  </data>
+  <data name="PodepsanoVedouci" xml:space="preserve">
+    <value>Podepsáno vedoucím</value>
+  </data>
+  <data name="popis" xml:space="preserve">
+    <value>Celkový popis (nadpis) požadavku</value>
+  </data>
+  <data name="PozadavekCislo" xml:space="preserve">
+    <value>Požadavek číslo</value>
+  </data>
+  <data name="PozadavekPozn1" xml:space="preserve">
+    <value>Požadavek můžete poslat znovu na schválení</value>
+  </data>
+  <data name="PozadavekZalozen" xml:space="preserve">
+    <value>Požadavek založen dne</value>
+  </data>
+  <data name="PozadavekZamitnut" xml:space="preserve">
+    <value>Požadavek byl ZAMÍTNUT</value>
+  </data>
+  <data name="Poznamka" xml:space="preserve">
+    <value>Poznámka</value>
+  </data>
+  <data name="PrilozeneSoubory" xml:space="preserve">
+    <value>Přiložené soubory</value>
+  </data>
+  <data name="PriraditDodavatele" xml:space="preserve">
+    <value>Přiřadit dodavatele k požadavku</value>
+  </data>
+  <data name="Schalovatel" xml:space="preserve">
+    <value>Schvalovatel</value>
+  </data>
+  <data name="Uzivatelem" xml:space="preserve">
+    <value>uživatelem</value>
+  </data>
+  <data name="VybrDodavatel" xml:space="preserve">
+    <value>Vybraný dodavatel</value>
+  </data>
+  <data name="zalozil" xml:space="preserve">
+    <value>Založil</value>
+  </data>
+  <data name="zastoupeni" xml:space="preserve">
+    <value>V zastoupení (jméno.příjmení)</value>
+  </data>
+  <data name="ZpusobPlatby" xml:space="preserve">
+    <value>Způsob platby</value>
+  </data>
+  <data name="ZvolteCisloInvestice" xml:space="preserve">
+    <value>Zvolte číslo investice</value>
+  </data>
+  <data name="ZvolteDodavatele" xml:space="preserve">
+    <value>Zvolte dodavatele ...</value>
+  </data>
+  <data name="ZvolteKonto" xml:space="preserve">
+    <value>Zvolte číslo konta</value>
+  </data>
+  <data name="Ano" xml:space="preserve">
+    <value>ANO</value>
+  </data>
+  <data name="PodepsanoReditel" xml:space="preserve">
+    <value>Podepsáno ředitel nebo controling a odesláno na objednání:</value>
+  </data>
+  <data name="InvesticePlan" xml:space="preserve">
+    <value>Plánovaná investice</value>
+  </data>
+  <data name="JinyNevyhovuje" xml:space="preserve">
+    <value>Jiný materiál nebo systém jiného Dodavatel by byly pro JULI Motorenwerk zcela nevyhovující a nekompatibilní z pohledu již zavedené současné i budoucí výroby nebo provozu JULI Motorenwerk</value>
+  </data>
+  <data name="ModelZar" xml:space="preserve">
+    <value>Modelové zařízení</value>
+  </data>
+  <data name="NakupyOst" xml:space="preserve">
+    <value>Ostatní nákupy</value>
+  </data>
+  <data name="PocetPol" xml:space="preserve">
+    <value>Počet položek:</value>
+  </data>
+  <data name="PopisteDuvody" xml:space="preserve">
+    <value>Prosím popište důvod:</value>
+  </data>
+  <data name="Poptany3" xml:space="preserve">
+    <value>Poptány nejméně tři společnosti?</value>
+  </data>
+  <data name="RozuctovatPopis" xml:space="preserve">
+    <value>zadejte množství, které patří k této položce, ze zbylého množství bude vytvořena nová položka</value>
+  </data>
+  <data name="TypInvestice" xml:space="preserve">
+    <value>Typ investice</value>
+  </data>
+  <data name="Zduvodneni" xml:space="preserve">
+    <value>Zdůvodnění</value>
+  </data>
+  <data name="IntPoznamka" xml:space="preserve">
+    <value>Interní poznámka</value>
+  </data>
+  <data name="ModalConfirmNadpis" xml:space="preserve">
+    <value>Potvrzení</value>
+  </data>
+  <data name="Rozuctovat" xml:space="preserve">
+    <value>Rozúčtovat</value>
+  </data>
+  <data name="Ukoncit" xml:space="preserve">
+    <value>Ukončit</value>
+  </data>
+</root>

@@ -1,29 +1,27 @@
 ﻿@viewModel ViewModels.PozadavkyViewModels.PrijemZboziViewModel, JULI_IS
 @masterPage Views/app.dotmaster
-
+@import JULI_IS.Resources.Pozadavky
 
 <dot:Content ContentPlaceHolderID="PageContent">
     <div class="form-group wrapper">
-        <h1>Převzetí zboží</h1>
+        <h1>{{resource: PagePrijemZbozi.Nadpis}}</h1>
         <p>
-            Styl výpisu objednávek
+            {{resource: PagePrijemZbozi.ChooseStyl}}
             <dot:RadioButton Checked="{value: ObjednavkyOnly}" CheckedValue="{value: true}"
-                             GroupName="RadioGroup" Text=" Samostatné objednávky" Changed="{command: ChangeView()}" 
-                             Validation.Enabled="false"
-                             />
+                             GroupName="RadioGroup" Text= "{{resource: PagePrijemZbozi.ObjednavkySingle}}" Changed="{command: ChangeView()}"
+                             Validation.Enabled="false" />
 
             <dot:RadioButton Checked="{value: ObjednavkyOnly}" CheckedValue="{value: false}"
-                             GroupName="RadioGroup" Text=" Objednávky včetně položek" Changed="{command: ChangeView()}" 
-                             Validation.Enabled="false"
-                             />
+                             GroupName="RadioGroup" Text="{{resource: PagePrijemZbozi.ObjednavkyPolozky}}" Changed="{command: ChangeView()}"
+                             Validation.Enabled="false" />
         </p>
 
-       
+
         <%--  ------------------------------- FILTRY ------------------------------------------ --%>
 
         <div class="row">
             <div class="col-sm-2">
-                <label class="control-label">Číslo objednávky</label>
+                <label class="control-label">{{resource: Filter.ObjCislo}}</label>
                 <dot:ComboBox DataSource="{value: ListObjFullId2}"
                               <%--DisplayMember="objid"--%>
                               SelectedValue="{value: WhereFilterPozadavek}"
@@ -32,7 +30,7 @@
             </div>
 
             <div class="col-sm-2">
-                <label class="control-label">Dodavatel</label>
+                <label class="control-label">{{resource: Filter.Dodavatel}}</label>
                 <dot:ComboBox DataSource="{value: ListDodavatele}"
                               SelectedValue="{value: WhereFilterDodavatel}"
                               class="form-control"
@@ -40,7 +38,7 @@
             </div>
 
             <div class="col-sm-2">
-                <label class="control-label">Založil</label>
+                <label class="control-label">{{resource: Filter.Zalozil}}</label>
                 <dot:ComboBox DataSource="{value: ListZalozil}"
                               SelectedValue="{value: WhereFilterZalozil}"
                               class="form-control"
@@ -48,7 +46,7 @@
             </div>
 
             <div class="col-sm-2" Visible="{value: !ObjednavkyOnly}">
-                <label class="control-label">Stav</label>
+                <label class="control-label">{{resource: Filter.Stav}}</label>
                 <dot:ComboBox DataSource="{value: ListKST}"
                               SelectedValue="{value: WhereFilterKST}"
                               class="form-control"
@@ -56,14 +54,14 @@
             </div>
 
             <div class="col-sm-2">
-                <label class="control-label">Datum Od:</label>
+                <label class="control-label">{{resource: Filter.DatumOd}}</label>
                 <div>
                     <dot:TextBox class="form-control datetimepicker" Text="{value: DatumOd}" FormatString="dd.MM.yyyy" ValueType="DateTime" />
                 </div>
             </div>
 
             <div class="col-sm-2">
-                <label class="control-label">Datum Do:</label>
+                <label class="control-label">{{resource: Filter.DatumDo}}</label>
                 <div>
                     <dot:TextBox class="form-control datetimepicker" Text="{value: DatumDo}" FormatString="dd.MM.yyyy" ValueType="DateTime" />
                 </div>
@@ -90,7 +88,7 @@
 
         <div class="row" Visible="{value: !ObjednavkyOnly}">
             <div class="col-sm-3">
-                <label class="control-label">Obsah položky:</label>
+                <label class="control-label">{{resource: Filter.PolozkaObsah}}</label>
                 <div>
                     <dot:TextBox class="form-control" Text="{value: WhereFilterPolozkaLike}" ValueType="Text" />
                 </div>
@@ -105,9 +103,9 @@
             </div>--%>
 
         </div>
-        <div class="row" Visible="{value: !ObjednavkyOnly}">  
+        <div class="row" Visible="{value: !ObjednavkyOnly}">
             <div class="col-sm-2">
-                <dot:Button class="btn btn-success col-sm-10" Text="Filtr obsah položky" Click="{command: SetFiltr("Polozka")}" />
+                <dot:Button class="btn btn-success col-sm-10" Text="{{resource: Filter.FilterPolozkaObsah}}" Click="{command: SetFiltr("Polozka")}" />
             </div>
 
             <%--<div class="col-sm-offset-1 col-sm-2">
@@ -116,7 +114,7 @@
         </div>
         <div class="row">
             <div class="form-group col-sm-2">
-                <dot:RouteLink class="btn btn-warning col-sm-8" Text="Reset filtrů" RouteName="PrijemZbozi" />
+                <dot:RouteLink class="btn btn-warning col-sm-8" Text="{{resource: Filter.FilterReset}}" RouteName="PrijemZbozi" />
             </div>
         </div>
         <hr />
@@ -130,47 +128,46 @@
         <div Visible="{value: ObjednavkyOnly}">
             <p>Počet objednávek: {{value: SeznamObjednavekGV.PagingOptions.TotalItemsCount}}</p>
             <br />
-            <p Visible="{value: NothingFound}"> Nenalezeny žádné objednávky! </p>
+            <p Visible="{value: NothingFound}">{{resource: PagePrijemZbozi.NoPolozky}}</p>
 
             <dot:GridView DataSource="{value: SeznamObjednavekGV}" class="table table-bordered">
                 <RowDecorators>
-                    <dot:Decorator 
-                        class="{value:  (AvizoDoruceni ? 'btn-color' : '')}" >
-                                   <%--style="{value: 'background-color: ' + (AvizoDoruceni ? 'green;' : '')}">--%>
+                    <dot:Decorator class="{value:  (AvizoDoruceni ? 'btn-color' : '')}">
+                        <%--style="{value: 'background-color: ' + (AvizoDoruceni ? 'green;' : '')}">--%>
                     </dot:Decorator>
-                </RowDecorators>                
+                </RowDecorators>
                 <Columns>
 
-                    <dot:GridViewTemplateColumn HeaderText="Číslo objednávky" AllowSorting="true">
+                    <dot:GridViewTemplateColumn HeaderText="{{resource: Grid.ObjCislo}}" AllowSorting="true">
                         <ContentTemplate>
                             <dot:RouteLink RouteName="ObjednavkaEdit" Param-Id="{value: ID}">
                                 <strong style="color:black">{{value: FullObjednavkaID}}</strong>
                             </dot:RouteLink>
                         </ContentTemplate>
                     </dot:GridViewTemplateColumn>
-                    <dot:GridViewTextColumn ValueBinding="{value: PocetPolozek}" HeaderText="Položek" AllowSorting="true" />
+                    <dot:GridViewTextColumn ValueBinding="{value: PocetPolozek}" HeaderText="{{resource: Grid.PocetPolozek}}" AllowSorting="true" />
                     <%--<dot:GridViewTextColumn ValueBinding="{value: CelkovyPopis}" HeaderText="Popis objednávky" AllowSorting="true" />--%>
-                    <dot:GridViewTextColumn ValueBinding="{value: CelkovaCena}" HeaderText="Celková cena" FormatString="N2" AllowSorting="true" />
-                    <dot:GridViewTextColumn ValueBinding="{value: Mena}" HeaderText="Měna" AllowSorting="true" />
-                    <dot:GridViewTextColumn ValueBinding="{value: PozadavekZalozil}" HeaderText="Založil" AllowSorting="true" />
-                    <dot:GridViewTextColumn ValueBinding="{value: Datum}" HeaderText="Datum" FormatString="d" AllowSorting="true" />
+                    <dot:GridViewTextColumn ValueBinding="{value: CelkovaCena}" HeaderText="{{resource: Grid.CelkovaCena}}" FormatString="N2" AllowSorting="true" />
+                    <dot:GridViewTextColumn ValueBinding="{value: Mena}" HeaderText="{{resource: Grid.Mena}}" AllowSorting="true" />
+                    <dot:GridViewTextColumn ValueBinding="{value: PozadavekZalozil}" HeaderText="{{resource: Grid.Zalozil}}" AllowSorting="true" />
+                    <dot:GridViewTextColumn ValueBinding="{value: Datum}" HeaderText="{{resource: Grid.Datum}}" FormatString="d" AllowSorting="true" />
                     <%--<dot:GridViewTextColumn ValueBinding="{value: Stav}" HeaderText="Stav" AllowSorting="true" />--%>
-                    <dot:GridViewTextColumn ValueBinding="{value: FullDodavatelName}" HeaderText="Dodavatel" AllowSorting="true" />
-               
+                    <dot:GridViewTextColumn ValueBinding="{value: FullDodavatelName}" HeaderText="{{resource: Grid.Dodavatel}}" AllowSorting="true" />
+
 
                     <!--tlacitko o avizu -->
-                    <dot:GridViewTemplateColumn HeaderText="Avízo o dodávce">
+                    <dot:GridViewTemplateColumn HeaderText="{{resource: Grid.Avizo}}">
                         <ContentTemplate>
                             <dot:LinkButton class="fa fa-check" Click="{command: _parent.Avizo(ID)}">
                                 <PostBack.Handlers>
-                                    <dot:ConfirmPostBackHandler Message="Odeslat zakladateli požadavku avízo o dodávce?" />
+                                    <dot:ConfirmPostBackHandler Message="{{resource: Grid.AvizoConfirm}}" />
                                 </PostBack.Handlers>
                             </dot:LinkButton>
                         </ContentTemplate>
                     </dot:GridViewTemplateColumn>
 
-                    <!--datum-->                    
-                    <dot:GridViewTextColumn ValueBinding="{value: DatumDodani}" HeaderText="Datum dodání" FormatString="d" AllowSorting="true" />
+                    <!--datum-->
+                    <dot:GridViewTextColumn ValueBinding="{value: DatumDodani}" HeaderText="{{resource: Grid.DateDelivery}}" FormatString="d" AllowSorting="true" />
 
                 </Columns>
             </dot:GridView>
@@ -179,7 +176,7 @@
             <br />
 
         </div>
-    
+
 
         <%--
         Vypsat objednavky vc. polozek
@@ -190,17 +187,17 @@
 
             <p>Počet položek: {{value: SeznamItemsGv.PagingOptions.TotalItemsCount}}</p>
             <br />
-            <p Visible="{value: NothingFound}"> Nenalezeny žádné objednávky! </p>
+            <p Visible="{value: NothingFound}"> {{resource: PagePrijemZbozi.NoPolozky}} </p>
 
             <dot:GridView DataSource="{value: SeznamItemsGv}" class="table table-bordered">
                 <RowDecorators>
                     <dot:Decorator class="{value:  (Dodano ? 'dodano-color' : '')}">
                     </dot:Decorator>
-                </RowDecorators>   
+                </RowDecorators>
                 <Columns>
 
                     <%--<dot:GridViewTextColumn ValueBinding="{value: ObjednavkaFullID}" HeaderText="Číslo objednávky" AllowSorting="true" />--%>
-                    <dot:GridViewTemplateColumn HeaderText="Číslo objednávky" AllowSorting="true">
+                    <dot:GridViewTemplateColumn HeaderText="{{resource: Grid.ObjCislo}}" AllowSorting="true">
                         <ContentTemplate>
                             <dot:RouteLink RouteName="ObjednavkaEdit" Param-Id="{value: ObjednavkaID}">
                                 <strong style="color:black">{{value: ObjednavkaFullID}}</strong>
@@ -208,17 +205,17 @@
                         </ContentTemplate>
                     </dot:GridViewTemplateColumn>
 
-                    <dot:GridViewTextColumn ValueBinding="{value: DatumZalozeni}" HeaderText="Datum vytvoření" FormatString="d" AllowSorting="true" />
-                    <dot:GridViewTextColumn ValueBinding="{value: TerminDodani}" HeaderText="Termín Dodání" FormatString="d" AllowSorting="true" />
-                    <dot:GridViewTextColumn ValueBinding="{value: FullDodavatelName}" HeaderText="Dodavatel" AllowSorting="true" />
-                    <dot:GridViewTextColumn ValueBinding="{value: Popis}" HeaderText="Popis položky" AllowSorting="true" />
-                    <dot:GridViewTextColumn ValueBinding="{value: CelkovaCena}" HeaderText="Celková cena" AllowSorting="true" FormatString="N2" />
-                    <dot:GridViewTextColumn ValueBinding="{value: Mena}" HeaderText="Měna" AllowSorting="true" />
-                    <dot:GridViewTextColumn ValueBinding="{value: Stav}" HeaderText="Stav objednávky" AllowSorting="true" />
+                    <dot:GridViewTextColumn ValueBinding="{value: DatumZalozeni}" HeaderText="{{resource: Grid.Datum}}" FormatString="d" AllowSorting="true" />
+                    <dot:GridViewTextColumn ValueBinding="{value: TerminDodani}" HeaderText="{{resource: Grid.TerminDodani}}" FormatString="d" AllowSorting="true" />
+                    <dot:GridViewTextColumn ValueBinding="{value: FullDodavatelName}" HeaderText="{{resource: Grid.Dodavatel}}" AllowSorting="true" />
+                    <dot:GridViewTextColumn ValueBinding="{value: Popis}" HeaderText="{{resource: Grid.PopisPolozka}}" AllowSorting="true" />
+                    <dot:GridViewTextColumn ValueBinding="{value: CelkovaCena}" HeaderText="{{resource: Grid.CelkovaCena}}" AllowSorting="true" FormatString="N2" />
+                    <dot:GridViewTextColumn ValueBinding="{value: Mena}" HeaderText="{{resource: Grid.Mena}}" AllowSorting="true" />
+                    <dot:GridViewTextColumn ValueBinding="{value: Stav}" HeaderText="{{resource: Grid.StavObj}}" AllowSorting="true" />
 
- 
 
-                    <dot:GridViewTemplateColumn HeaderText="Požadavek">
+
+                    <dot:GridViewTemplateColumn HeaderText="{{resource: Grid.Pozadavek}}">
                         <ContentTemplate>
                             <dot:RouteLink Text="{value: FullPozadavekID}" RouteName="PozadavekEdit" Param-Id="{value: PozadavekID}" />
                             {{value: Zastoupeno}}
@@ -226,17 +223,17 @@
                     </dot:GridViewTemplateColumn>
 
                     <!--tlacitko o avizu -->
-                    <dot:GridViewTemplateColumn HeaderText="Zboží dodáno">
+                    <dot:GridViewTemplateColumn HeaderText="{{resource: Grid.ZboziDodano}}">
                         <ContentTemplate>
                             <dot:LinkButton class="{value:  (Dodano ? 'fa fa-check' : 'fa fa-window-close-o')}" Click="{command: _parent.Dodano(ID)}">
                                 <PostBack.Handlers>
-                                    <dot:ConfirmPostBackHandler Message="Opravdu změnit stav položky?" />
+                                    <dot:ConfirmPostBackHandler Message="{{resource: Grid.PolozkaZmenitConfirm}}" />
                                 </PostBack.Handlers>
                             </dot:LinkButton>
                         </ContentTemplate>
                     </dot:GridViewTemplateColumn>
 
-  
+
 
                 </Columns>
             </dot:GridView>
@@ -245,8 +242,8 @@
             <br /><hr />
 
         </div>
-    
-    
+
+
     </div>
 
     <script>

@@ -1041,12 +1041,18 @@ namespace Pozadavky.Services
             p.AddFormattedText("Potvrzení objednávky zašlete na: objednavky@juli.cz", TextFormat.Bold);
             p.AddFormattedText("\nOrder confirmation send to: objednavky@juli.cz", TextFormat.Bold);
 
+            p = section.AddParagraph();
+            p.Format.Font.Size = 8;
+            p.Format.SpaceBefore = "0.5cm";
+            p.AddFormattedText("Elektronické faktury zasílejte na email: faktury@juli.cz", TextFormat.Bold);
+            p.AddFormattedText("\nE-invoices send to: faktury@juli.cz", TextFormat.Bold);
+
             //p = section.AddParagraph();
             //p.Format.Font.Size = 10;
             //p.Format.SpaceBefore = "0.5cm";
             //p.AddFormattedText("UPOZORNĚNÍ", TextFormat.Bold);
             //p.AddFormattedText("\nV době od 19.12.2017 do 1.1.2018 bude příjem firmy JULI Motorenwerk, s.r.o. z důvodu inventury uzavřen. Zboží nebude možné přijmout.", TextFormat.Bold);
-           
+
 
 
 
@@ -1346,6 +1352,18 @@ namespace Pozadavky.Services
                         image = row.Cells[1].AddImage(@"\\juli-app\Pozadavky\podpis_Petr_Smolka.jpg");
                         break;
 
+                    // Smolka
+                    case "milan.drapal":
+                        image = row.Cells[1].AddImage(@"\\juli-app\Pozadavky\podpis_Milan_Drapal.jpg");
+                        break;
+
+                    case "pavel.rieder":
+                        image = row.Cells[1].AddImage(@"\\juli-app\Pozadavky\podpis_Pavel_Rieder.jpg");
+                        break;
+
+                    case "wolfgang.gebhardt":
+                        image = row.Cells[1].AddImage(@"\\juli-app\Pozadavky\podpis_Wolfgang_Gebhardt.jpg");
+                        break;
                     default:
                         row.Cells[1].AddParagraph("\n\n\n\n");
                         row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
@@ -1741,6 +1759,12 @@ namespace Pozadavky.Services
             p.Format.SpaceBefore = "0.5cm";
             p.AddFormattedText("Potvrzení objednávky zašlete na: objednavky@juli.cz", TextFormat.Bold);
             p.AddFormattedText("\nOrder confirmation send to: objednavky@juli.cz", TextFormat.Bold);
+
+            p = section.AddParagraph();
+            p.Format.Font.Size = 8;
+            p.Format.SpaceBefore = "0.5cm";
+            p.AddFormattedText("Elektronické faktury zasílejte na email: faktury@juli.cz", TextFormat.Bold);
+            p.AddFormattedText("\nE-invoices send to: faktury@juli.cz", TextFormat.Bold);
 
             // -----------------------------  FOOTERS FIRST PAGE  ---------------------------
 
@@ -2331,6 +2355,12 @@ namespace Pozadavky.Services
             p.Format.SpaceBefore = "1.0cm";
             p.AddFormattedText("Potvrzení objednávky zašlete na: objednavky@juli.cz", TextFormat.Bold);
             p.AddFormattedText("\nOrder confirmation send to: objednavky@juli.cz", TextFormat.Bold);
+
+            p = section.AddParagraph();
+            p.Format.Font.Size = 8;
+            p.Format.SpaceBefore = "0.5cm";
+            p.AddFormattedText("Elektronické faktury zasílejte na email: faktury@juli.cz", TextFormat.Bold);
+            p.AddFormattedText("\nE-invoices send to: faktury@juli.cz", TextFormat.Bold);
 
             // -----------------------------  FOOTERS FIRST PAGE  ---------------------------
 

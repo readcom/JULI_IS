@@ -1,6 +1,7 @@
 ﻿@viewModel ViewModels.PozadavkyViewModels.HomeViewModel, JULI_IS
 <%--@masterPage Views/DovolenkyApp.dotmaster--%>
 @masterPage Views/app.dotmaster
+@import JULI_IS.Resources.Pozadavky
 
 <dot:Content ContentPlaceHolderID="PageContent">
     <section ID="homepage">
@@ -8,12 +9,21 @@
             <div class="container">
 
                 <dot:RouteLink RouteName="PozadavekEdit" Param-Id=0
-                               class="btn btn-primary" Text="Nový požadavek">
+                               class="btn btn-primary btn-lg" Text="">
+                    <i style="color:white" class="fa fa-plus" aria-hidden="true">&nbsp; </i>
+                    {{resource: Home.NovyPozadavek}}
                 </dot:RouteLink>
                 <hr />
-                <h1>Novinky:</h1>
+                <h1>
+                    <p>
+                        {{resource: Home.nadpis}}
+                    </p>
+
+                </h1>
                 <div class="container jumbotron">
                     <ul>
+                        <li>30.08.2018 - Lokalizace do EN!</li>
+                        <li>25.04.2018 - Přehled po položkách, přidáno Inteligentní hledání dodavatelů, po vypnutí hledá dodavatele s přesným názvem, po zapnutí hledá podle prvních písmen</li>
                         <li>12.12.2017 - Vkládán text do objednávek o uzavření příjmu v době inventury</li>
                         <li>12.12.2017 - Připraveno na další rok, automatické generování čísla požadavku a objednávky podle posledního v daném roce</li>
                         <li>12.10.2017 - Přepracován systém dodavatelů v požadavku:</li>
@@ -86,7 +96,7 @@
                         <li>vymazána testovací data</li>
                         <li>přidána sekce novinky</li>
                     </ul>
-                </div>                
+                </div>
                 <hr />
                 <div Visible="{value: false}">
                     <div class="row icony-aplikaci">

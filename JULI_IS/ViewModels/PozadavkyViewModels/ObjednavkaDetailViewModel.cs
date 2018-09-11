@@ -66,6 +66,11 @@ namespace ViewModels.PozadavkyViewModels
         
         public string SelectedDodavatel { get; set; }
 
+        public string Vytisknuto { get; set; }
+
+        public List<string> DodavateleS21List { get; set; } = new List<string>();
+        public string DodavatelSelected { get; set; }
+
         //----------------------------------------------------------------------
 
         public List<string> MenaList { get; set; } = new List<string> { "CZK", "EUR", "USD", "CHF", "GBP" };
@@ -362,7 +367,11 @@ namespace ViewModels.PozadavkyViewModels
                     throw new ValidationException("email");
                 }
 
-                
+                if (ObjData.KST1 == 0 || ObjData.KST1 is null)
+                {
+                    throw new ValidationException("KST");
+                }
+
 
                 ObjData.Objednano = true;
                 ObjData.ObjednavatelName = ActiveUser;
@@ -403,6 +412,9 @@ namespace ViewModels.PozadavkyViewModels
 
                 if (exc.Message == "email")
                     AlertText = "Není vyplněna emailová adresa dodavatele!";
+
+                if (exc.Message == "KST")
+                    AlertText = "Nenalezeno KST v požadavku, prosím zvolte správné středisko!";
             }
             catch (Exception exc)
             {
@@ -428,8 +440,10 @@ namespace ViewModels.PozadavkyViewModels
 
         public void DodavateleInit()
         {
-            DodavateleS21 = DodavatelService.GetS21DodavateleOrderedByName();
-            DodavateleS21ByNumb = DodavatelService.GetS21DodavateleOrderedByNumb();
+            DodavateleS21 = DodavatelService.GetS21DodavateleOrderedByName().Where(w => w.NazevCislo != null && w.NazevCislo.Length > 3).ToList();
+            DodavateleS21List = DodavateleS21.Select(s => s.NazevCislo).ToList();
+            //DodavateleS21 = DodavatelService.GetS21DodavateleOrderedByName();
+            //DodavateleS21ByNumb = DodavatelService.GetS21DodavateleOrderedByNumb();
         }
 
 
@@ -521,15 +535,17 @@ namespace ViewModels.PozadavkyViewModels
 
         }
 
-        public void LoadDodavatele(int dodId)
+        //public void LoadDodavatele(int dodId)
+        // nacte dodavatele a osoby z S21 podle kombinace Nazev | Cislo
+        public void LoadDodavatele(string dodavatel, bool editovany = false)
         {
             ClearAlerts();
             //Dodavatel = DodavatelService.GetS21DodavatelById()
-
-            DodavatelS21 = DodavateleS21.Find(d => d.Id == dodId);
+            DodavatelS21 = DodavateleS21.Where(w => w.NazevCislo == dodavatel).SingleOrDefault();
+            //DodavatelS21 = DodavateleS21.Find(d => d.Id == dodId);
             DodavatelS21.PSC = DodavatelS21.PCD105 + DodavatelS21.PCD205;
 
-            Osoba = DodavatelService.GetOdpOsobaByDodavatelId(dodId);
+            Osoba = DodavatelService.GetOdpOsobaByDodavatelId(DodavatelS21.Id);
             SelectedDodavatel = DodavatelS21.SNAM05 + ", " + DodavatelS21.SUPN05
                + "\n"
                + (String.IsNullOrEmpty(DodavatelS21.SAD105) ? "" : DodavatelS21.SAD105 + ", ")
@@ -671,6 +687,8 @@ namespace ViewModels.PozadavkyViewModels
                 var PDFfile = FilesService.GetFileByID(id);
                 TiskServices.PrintFile(PDFfile.FullPath);
 
+                //Vytisknuto = Tools.ReadTextResourceFromAssembly("JULI_IS.Resources.Pozadavky.PageObjednavkaDetail.Vytisteno");
+                //if (string.IsNullOrEmpty(Vytisknuto)) Vytisknuto = "Nezdarilo se";
             }
 
             //string juliFile = @"\\juli-app\Pozadavky";
@@ -738,7 +756,7 @@ namespace ViewModels.PozadavkyViewModels
 
         public void DeleteFile(int id)
         {
-            if (Editovatelny)
+           // if (Editovatelny)
             {
                 try
                 {
@@ -750,7 +768,7 @@ namespace ViewModels.PozadavkyViewModels
                 }
             }
 
-            else AlertText = $"Změny v objednávce nejsou povoleny!";
+           // else AlertText = $"Změny v objednávce nejsou povoleny!";
 
 
 
@@ -812,6 +830,7 @@ namespace ViewModels.PozadavkyViewModels
         public void ZrusitPodpisy()
         {
             ObjData.Objednano = false;
+            Editovatelny = true;
             SaveKoncept();
             Context.ResourceManager.AddStartupScript("$('div[data-id=confirm]').modal('hide');");
         }
@@ -914,7 +933,9 @@ namespace ViewModels.PozadavkyViewModels
             ObjData.PocetPolozek = ItemsGv.Items.Count();
 
             if (String.IsNullOrEmpty(ObjData.KST1.ToString()))
-                ObjData.KST1 = Convert.ToInt32(ItemsGv.Items[0].KST);
+                if (!String.IsNullOrEmpty(ItemsGv.Items[0].KST))
+                    ObjData.KST1 = Convert.ToInt32(ItemsGv.Items[0].KST);
+                else ObjData.KST1 = 0;
 
             ZrusitelnyPodpis = (ObjData.Objednano && !ObjData.Schvaleno && !ObjData.Zamitnuto) &&
                 (UserServices.GetActiveUserLevels().Contains(3)

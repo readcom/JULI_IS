@@ -19,6 +19,9 @@ namespace JULI_IS
             ConfigureRoutes(config, applicationPath);
             ConfigureControls(config, applicationPath);
             ConfigureResources(config, applicationPath);
+
+            config.DefaultCulture = "cs-CZ";
+
         }
 
         private void ConfigureRoutes(DotvvmConfiguration config, string applicationPath)

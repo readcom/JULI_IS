@@ -1,4 +1,5 @@
 ﻿@viewModel ViewModels.AppViewModel, JULI_IS
+@import JULI_IS.Resources.Pozadavky
 
 <!DOCTYPE html>
 
@@ -24,51 +25,51 @@
             <section ID="main-menu" class="col-xs-10">
 
                 <dot:RouteLink RouteName="Default">
-                    <h1><span class="glyphicon glyphicon-list-alt"></span> Požadavky a objednávky</h1>
+                    <h1><span class="glyphicon glyphicon-list-alt"></span> {{resource: Menu.AppName}}</h1>
                 </dot:RouteLink>
 
                 <!--<dot:LinkButton class="header-item" Click="{command: ShowDemandPopup(null)}" Validation.Enabled="false">
-            <span class="glyphicon glyphicon-plus"></span> Nový požadavek
-            </dot:LinkButton>-->
+                <span class="glyphicon glyphicon-plus"></span> Nový požadavek
+                </dot:LinkButton>-->
 
                 <dot:RouteLink RouteName="PozadavkyPrehled" class="{value: 'header-item ' + (ActivePage == 'newdemand' ? 'header-item-active' : '')}">
-                    <span class="fa fa-tasks"></span> Celkový přehled
+                    <span class="fa fa-tasks"></span> {{resource: Menu.CelkovyPrehled}}
                 </dot:RouteLink>
 
                 <dot:RouteLink RouteName="PolozkyPrehled" class="{value: 'header-item ' + (ActivePage == 'newdemand' ? 'header-item-active' : '')}">
-                    <span class="fa fa-tasks"></span> Přehled požadavků
+                    <span class="fa fa-tasks"></span> {{resource: Menu.PolozkyPrehled}}
                 </dot:RouteLink>
 
                 <dot:RouteLink RouteName="DodavatelePrehled" class="{value: 'header-item ' + (ActivePage == 'manager' ? 'header-item-active' : '')}">
-                    <span class="fa fa-address-card-o"></span> Přehled dodavatelů
+                    <span class="fa fa-address-card-o"></span>  {{resource: Menu.Dodavatele}}
                 </dot:RouteLink>
 
                 <dot:RouteLink Visible="{value: CanSignPozadavky}" RouteName="sign" Text="Podpis požadavků" class="{value: 'header-item ' + (ActivePage == 'sign' ? 'header-item-active' : '')}">
-                    <span class="glyphicon glyphicon-pencil"></span> Podpis požadavků
+                    <span class="glyphicon glyphicon-pencil"></span>  {{resource: Menu.PodpisPozadavku}}
                 </dot:RouteLink>
 
                 <dot:RouteLink Visible="{value: CanSignObjednavky}" RouteName="SignObjednavky" Text="Podpis objednávek" class="{value: 'header-item ' + (ActivePage == 'SignObjednavky' ? 'header-item-active' : '')}">
-                    <span class="glyphicon glyphicon-pencil"></span> Podpis objednávek
+                    <span class="glyphicon glyphicon-pencil"></span>  {{resource: Menu.PodpisObj}}
                 </dot:RouteLink>
 
                 <dot:RouteLink Visible="{value: CanMakeObjednavky}" RouteName="objednavkyTvorba" Text="Tvorba objednávek" class="{value: 'header-item ' + (ActivePage == 'objednavkyTvorba' ? 'header-item-active' : '')}">
-                    <span class="glyphicon glyphicon-edit"></span> Tvorba objednávek z požadavků
+                    <span class="glyphicon glyphicon-edit"></span>  {{resource: Menu.MakeObjFromPoz}}
                 </dot:RouteLink>
 
                 <dot:RouteLink RouteName="objednavkySprava" Text="Tvorba objednávek" class="{value: 'header-item ' + (ActivePage == 'objednavkySprava' ? 'header-item-active' : '')}">
-                    <span class="glyphicon glyphicon-list"></span> Správa objednávek
+                    <span class="glyphicon glyphicon-list"></span>  {{resource: Menu.ObjSprava}}
                 </dot:RouteLink>
 
                 <dot:RouteLink RouteName="objednavkyPrehled" Text="Tvorba objednávek" class="{value: 'header-item ' + (ActivePage == 'objednavkyPrehled' ? 'header-item-active' : '')}">
-                    <span class="glyphicon glyphicon-list"></span> Přehled objednávek
+                    <span class="glyphicon glyphicon-list"></span>  {{resource: Menu.ObjPrehled}}
                 </dot:RouteLink>
 
                 <dot:RouteLink Visible="{value: CanMakeObjednavky}" RouteName="objednavkySend" Text="Odeslání objednávek" class="{value: 'header-item ' + (ActivePage == 'objednavkySend' ? 'header-item-active' : '')}">
-                    <span class="fa fa-envelope-o"></span> Odeslání objednávek
+                    <span class="fa fa-envelope-o"></span>  {{resource: Menu.ObjOdeslani}}
                 </dot:RouteLink>
 
                 <dot:RouteLink RouteName="PrijemZbozi" class="{value: 'header-item ' + (ActivePage == 'PrijemZbozi' ? 'header-item-active' : '')}">
-                    <span class="fa fa-home"></span> Příjem zboží
+                    <span class="fa fa-home"></span>  {{resource: Menu.ZboziPrijem}}
                 </dot:RouteLink>
 
                 <!--Visible="{value: ActiveUser=="marek.novak"}"-->
@@ -86,14 +87,14 @@
             </section>
 
             <section ID="menu-addon" class="col-xs-2">
-                <div ID="language-switch"  Visible="{value: (ActiveUser=='marek.novak')}">
-                    <dot:LinkButton class="header-item" Click="{command: ChangeLanguage('CZ')}" >
+                <div ID="language-switch">
+                    <dot:LinkButton class="header-item" Click="{command: ChangeLanguage('CZ')}">
                         <i class="fa fa-flag-o" aria-hidden="true"></i> CZ
                     </dot:LinkButton>
 
-                    <dot:LinkButton class="header-item" Click="{command: ChangeLanguage('EN')}" >
+                    <dot:LinkButton class="header-item" Click="{command: ChangeLanguage('EN')}">
                         <i class="fa fa-flag" aria-hidden="true"></i> EN
-                    </dot:LinkButton>                    
+                    </dot:LinkButton>
                 </div>
                 <br />
                 <div class="header-item">
@@ -103,7 +104,7 @@
             </section>
 
         </div>
-</header>
+    </header>
 
     <article>
         <p Visible="{value: Test == true}" class="alert alert-success">{{value: TestModeText}}</p>
@@ -113,18 +114,18 @@
         <!-- obsah dalsich stranek -->
 
         <dot:ContentPlaceHolder ID="PageContent">
-            <p>zavedeni Hlavni page se nezdarilo!!</p>
+            <p>{{resource: Global.ErrorLoadHome}}</p>
         </dot:ContentPlaceHolder>
 
         <p Visible="{value: ConfirmText != null}" class="alert alert-success">{{value: ConfirmText}}</p>
         <p Visible="{value: AlertText != null}" class="alert alert-danger">{{value: AlertText}}</p>
     </article>
 
-      <p>{{value: Text}}</p>
+    <p>{{value: Text}}</p>
 
     <footer style="display: table;">
         <div style="display: table-cell; vertical-align: middle;">
-                V případě dotazů nebo problémů kontaktujte IT oddělení: tel. 261        
+            {{resource: Global.GlobalInfo}}
         </div>
     </footer>
 
@@ -138,7 +139,7 @@
                     <h4 class="modal-title">Nastavení</h4>
                 </div>
                 <div class="modal-body text-center">
-                    
+
                     <div class="row">
                         <div class="col-sm-12">
 
@@ -148,18 +149,18 @@
                             <br />
 
                             <bp:TextBox Text="{value: SettingTextDoObjednavky}" Type="MultiLine" Enabled="{value: IsSettingTextDoObjednavky}" />
-             
+
                             <br />
 
-                        </div>                        
+                        </div>
                     </div>
 
 
                 </div>
                 <div class="modal-footer">
                     <div class="text-center">
-                        <dot:Button  class="btn btn-primary" Text="Uložit" Click="{command: SaveSetting()}" />
-                        <dot:Button  class="btn btn-default" Text="Zrušit" Click="{command: CloseModal("setting")}" />
+                        <dot:Button class="btn btn-primary" Text="Uložit" Click="{command: SaveSetting()}" />
+                        <dot:Button class="btn btn-default" Text="Zrušit" Click="{command: CloseModal("setting")}" />
                     </div>
                 </div>
             </div>

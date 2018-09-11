@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Mapping;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ namespace ViewModels.PozadavkyViewModels
         public List<ItemsDTO> SeznamCheckedItems { get; set; } = new List<ItemsDTO>();
            
         public bool CurrentUserOnly { get; set; } = false;
+
+        public bool IQDodavateleSearch { get; set; } = true;
 
         public GridViewDataSet<ItemsDTO> SeznamItemsGv { get; set; } = new GridViewDataSet<ItemsDTO>();
         //{
@@ -98,9 +101,9 @@ namespace ViewModels.PozadavkyViewModels
                 ListItems.ForEach(p => ListKST.Add(p.Stredisko));
                 ListKST = ListKST.Distinct().ToList();
                 ListKST.RemoveAll(item => item == null);
-            }
+            }  
         }
-
+        
         public bool NothingFound { get; set; } = false;
 
         public bool JenPozadavky { get; set; } = true;
@@ -322,8 +325,8 @@ namespace ViewModels.PozadavkyViewModels
                 ItemsService.FillGridViewItemsByUser(SeznamItemsGv);
                 ListItems = SeznamItemsGv.Items.ToList();           
                 ItemsService.GridViewSetSort(SeznamItemsGv);
-
-
+                SeznamItemsGv.RequestRefreshAsync();
+                
                 //ListItems.Where(w => (w.FullPozadavekID != null)).ToList().ForEach(p => ListPozadavekFullId.Add(new PozList { id = p.PozadavekID, pozid = p.FullPozadavekID ?? ""}));
 
                 //ListItems.ForEach(p => ListPozadavekFullId.Add(new PozList { id = p.PozadavekID, pozid = p.FullPozadavekID }));
@@ -351,6 +354,10 @@ namespace ViewModels.PozadavkyViewModels
                 SeznamSloupcuI = GetSeznamSloupcu("I");
                 SeznamSloupcuP = GetSeznamSloupcu("P");
             }
+            else
+            {                
+                // NE, nenatahne se strankovani a zobrazi to vsechny zaznamy
+            }
 
             if (String.IsNullOrEmpty(WhereFilter)) ColumnFilter = "";
 
@@ -359,17 +366,15 @@ namespace ViewModels.PozadavkyViewModels
                 if (SetDatum)
                     ItemsService.FillGridViewItemsByUser(SeznamItemsGv, UserServices.GetActiveUser(), "", "", DatumOd, DatumDo);
                 else
-                    ItemsService.FillGridViewItemsByUser(SeznamItemsGv, UserServices.GetActiveUser(), ColumnFilter, WhereFilter);
+                    ItemsService.FillGridViewItemsByUser(SeznamItemsGv, UserServices.GetActiveUser(), ColumnFilter, WhereFilter, null, null, IQDodavateleSearch);
             }
             else
             {
                 if (SetDatum)
                     ItemsService.FillGridViewItemsByUser(SeznamItemsGv, "", "", "", DatumOd, DatumDo);
                 else
-                    ItemsService.FillGridViewItemsByUser(SeznamItemsGv, "", ColumnFilter, WhereFilter);
+                    ItemsService.FillGridViewItemsByUser(SeznamItemsGv, "", ColumnFilter, WhereFilter, null, null, IQDodavateleSearch);
             }
-            
-
 
             if (qSQL)
             {

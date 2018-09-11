@@ -134,7 +134,7 @@ namespace ViewModels.PozadavkyViewModels
                 ActiveUserLevel = UserServices.GetActiveUserLevels();
                 ActiveUser = UserServices.GetActiveUser();
        
-                ItemsService.FillGridViewObjednavkyWithItemsFilteredSchvalene(SeznamItemsGv, ColumnFilter, WhereFilter);
+                ItemsService.FillGridViewObjednavkyWithItemsFilteredSchvalene(SeznamItemsGv, ColumnFilter, WhereFilter, null, null, ActiveUser, ActiveUserLevel);
                 ListObjItems = SeznamItemsGv.Items.ToList();
                 ItemsService.GridViewSetSortByID(SeznamItemsGv);
 
@@ -159,13 +159,18 @@ namespace ViewModels.PozadavkyViewModels
                 ListHlavniRada = ListHlavniRada.Distinct().OrderBy(o => o).ToList();
                 //ListHlavniRada.RemoveAll(item => item == null);
             }
+            else
+            {                
+               // NE, nenatahne se strankovani a zobrazi to vsechny zaznamy               
+            }
 
             if (String.IsNullOrEmpty(WhereFilter)) ColumnFilter = "";
 
             if (SetDatum)
-                ItemsService.FillGridViewObjednavkyWithItemsFilteredSchvalene(SeznamItemsGv, "", "", DatumOd, DatumDo);
+                ItemsService.FillGridViewObjednavkyWithItemsFilteredSchvalene(SeznamItemsGv, "", "", DatumOd, DatumDo, ActiveUser, ActiveUserLevel);
             else
-                ItemsService.FillGridViewObjednavkyWithItemsFilteredSchvalene(SeznamItemsGv, ColumnFilter, WhereFilter);
+                ItemsService.FillGridViewObjednavkyWithItemsFilteredSchvalene(SeznamItemsGv, ColumnFilter, WhereFilter, null, null, ActiveUser, ActiveUserLevel);
+
 
             //info = ObjednavkyService.InfoText;
             //PozadavekData.CelkovaCena = ItemsService.GetCelkovaCenaByPozadavekId(PozadavekId.Value);

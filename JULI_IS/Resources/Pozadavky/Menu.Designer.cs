@@ -22,7 +22,7 @@ namespace JULI_IS.Resources.Pozadavky {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Menu {
+    public class Menu {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace JULI_IS.Resources.Pozadavky {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("JULI_IS.Resources.Pozadavky.Menu", typeof(Menu).Assembly);
@@ -51,12 +51,111 @@ namespace JULI_IS.Resources.Pozadavky {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Requirements and orders.
+        /// </summary>
+        public static string AppName {
+            get {
+                return ResourceManager.GetString("AppName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to General overview.
+        /// </summary>
+        public static string CelkovyPrehled {
+            get {
+                return ResourceManager.GetString("CelkovyPrehled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suppliers.
+        /// </summary>
+        public static string Dodavatele {
+            get {
+                return ResourceManager.GetString("Dodavatele", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make order from requirements.
+        /// </summary>
+        public static string MakeObjFromPoz {
+            get {
+                return ResourceManager.GetString("MakeObjFromPoz", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send orders.
+        /// </summary>
+        public static string ObjOdeslani {
+            get {
+                return ResourceManager.GetString("ObjOdeslani", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overview of orders.
+        /// </summary>
+        public static string ObjPrehled {
+            get {
+                return ResourceManager.GetString("ObjPrehled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Order management.
+        /// </summary>
+        public static string ObjSprava {
+            get {
+                return ResourceManager.GetString("ObjSprava", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign of orders.
+        /// </summary>
+        public static string PodpisObj {
+            get {
+                return ResourceManager.GetString("PodpisObj", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign of requirements.
+        /// </summary>
+        public static string PodpisPozadavku {
+            get {
+                return ResourceManager.GetString("PodpisPozadavku", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Items overview.
+        /// </summary>
+        public static string PolozkyPrehled {
+            get {
+                return ResourceManager.GetString("PolozkyPrehled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Receipt of goods.
+        /// </summary>
+        public static string ZboziPrijem {
+            get {
+                return ResourceManager.GetString("ZboziPrijem", resourceCulture);
             }
         }
     }

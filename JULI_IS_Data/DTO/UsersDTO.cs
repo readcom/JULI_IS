@@ -8,7 +8,7 @@ namespace Pozadavky.DTO
 {
     public class UsersDTO
     {
-      
+
         public int ID { get; set; }
 
         public int JULINumber { get; set; }
@@ -24,6 +24,6 @@ namespace Pozadavky.DTO
         public string Telefon { get; set; }
         public bool OdesilatMaily { get; set; }
         public bool NacitatDodavatele { get; set; }
-
+        public bool NeverejnyPristup { get; set; }
     }
 }

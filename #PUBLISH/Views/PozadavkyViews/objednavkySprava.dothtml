@@ -1,128 +1,123 @@
 ﻿@viewModel ViewModels.PozadavkyViewModels.ObjednavkySpravaViewModel, JULI_IS
 @masterPage Views/app.dotmaster
+@import JULI_IS.Resources.Pozadavky
 
 <dot:Content ContentPlaceHolderID="PageContent">
     <div class="form wrapper">
-        <h1>Správa nových objednávek</h1>
+        <h1>{{resource: PageObjednavkySprava.Nadpis}}</h1>
 
         <%--<p class="alert alert-info">{{value: info}}</p>--%>
 
-   
+
 
         <!--<p>
-            Vypsat
-            <dot:RadioButton Checked="{value: JenPozadavky}" CheckedValue="{value: true}"
-                             GroupName="RadioGroup" Text=" požadavky" Changed="{command: ChangeObjStyle()}" />
+        Vypsat
+        <dot:RadioButton Checked="{value: JenPozadavky}" CheckedValue="{value: true}"
+                         GroupName="RadioGroup" Text=" požadavky" Changed="{command: ChangeObjStyle()}" />
 
-            <dot:RadioButton Checked="{value: JenPozadavky}" CheckedValue="{value: false}"
-                             GroupName="RadioGroup" Text=" všechny položky" Changed="{command: ChangeObjStyle()}" />
-        </p>-->
-
+        <dot:RadioButton Checked="{value: JenPozadavky}" CheckedValue="{value: false}"
+                         GroupName="RadioGroup" Text=" všechny položky" Changed="{command: ChangeObjStyle()}" />
+    </p>-->
         <%--  ------------------------------- FILTRY ------------------------------------------ --%>
-        
+
         <div class="row">
             <div class="col-sm-2">
-                <label class="control-label">Číslo objednávky</label>
+                <label class="control-label">{{resource: Filter.ObjCislo}}</label>
                 <bp:ComboBox DataSource="{value: ListObjFullId2}"
-                              <%--DisplayMember="objid"--%>
-                              SelectedValue="{value: WhereFilterObj}"
-                              class="ComboBoxStyle"
-                              Changed="{command: SetFiltr("ObjednavkaFullID")}"
-                               />
+                             <%--DisplayMember="objid"--%>
+                             SelectedValue="{value: WhereFilterObj}"
+                             class="ComboBoxStyle"
+                             Changed="{command: SetFiltr("ObjednavkaFullID")}" />
             </div>
 
             <div class="col-sm-3">
-                <label class="control-label">Dodavatel</label>
+                <label class="control-label">{{resource: Filter.Dodavatel}}</label>
                 <bp:ComboBox DataSource="{value: ListDodavatele}"
-                              SelectedValue="{value: WhereFilterDodavatel}"
-                              class="ComboBoxStyle"
-                              Changed="{command: SetFiltr("FullDodavatelName")}"
-                               />
+                             SelectedValue="{value: WhereFilterDodavatel}"
+                             class="ComboBoxStyle"
+                             Changed="{command: SetFiltr("FullDodavatelName")}" />
             </div>
 
             <div class="col-sm-2">
-                <label class="control-label">Založil</label>
+                <label class="control-label">{{resource: Filter.Zalozil}}</label>
                 <bp:ComboBox DataSource="{value: ListZalozil}"
-                              SelectedValue="{value: WhereFilterZalozil}"
-                              class="ComboBoxStyle"
-                              Changed="{command: SetFiltr('Zalozil')}"
-                               />
+                             SelectedValue="{value: WhereFilterZalozil}"
+                             class="ComboBoxStyle"
+                             Changed="{command: SetFiltr('Zalozil')}" />
             </div>
 
             <div class="col-sm-2">
-                <label class="control-label">Stav</label>
+                <label class="control-label">{{resource: Filter.Stav}}</label>
                 <bp:ComboBox DataSource="{value: ListKST}"
-                              SelectedValue="{value: WhereFilterKST}"
-                              class="ComboBoxStyle"
-                              Changed="{command: SetFiltr("Stav")}" 
-                               />
+                             SelectedValue="{value: WhereFilterKST}"
+                             class="ComboBoxStyle"
+                             Changed="{command: SetFiltr("Stav")}" />
             </div>
 
             <div class="col-sm-2">
-                <label class="control-label">Hlavní řada</label>
+                <label class="control-label">{{resource: Filter.HlavniRada}}</label>
                 <bp:ComboBox DataSource="{value: ListHlavniRada}"
-                              SelectedValue="{value: WhereFilterHlavniRada}"
-                              class="ComboBoxStyle"
-                              Changed="{command: SetFiltr("HlavniRada")}"
-                               />
+                             SelectedValue="{value: WhereFilterHlavniRada}"
+                             class="ComboBoxStyle"
+                             Changed="{command: SetFiltr("HlavniRada")}" />
             </div>
         </div>
 
         <div class="row" Visible="{value: false}">
             <div class="col-sm-2">
-                <dot:Button class="btn btn-success col-sm-10" Text="Filtr Objednávka" Click="{command: SetFiltr("ObjednavkaFullID")}" />
+                <dot:Button class="btn btn-success col-sm-10" Text="{{resource: Filter.FiltrObj}}" Click="{command: SetFiltr("ObjednavkaFullID")}" />
             </div>
             <div class="col-sm-2">
-                <dot:Button class="btn btn-success col-sm-10" Text="Filtr Dodavatel" Click="{command: SetFiltr("FullDodavatelName")}" />
+                <dot:Button class="btn btn-success col-sm-10" Text="{{resource: Filter.FilterDodavatel}}" Click="{command: SetFiltr("FullDodavatelName")}" />
             </div>
             <div class="col-sm-2">
-                <dot:Button class="btn btn-success col-sm-10" Text="Filtr Zalozil" Click="{command: SetFiltr("Zalozil")}" />
+                <dot:Button class="btn btn-success col-sm-10" Text="{{resource: Filter.FilterZalozil}}" Click="{command: SetFiltr("Zalozil")}" />
             </div>
             <div class="col-sm-2">
-                <dot:Button class="btn btn-success col-sm-10" Text="Filtr Stav" Click="{command: SetFiltr("Stav")}" />
+                <dot:Button class="btn btn-success col-sm-10" Text="{{resource: Filter.FiltrStav}}" Click="{command: SetFiltr("Stav")}" />
             </div>
 
         </div>
-        
+
         <br />
 
         <div class="row">
             <div class="col-sm-3">
-                <label class="control-label">Obsah položky:</label>
+                <label class="control-label">{{resource: Filter.PolozkaObsah}}</label>
                 <div>
                     <dot:TextBox class="form-control" Text="{value: WhereFilterPolozkaLike}" ValueType="Text" />
                 </div>
             </div>
-            
+
             <div class="col-sm-2">
-                <label class="control-label">Datum Od:</label>
+                <label class="control-label">{{resource: Filter.DatumOd}}</label>
                 <div>
                     <dot:TextBox class="form-control datetimepicker" Text="{value: DatumOd}" FormatString="dd.MM.yyyy" ValueType="DateTime" />
                 </div>
             </div>
 
             <div class="col-sm-2">
-                <label class="control-label">Datum Do:</label>
+                <label class="control-label">{{resource: Filter.DatumDo}}</label>
                 <div>
                     <dot:TextBox class="form-control datetimepicker" Text="{value: DatumDo}" FormatString="dd.MM.yyyy" ValueType="DateTime" />
                 </div>
             </div>
 
             <div class="form-group col-sm-2">
-                <dot:RouteLink class="btn btn-warning col-sm-8" style="position: relative; top: 24px;" Text="Reset filtrů" RouteName="objednavkySprava" />
+                <dot:RouteLink class="btn btn-warning col-sm-8" style="position: relative; top: 24px;" Text="{{resource: Filter.FilterReset}}" RouteName="objednavkySprava" />
             </div>
 
         </div>
         <div class="row">
             <div class="col-sm-2">
-                <dot:Button class="btn btn-success col-sm-10" Text="Filtr obsah položky" Click="{command: SetFiltr("Polozka")}" />
+                <dot:Button class="btn btn-success col-sm-10" Text="{{resource: Filter.FilterPolozkaObsah}}" Click="{command: SetFiltr("Polozka")}" />
             </div>
 
             <div class="col-sm-offset-1 col-sm-2">
-                <dot:Button class="btn btn-success col-sm-10" Text="Filtr Datum" Click="{command: SetFiltr("Datum")}" />
+                <dot:Button class="btn btn-success col-sm-10" Text="{{resource: Filter.FilterDatum}}" Click="{command: SetFiltr("Datum")}" />
             </div>
         </div>
-            <%--<div class="col-sm-offset-1 col-sm-2">
+        <%--<div class="col-sm-offset-1 col-sm-2">
                 <dot:Button class="btn btn-success col-sm-10" Text="Filtr: Hlavní řada" Click="{command: SetFiltr("HlavniRada")}" />
             </div>
         </div>
@@ -134,19 +129,19 @@
         <hr />
         <%--  ------------------------------- FILTRY KONEC --------------------------------- --%>
 
-         <br />
-        <p>Počet položek: {{value: SeznamItemsGv.PagingOptions.TotalItemsCount}}</p>
-        <p Visible="{value: NothingFound}"> Nenalezeny žádné objednávky! </p>
-        
+        <br />
+        <p>{{resource: PageObjednavkyTvorba.PocetPolozek}} {{value: SeznamItemsGv.PagingOptions.TotalItemsCount}}</p>
+        <p Visible="{value: NothingFound}"> {{resource: PageObjednavkySprava.NoPolozky}} </p>
+
         <p>
             <dot:DataPager DataSet="{value: SeznamItemsGv}" class="pagination" />
         </p>
 
         <dot:GridView DataSource="{value: SeznamItemsGv}" class="table table-bordered">
-            <Columns>                                
-                
+            <Columns>
+
                 <%--<dot:GridViewTextColumn ValueBinding="{value: ObjednavkaFullID}" HeaderText="Číslo objednávky" AllowSorting="true" />--%>
-                <dot:GridViewTemplateColumn HeaderText="Číslo objednávky" AllowSorting="true">
+                <dot:GridViewTemplateColumn HeaderText="{{resource: Grid.ObjCislo}}" AllowSorting="true">
                     <ContentTemplate>
                         <dot:RouteLink RouteName="ObjednavkaEdit" Param-Id="{value: ObjednavkaID}">
                             <strong style="color:black">{{value: ObjednavkaFullID}}</strong>
@@ -154,16 +149,16 @@
                     </ContentTemplate>
                 </dot:GridViewTemplateColumn>
 
-                <dot:GridViewTextColumn ValueBinding="{value: DatumZalozeni}" HeaderText="Datum vytvoření" FormatString="d" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: TerminDodani}" HeaderText="Termín Dodání" FormatString="d" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: FullDodavatelName}" HeaderText="Dodavatel" AllowSorting="true" /> 
-                <dot:GridViewTextColumn ValueBinding="{value: Popis}" HeaderText="Popis položky" AllowSorting="true" />
-                <dot:GridViewTextColumn ValueBinding="{value: CelkovaCena}" HeaderText="Celková cena" AllowSorting="true" FormatString="N2" />                
-                <dot:GridViewTextColumn ValueBinding="{value: Mena}" HeaderText="Měna" AllowSorting="true" />                
-                <dot:GridViewTextColumn ValueBinding="{value: Stav}" HeaderText="Stav objednávky" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: DatumZalozeni}" HeaderText="{{resource: Grid.DatumVytv}}" FormatString="d" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: TerminDodani}" HeaderText="{{resource: Grid.TerminDodani}}" FormatString="d" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: FullDodavatelName}" HeaderText="{{resource: Grid.Dodavatel}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Popis}" HeaderText="{{resource: Grid.PopisPolozka}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: CelkovaCena}" HeaderText="{{resource: Grid.CelkovaCena}}" AllowSorting="true" FormatString="N2" />
+                <dot:GridViewTextColumn ValueBinding="{value: Mena}" HeaderText="{{resource: Grid.Mena}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Stav}" HeaderText="{{resource: Grid.StavObj}}" AllowSorting="true" />
 
-                                      
-                <dot:GridViewTemplateColumn HeaderText="Požadavek">
+
+                <dot:GridViewTemplateColumn HeaderText="{{resource: Grid.Pozadavek}}">
                     <ContentTemplate>
                         <dot:RouteLink Text="{value: FullPozadavekID}" RouteName="PozadavekEdit" Param-Id="{value: PozadavekID}" />
                         {{value: Zastoupeno}}
@@ -179,26 +174,26 @@
                     </ContentTemplate>
                 </dot:GridViewTemplateColumn>
 
-                <dot:GridViewTemplateColumn HeaderText="Vrátit do tvorby objednávek">
+                <dot:GridViewTemplateColumn HeaderText="{{resource: PageObjednavkySprava.Vratit}}">
                     <ContentTemplate>
                         <dot:LinkButton Enabled="{value: !Objednano}" class="glyphicon glyphicon-remove" Click="{command: _parent.DeleteObj(ObjednavkaID)}">
                             <PostBack.Handlers>
-                                <dot:ConfirmPostBackHandler Message="Opravdu zrušit koncept objednávky a vrátit VŠECHNY položky do tvorby objednávek?" />
+                                <dot:ConfirmPostBackHandler Message="{{resource: PageObjednavkySprava.DeleteConfirm}}" />
                             </PostBack.Handlers>
                         </dot:LinkButton>
                     </ContentTemplate>
                 </dot:GridViewTemplateColumn>
-                              
+
             </Columns>
         </dot:GridView>
 
         <dot:DataPager DataSet="{value: SeznamItemsGv}" class="pagination" />
         <br /><hr />
 
-    
+
         <p><br></p>
         <p>{{value: Vysledek}}</p>
-    
+
     </div>
 
     <script>

@@ -81,16 +81,17 @@ namespace ViewModels
         {
             if (lang == "CZ")
             {
-                CookiesServices.SetCookie("jazyk", "CS-cz");
+                CookiesServices.SetCookie("jazyk", "cs");
                 CookiesServices.SetCookie("DTB", DtbConxStringCZ);
                 DtbConxString = DtbConxStringCZ;
             }
             else
             {
                 DtbConxString = DtbConxStringEN;
-                CookiesServices.SetCookie("jazyk", "EN-us");
+                CookiesServices.SetCookie("jazyk", "en");
                 CookiesServices.SetCookie("DTB", DtbConxStringEN);
             }
+            Context.RedirectToRoute("Default");
         }
 
         public void ClearAlerts()
@@ -146,6 +147,15 @@ namespace ViewModels
 
         }
 
+        public override Task Init()
+        {
+            if (!string.IsNullOrEmpty(CookiesServices.GetCookieValue("jazyk")))
+            {
+                Context.ChangeCurrentCulture(CookiesServices.GetCookieValue("jazyk"));
+            }
+
+            return base.Init();
+        }
 
         public override Task PreRender()
         {
@@ -174,7 +184,7 @@ namespace ViewModels
                     CanSignObjednavky = ActiveUserLevel.Contains(4);
                     CanMakeObjednavky = ActiveUserLevel.Contains(3);
                     CanSignPozadavky = (ActiveUserLevel.Contains(1) || ActiveUserLevel.Contains(2));
-                    Text = $"Uzivatel: {ActiveUser}, Level: ";
+                    Text = $"User: {ActiveUser}, Level: ";
                     ActiveUserLevel.ForEach(e => Text += e + ", ");
                     UserLever = ActiveUserLevel.Max();
 
@@ -184,14 +194,14 @@ namespace ViewModels
                         if (UserServices.GetActualDomain() == "JULIDOMAIN")
                         {
                             // jsme v CZ
-                            CookiesServices.SetCookie("jazyk", "CS-cz");
+                            CookiesServices.SetCookie("jazyk", "cs");
                             CookiesServices.SetCookie("DTB", DtbConxStringCZ);
                             DtbConxString = DtbConxStringCZ;
                         }
                         else
                         {
                             DtbConxString = DtbConxStringEN;
-                            CookiesServices.SetCookie("jazyk", "EN-us");
+                            CookiesServices.SetCookie("jazyk", "en");
                             CookiesServices.SetCookie("DTB", DtbConxStringEN);
                         }
                     }

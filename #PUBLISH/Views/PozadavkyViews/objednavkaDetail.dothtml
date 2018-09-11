@@ -1,23 +1,24 @@
 ﻿@viewModel ViewModels.PozadavkyViewModels.ObjednavkaDetailViewModel, JULI_IS
 @masterPage Views/app.dotmaster
+@import JULI_IS.Resources.Pozadavky
 
 <dot:Content ContentPlaceHolderID="PageContent">
 
-    <h2 class="text-center">Detail objednávky</h2>
+    <h2 class="text-center">{{resource: PageObjednavkaDetail.nadpis}}</h2>
 
     <div class="form wrapper" Validation.Enabled="false" style="font-size: 0.9em">
 
         <%--cislo--%>
         <div class="row">
             <div class="form-group col-sm-2">
-                <label class="control-label">Interní číslo</label>
+                <label class="control-label">{{resource: PageObjednavkaDetail.IntCislo}}</label>
                 <div>
                     <dot:TextBox class="form-control" Text="{value: ObjData.ID}" readonly="" />
                 </div>
             </div>
 
             <div class="form-group col-sm-3">
-                <label class="control-label">Objednávka číslo</label>
+                <label class="control-label">{{resource: PageObjednavkaDetail.ObjCislo}}</label>
                 <div>
                     <dot:TextBox class="form-control" Text="{value: ObjData.FullObjednavkaID}" readonly="" />
                 </div>
@@ -26,8 +27,8 @@
             <div class="form-group col-sm-6 col-sm-offset-1" style="text-align: right">
                 <%--<label class="control-label" style="margin-right: 264px;"></label>--%>
                 <div>
-                    <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" style="margin-left: 10px;" class="btn btn-primary" Text="Náhled objednávky" Click="{command: Tisk()}" />
-                    <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" style="margin-left: 10px;" class="btn btn-primary" Text="Náhled potvrzení" Click="{command: TiskPotrzeni()}" />
+                    <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" style="margin-left: 10px;" class="btn btn-primary" Text="{{resource: PageObjednavkaDetail.NahledObj}}" Click="{command: Tisk()}" />
+                    <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" style="margin-left: 10px;" class="btn btn-primary" Text="{{resource: PageObjednavkaDetail.NahledPotvrzeni}}" Click="{command: TiskPotrzeni()}" />
                 </div>
 
                 <div ID="objednavka-zahlavi-tlacitka" style="margin-bottom: 0px; margin-top: 10px;" class="TextPodTlacitkem">
@@ -35,17 +36,17 @@
                     <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" style="margin-right: 59px;"
                                 class="{value: 'btn ' + (ObjData.Neodesilat == true ? 'btn-danger' : 'btn-default')}"
                                 Click="{command: NeodesilatChange()}" ButtonTagName="button">
-                        <span class="glyphicon glyphicon-ban-circle"></span> NEODESÍLAT
+                        <span class="glyphicon glyphicon-ban-circle"></span> {{resource: PageObjednavkaDetail.Neodesilat}}
                     </dot:Button>
 
                     <dot:Button Visible="{value: !ObjData.Vytisknuto}" Enabled="{value: !UploadedFiles.IsBusy}" style="margin-left: 10px;" class="btn btn-info" Click="{command: Vytisteno()}" ButtonTagName="button">
-                        <span class="glyphicon glyphicon-print"></span> TISK
+                        <span class="glyphicon glyphicon-print"></span> {{resource: PageObjednavkaDetail.Tisk}}
                     </dot:Button>
 
 
                     <div Visible="{value: ObjData.Vytisknuto}">
-                        <br />
-                        Objednávka <b>vytisknutá</b> dne
+                        <br />         
+                        {{resource: PageObjednavkaDetail.Vytisteno}}         
                         <dot:Literal Text="{value: ObjData.VytisknutoDne}" FormatString="d.M.yyyy H:mm" />
                     </div>
 
@@ -54,31 +55,31 @@
             </div>
 
         </div>
-        
-       
-        
 
 
 
-            <%--<div class="form-group">
+
+
+
+        <%--<div class="form-group">
                 <label class="control-label">Popis</label>
                 <div>
                     <dot:TextBox class="form-control" Text="{value: ObjData.CelkovyPopis}" />
                 </div>
             </div>--%>
 
-            <!--dodavatele-->
-            <div class="row">
-                <div class="form-group col-sm-6">
-                    <label class="control-label">Vybraný dodavatel</label>
-                    <div>
-                        <dot:TextBox class="VybrDodavatel" Text="{value: SelectedDodavatel}" Type="MultiLine" rows="5" style="width: 100%;"></dot:TextBox>
-                    </div>
-                    <dot:Button Enabled="{value: Editovatelny}" class="btn btn-primary ButtonSmall" Text="Nový / Edit dodavatele" Click="{command: EditDodavatel()}" />
+        <!--dodavatele-->
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label class="control-label">{{resource: PageObjednavkaDetail.VybrDodavatel}}</label>
+                <div>
+                    <dot:TextBox class="VybrDodavatel" Text="{value: SelectedDodavatel}" Type="MultiLine" rows="5" style="width: 100%;"></dot:TextBox>
                 </div>
+                <dot:Button Enabled="{value: Editovatelny}" class="btn btn-primary ButtonSmall" Text="{{resource: PagePozadavkyDetail.EditDodavatele}}" Click="{command: EditDodavatel()}" />
+            </div>
 
 
-                <%--<div class="form-group col-sm-6">
+            <%--<div class="form-group col-sm-6">
                 <dot:Button Enabled="{value: Editovatelny}" class="btn btn-sm btn-success" Text="Nahrát databázi dodavatelů" Click="{command: DodavateleInit()}" />
 
             </div>
@@ -97,7 +98,7 @@
 
 
 
-                <%--<div class="form-group col-sm-3">
+            <%--<div class="form-group col-sm-3">
                 <label class="control-label">Číslo dodavatele</label>
                 <div>
                     <dot:ComboBox RenderSettings.Mode="Server"
@@ -110,300 +111,311 @@
                 </div>
             </div>--%>
 
-                <%--<div class="form-group col-sm-6">
+            <%--<div class="form-group col-sm-6">
                 <dot:Button Enabled="{value: Editovatelny}" class="btn btn-primary" Text="Přiřadit dodavate k objednávce" Click="{command: LoadDodavatele(ObjData.DodavatelS21ID)}" />
                 <dot:Button Enabled="{value: Editovatelny}" class="btn btn-primary ButtonSmall" Text="Nový / Edit dodavatele" Click="{command: EditDodavatel()}" />
                 <p class="TextPodTlacitkemAlignLeft">po výběru dodavatele klikněte na toto tlačítko pro přiřazení dodavatele k požadavku</p>
             </div>--%>
 
-                <div class="form-group col-sm-3">
-                    <label class="control-label">KST</label>
-                    <div>
-                        <dot:ComboBox DataSource="{value: KSTlist}"
-                                      SelectedValue="{value: ObjData.KST1}"
-                                      ValueMember="Cislo"
-                                      DisplayMember="FullName"
-                                      EmptyItemText="Zvolte KST ..."
-                                      class="form-control" />
-                    </div>
-                </div>
-
-                <div class="form-group col-sm-3">
-                    <label class="control-label">Hlavní řada</label>
-                    <div>
-                        <dot:ComboBox DataSource="{value: HlavniRada}"
-                                      SelectedValue="{value: ObjData.HlavniRada}"
-                                      class="form-control" />
-                    </div>
-                </div>
-
-                <div class="form-group col-sm-3">
-                    <label class="control-label">Číslo nabídky</label>
-                    <div>
-                        <dot:TextBox readonly class="form-control" Text="{value: ObjData.NabidkaCislo}" />
-                    </div>
-                </div>
-
-            </div>
-
-            <%--celk. cena a mena--%>
-            <div class="row">
-
-                <div class="form-group col-sm-3">
-                    <label class="control-label">Celková cena</label>
-                    <div>
-                        <dot:TextBox readonly class="form-control" Text="{value: ObjData.CelkovaCena}" FormatString="N2" ValueType="Number" />
-                    </div>
-                </div>
-
-                <div class="form-group col-sm-2">
-                    <label class="control-label">Měna</label>
-                    <dot:ComboBox DataSource="{value: MenaList}"
-                                  SelectedValue="{value: ObjData.Mena}" class="{value: MenaClass}"
-                                  SelectionChanged="{command: ChangeMena()}"
-                                  Enabled="{value: Editovatelny}" />
+            <div class="form-group col-sm-3">
+                <label class="control-label">{{resource: PageObjednavkaDetail.kst}}</label>
+                <div>
+                    <dot:ComboBox DataSource="{value: KSTlist}"
+                                  SelectedValue="{value: ObjData.KST1}"
+                                  ValueMember="Cislo"
+                                  DisplayMember="FullName"
+                                  EmptyItemText="{{resource: PageObjednavkaDetail.kstVyber}}"
+                                  class="form-control" />
                 </div>
             </div>
 
-            <%--druh ceny, dod. podm. a plat.podm.--%>
-            <div class="row">
-                <div class="form-group col-sm-3">
-                    <label class="control-label">Druh ceny</label>
-                    <div>
-                        <dot:ComboBox DataSource="{value: TextCena}"
-                                      SelectionChanged="{command: DruhCenyChange()}"
-                                      SelectedValue="{value: ObjData.TextCenaId}"
-                                      ValueMember="ID"
-                                      DisplayMember="Text"
-                                      EmptyItemText="Vyberte druh ceny..."
-                                      class="form-control btn-color" />
-                    </div>
-                </div>
-
-                <div class="form-group col-sm-3" Visible="{value: DruhCenyVlastniText}">
-                    <label class="control-label">Prosím zadejte vlastní text</label>
-                    <dot:TextBox class="form-control" Text="{value: ObjData.TextCenaText}"></dot:TextBox>                   
-                </div>
-
-                <div class="form-group col-sm-3">
-                    <label class="control-label">Dodací podmínky</label>
-                    <div>
-                        <dot:ComboBox DataSource="{value: TextDodaciPodm}"
-                                      SelectionChanged="{command: DodPodmyChange()}"
-                                      SelectedValue="{value: ObjData.TextDodaciPodmId}"
-                                      ValueMember="ID"
-                                      DisplayMember="Text"
-                                      EmptyItemText="Vyberte dodací podmínku..."
-                                      class="form-control btn-color" />
-                    </div>
-                </div>
-
-                <div class="form-group col-sm-3" Visible="{value: DodPodmVlastniText}">
-                    <label class="control-label">Prosím zadejte vlastní text</label>
-                    <dot:TextBox class="form-control" Text="{value: ObjData.TextDodaciPodmText}" />
-                </div>
-
-                <div class="form-group col-sm-3">
-                    <label class="control-label">Platební podmínky</label>
-                    <div>
-                        <dot:ComboBox DataSource="{value: TextPlatebniPodm}"
-                                      SelectionChanged="{command: PlatPodmChange()}"
-                                      SelectedValue="{value: ObjData.TextPlatebniPodmId}"
-                                      ValueMember="ID"
-                                      DisplayMember="Text"
-                                      EmptyItemText="Vyberte platební podmínku..."
-                                      class="form-control btn-color" />
-                    </div>
-                </div>
-
-                <div class="form-group col-sm-3" Visible="{value: PlatPodmVlastniText}">
-                    <label class="control-label">Prosím zadejte vlastní text</label>
-                    <dot:TextBox class="form-control" Text="{value: ObjData.TextPlatebniPodmText}" Type="MultiLine" rows="1"/>
+            <div class="form-group col-sm-3">
+                <label class="control-label">{{resource: PageObjednavkaDetail.HlRada}}</label>
+                <div>
+                    <dot:ComboBox DataSource="{value: HlavniRada}"
+                                  SelectedValue="{value: ObjData.HlavniRada}"
+                                  class="form-control" />
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-sm-12">
-                    <label class="control-label">Poznámky z požadavků</label>
-                    <div>
-                        <dot:TextBox readonly class="" Text="{value: ObjData.Poznamka}" Type="MultiLine" rows="2" style="width: 100%;"></dot:TextBox>
-                    </div>
+            <div class="form-group col-sm-3">
+                <label class="control-label">{{resource: PageObjednavkaDetail.NabidkaCislo}}</label>
+                <div>
+                    <dot:TextBox readonly class="form-control" Text="{value: ObjData.NabidkaCislo}" />
                 </div>
             </div>
-
-
-            <!--List of ITEMS-->
-            <hr />
-            <h4 style="float:left;">Položky v objednávce</h4>
-
-            <p style="position: relative; top: 14px; left: 16px;">Počet položek: {{value: ObjData.PocetPolozek}}</p>
-            <dot:GridView DataSource="{value: ItemsGv}" class="table table-bordered">
-                <Columns>
-                    <!--<dot:GridViewTextColumn ValueBinding="{value: ID}" HeaderText="ID" />-->
-                    <dot:GridViewTextColumn ValueBinding="{value: Popis}" HeaderText="Popis položky" AllowSorting="true" />
-                    <dot:GridViewTextColumn ValueBinding="{value: Jednotka}" HeaderText="Jednotka" AllowSorting="true" />
-                    <dot:GridViewTextColumn ValueBinding="{value: Mnozstvi}" HeaderText="Množství" />
-                    <dot:GridViewTextColumn ValueBinding="{value: CenaZaJednotku}" HeaderText="Jednotková cena" FormatString="N2" />
-                    <dot:GridViewTextColumn ValueBinding="{value: CelkovaCena}" HeaderText="Celková cena" FormatString="N2" />
-                    <dot:GridViewTextColumn ValueBinding="{value: Mena}" HeaderText="Měna" AllowSorting="true" />
-                    <dot:GridViewTextColumn ValueBinding="{value: DatumZalozeni}" HeaderText="Datum založení" FormatString="d" AllowSorting="true" />
-                    <dot:GridViewTextColumn ValueBinding="{value: TerminDodani}" HeaderText="Termín dodání" FormatString="d" AllowSorting="true" />
-                    <dot:GridViewTextColumn ValueBinding="{value: InterniPoznamka}" HeaderText="Interní poznámka" />
-                    <dot:GridViewTextColumn ValueBinding="{value: Zalozil}" HeaderText="Založil" AllowSorting="true" />
-                    <dot:GridViewTextColumn ValueBinding="{value: NabidkaCislo}" HeaderText="Číslo nabídky" AllowSorting="true" />
-                    <!--propojeni na pozadavek-->
-                    <dot:GridViewTemplateColumn HeaderText="Požadavek">
-                        <ContentTemplate>
-
-                            <dot:RouteLink class="btn btn-default" Text="{value: FullPozadavekID}" RouteName="PozadavekEdit" Param-Id="{value: PozadavekID}" />
-                            <%--<dot:LinkButton  Click="{command: _parent.LinkToPozadavek(PozadavekID)}" Text="{value: PozadavekID}" >
-
-                        </dot:LinkButton>--%>
-                        </ContentTemplate>
-                    </dot:GridViewTemplateColumn>
-
-                    <!--tlacitko pro editaci polozky-->
-                    <dot:GridViewTemplateColumn HeaderText="Detail">
-                        <ContentTemplate>
-                            <dot:LinkButton class="glyphicon glyphicon-edit" Click="{command: _parent.EditItem(ID)}">
-                            </dot:LinkButton>
-                        </ContentTemplate>
-                    </dot:GridViewTemplateColumn>
-                    <!--tlacitko pro smazani polozky-->
-                    <dot:GridViewTemplateColumn HeaderText="Vyřadit položku z obj.">
-                        <ContentTemplate>
-                            <dot:LinkButton class="glyphicon glyphicon-remove" Click="{command: _parent.DeleteItem(ID)}">
-                                <PostBack.Handlers>
-                                    <dot:ConfirmPostBackHandler Message="Opravdu odstranit položku z objednávky?" />
-                                </PostBack.Handlers>
-                            </dot:LinkButton>
-                        </ContentTemplate>
-                    </dot:GridViewTemplateColumn>
-                </Columns>
-            </dot:GridView>
-            <dot:DataPager DataSet="{value: ItemsGv}" class="pagination" />
-            <br />
-
-            <!--prehled nahranych souboru k objednavce-->
-            <h4>Přiložené soubory:</h4>
-
-            <dot:FileUpload AllowMultipleFiles="true" UploadedFiles="{value: UploadedFiles}"
-                            UploadCompleted="{command: FilesUploadedComplete()}"
-                            UploadButtonText="Nahrát soubory (pro výběr více souborů podržte klávesu CTRL)"
-                            SuccessMessageText="Soubory byly v pořádku nahrány." />
-
-            <table class="table table-bordered" Validation.Enabled="false">
-                <thead>
-                    <tr>
-                        <th>Popis</th>
-                        <th>Jméno souboru</th>
-                        <th>uložit popis</th>
-                        <%--<th>delete</th>--%>
-                    </tr>
-                </thead>
-                <dot:Repeater DataSource="{value: Files}" WrapperTagName="tbody">
-                    <tr>
-                        <td>
-                            <dot:TextBox class="form-control" Text="{value: Description}"></dot:TextBox>
-                        </td>
-                        <td><dot:RouteLink RouteName="FileDownload" Param-Id="{value: ID}" Text="{value: FileName}" /></td>
-                        <td>
-                            <dot:LinkButton class="glyphicon glyphicon-ok" Text="" Click="{command: _parent.SaveDescription(Description, ID)}">
-                            </dot:LinkButton>
-                        </td>
-                        <td>
-                            <dot:LinkButton class="glyphicon glyphicon-remove" Text="" Click="{command: _parent.DeleteFile(ID)}">
-                                <PostBack.Handlers>
-                                    <dot:ConfirmPostBackHandler Message="Opravdu soubor vymazat?" />
-                                </PostBack.Handlers>
-                            </dot:LinkButton>
-                        </td>
-                    </tr>
-                </dot:Repeater>
-            </table>
-
-
-            <hr /> <br />
-
-            <p Visible="{value: ObjData.Stornovano}" style="font-size: 34px;">
-                Objednávka <b style="color: red;">STORNOVÁNA!</b>
-            </p>
-
-            <div Visible="{value: ObjData.Objednano}">
-
-                <h4>Objednávka vytvořena a odeslána na schválení!</h4>
-
-
-                <p Visible="{value: ObjData.Objednano}">
-                    Datum odeslání:
-                    <dot:Literal Text="{value: ObjData.OdeslanoNaSchvaleniDne}" FormatString="d.M.yyyy H:mm" />
-                </p>
-
-                <div Visible="{value: ObjData.Schvaleno}">
-                    <p>
-                        Objednávka schválena dne:
-                        <dot:Literal Text="{value: ObjData.SchvalenoDne}" FormatString="d.M.yyyy H:mm" />
-                    </p>
-                    <p>uživatelem {{value: Schvalovatel.Jmeno}}</p>
-                    <p Visible="{value: !ObjData.Dokonceno}">Objednávku je možné odeslat.</p>
-                </div>
-
-                <div Visible="{value: ObjData.Zamitnuto}">
-                    <p style="font-size: 34px;"> Objednávka byla <b style="color: red;">ZAMÍTNUTA!</b></p>
-                    <p>
-                        Dne:
-                        <dot:Literal Text="{value: ObjData.ZamitnutoDne}" FormatString="d.M.yyyy H:mm" />
-                    </p>
-                    <p>
-                        Důvod:
-                        <dot:Literal Text="{value: ObjData.DuvodZamitnutiText}" />
-                    </p>
-                    <hr />
-                </div>
-
-
-                <div Visible="{value: ObjData.Dokonceno}">
-                    <p>
-                        Objednávka <b>dokončena</b> dne:
-                        <dot:Literal Text="{value: ObjData.DokoncenoDne}" FormatString="d.M.yyyy H:mm" />
-                    </p>
-                </div>
-
-                <div Visible="{value: ObjData.Neodesilat}">
-                    <p>Objednávka se <b>NEBUDE</b> odesílat.</p>
-                </div>
-
-                <div Visible="{value: ObjData.Vytisknuto}">
-                    <p>
-                        Objednávka <b>vytisknutá</b> dne
-                        <dot:Literal Text="{value: ObjData.VytisknutoDne}" FormatString="d.M.yyyy H:mm" />
-                    </p>
-                </div>
-
-            </div>
-
-            <div class="text-center">
-                <dot:Button Enabled="{value: Editovatelny}" class="btn btn-primary" Text="Uložit koncept objednávky" Click="{command: SaveKoncept()}"></dot:Button>
-                <dot:Button Enabled="{value: Editovatelny}" class="btn btn-primary" Text="Zařadit objednávku" Click="{command: VytvoritObjednavku()}">
-                    <PostBack.Handlers>
-                        <dot:ConfirmPostBackHandler Message="Opravdu objednávku zařadit a odeslat na schválení?" />
-                    </PostBack.Handlers>
-                </dot:Button>
-                <dot:RouteLink class="btn btn-default" Text="Zrušit" RouteName="objednavkyPrehled" />
-
-                <dot:Button Visible="{value: ZrusitelnyPodpis}" class="btn btn-danger" Text="Vrátit objednávku (vyřadit z podpisů)" Click="{command: ZrusitPodpisyPotvrzeni()}" />
-
-                
-                <dot:Button Visible="{value: Stornovatelne}" class="btn btn-default right" style="margin-left: 10%;" Text="STORNO objednávky" Click="{command: StornovatObjednavku()}">
-                    <PostBack.Handlers>
-                        <dot:ConfirmPostBackHandler Message="Opravdu objednávku STORNOVAT?!?" />
-                    </PostBack.Handlers>
-                </dot:Button>
-            </div>
-
-
 
         </div>
+
+        <%--celk. cena a mena--%>
+        <div class="row">
+
+            <div class="form-group col-sm-3">
+                <label class="control-label">{{resource: PageObjednavkaDetail.CelkovaCena}}</label>
+                <div>
+                    <dot:TextBox readonly class="form-control" Text="{value: ObjData.CelkovaCena}" FormatString="N2" ValueType="Number" />
+                </div>
+            </div>
+
+            <div class="form-group col-sm-2">
+                <label class="control-label">{{resource: PageObjednavkaDetail.mena}}</label>
+                <dot:ComboBox DataSource="{value: MenaList}"
+                              SelectedValue="{value: ObjData.Mena}" class="{value: MenaClass}"
+                              SelectionChanged="{command: ChangeMena()}"
+                              Enabled="{value: Editovatelny}" />
+            </div>
+        </div>
+
+        <%--druh ceny, dod. podm. a plat.podm.--%>
+        <div class="row">
+            <div class="form-group col-sm-3">
+                <label class="control-label">{{resource: PageObjednavkaDetail.DruhCeny}}</label>
+                <div>
+                    <dot:ComboBox DataSource="{value: TextCena}"
+                                  SelectionChanged="{command: DruhCenyChange()}"
+                                  SelectedValue="{value: ObjData.TextCenaId}"
+                                  ValueMember="ID"
+                                  DisplayMember="Text"
+                                  EmptyItemText="{{resource: PageObjednavkaDetail.DruhCenyVyber}}"
+                                  class="form-control btn-color" />
+                </div>
+            </div>
+
+            <div class="form-group col-sm-3" Visible="{value: DruhCenyVlastniText}">
+                <label class="control-label">{{resource: PageObjednavkaDetail.VlText}}</label>
+                <dot:TextBox class="form-control" Text="{value: ObjData.TextCenaText}"></dot:TextBox>
+            </div>
+
+            <div class="form-group col-sm-3">
+                <label class="control-label">{{resource: PageObjednavkaDetail.DodaciPodm}}</label>
+                <div>
+                    <dot:ComboBox DataSource="{value: TextDodaciPodm}"
+                                  SelectionChanged="{command: DodPodmyChange()}"
+                                  SelectedValue="{value: ObjData.TextDodaciPodmId}"
+                                  ValueMember="ID"
+                                  DisplayMember="Text"
+                                  EmptyItemText="{{resource: PageObjednavkaDetail.DodPodmVyber}}"
+                                  class="form-control btn-color" />
+                </div>
+            </div>
+
+            <div class="form-group col-sm-3" Visible="{value: DodPodmVlastniText}">
+                <label class="control-label">{{resource: PageObjednavkaDetail.VlText}}</label>
+                <dot:TextBox class="form-control" Text="{value: ObjData.TextDodaciPodmText}" />
+            </div>
+
+            <div class="form-group col-sm-3">
+                <label class="control-label">{{resource: PageObjednavkaDetail.PlatPodm}}</label>
+                <div>
+                    <dot:ComboBox DataSource="{value: TextPlatebniPodm}"
+                                  SelectionChanged="{command: PlatPodmChange()}"
+                                  SelectedValue="{value: ObjData.TextPlatebniPodmId}"
+                                  ValueMember="ID"
+                                  DisplayMember="Text"
+                                  EmptyItemText="{{resource: PageObjednavkaDetail.PlatPodmVyber}}"
+                                  class="form-control btn-color" />
+                </div>
+            </div>
+
+            <div class="form-group col-sm-3" Visible="{value: PlatPodmVlastniText}">
+                <label class="control-label">{{resource: PageObjednavkaDetail.VlText}}t</label>
+                <dot:TextBox class="form-control" Text="{value: ObjData.TextPlatebniPodmText}" Type="MultiLine" rows="1" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <label class="control-label">{{resource: PageObjednavkaDetail.PoznPoz}}</label>
+                <div>
+                    <dot:TextBox readonly class="" Text="{value: ObjData.Poznamka}" Type="MultiLine" rows="2" style="width: 100%;"></dot:TextBox>
+                </div>
+            </div>
+        </div>
+
+
+        <!--List of ITEMS-->
+        <hr />
+        <h4 style="float:left;">{{resource: PageObjednavkaDetail.PolObj}}</h4>
+
+        <p style="position: relative; top: 14px; left: 16px;">{{resource: PageObjednavkaDetail.PocetPol}} {{value: ObjData.PocetPolozek}}</p>
+        <dot:GridView DataSource="{value: ItemsGv}" class="table table-bordered">
+            <Columns>
+                <!--<dot:GridViewTextColumn ValueBinding="{value: ID}" HeaderText="ID" />-->
+
+                <dot:GridViewTextColumn ValueBinding="{value: Popis}" HeaderText="{{resource: Grid.Popis}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Jednotka}" HeaderText="{{resource: Grid.Jednotka}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: Mnozstvi}" HeaderText="{{resource: Grid.Mnozstvi}}" FormatString="N2" />
+                <dot:GridViewTextColumn ValueBinding="{value: CenaZaJednotku}" HeaderText="{{resource: Grid.JednCena}}" FormatString="N2" />
+                <dot:GridViewTextColumn ValueBinding="{value: CelkovaCena}" HeaderText="{{resource: Grid.CelkovaCena}}" FormatString="N2" />
+                <dot:GridViewTextColumn ValueBinding="{value: Mena}" HeaderText="{{resource: Grid.Mena}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: DatumZalozeni}" HeaderText="{{resource: Grid.DatumVytv}}" FormatString="d" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: TerminDodani}" HeaderText="{{resource: Grid.TerminDodani}}" FormatString="d" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: InterniPoznamka}" HeaderText="{{resource: Grid.InterniPozn}}" />
+                <dot:GridViewTextColumn ValueBinding="{value: Zalozil}" HeaderText="{{resource: Grid.Zalozil}}" AllowSorting="true" />
+                <dot:GridViewTextColumn ValueBinding="{value: NabidkaCislo}" HeaderText="{{resource: Grid.NabCislo}}" AllowSorting="true" />
+
+
+
+                <%--<dot:GridViewTextColumn ValueBinding="{value: DatumZalozeni}" HeaderText="Datum založení" FormatString="d" AllowSorting="true" />--%>
+
+
+
+                <!--propojeni na pozadavek-->
+                <dot:GridViewTemplateColumn HeaderText="{{resource: Grid.Pozadavek}}">
+                    <ContentTemplate>
+
+                        <dot:RouteLink class="btn btn-default" Text="{value: FullPozadavekID}" RouteName="PozadavekEdit" Param-Id="{value: PozadavekID}" />
+                        <%--<dot:LinkButton  Click="{command: _parent.LinkToPozadavek(PozadavekID)}" Text="{value: PozadavekID}" >
+
+                        </dot:LinkButton>--%>
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>
+
+                <!--tlacitko pro editaci polozky-->
+                <dot:GridViewTemplateColumn HeaderText="Detail">
+                    <ContentTemplate>
+                        <dot:LinkButton class="glyphicon glyphicon-edit" Click="{command: _parent.EditItem(ID)}">
+                        </dot:LinkButton>
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>
+                <!--tlacitko pro smazani polozky-->
+                <dot:GridViewTemplateColumn HeaderText="{{resource: PageObjednavkaDetail.VyraditPolozku}}">
+                    <ContentTemplate>
+                        <dot:LinkButton class="glyphicon glyphicon-remove" Click="{command: _parent.DeleteItem(ID)}">
+                            <PostBack.Handlers>
+                                <dot:ConfirmPostBackHandler Message="{{resource: PageObjednavkaDetail.DeleteItemConfirm}}" />
+                            </PostBack.Handlers>
+                        </dot:LinkButton>
+                    </ContentTemplate>
+                </dot:GridViewTemplateColumn>
+            </Columns>
+        </dot:GridView>
+        <dot:DataPager DataSet="{value: ItemsGv}" class="pagination" />
+        <br />
+
+        <!--prehled nahranych souboru k objednavce-->
+        <h4>{{resource: PageObjednavkaDetail.PrilozeneSoubory}}:</h4>
+
+        <dot:FileUpload AllowMultipleFiles="true" UploadedFiles="{value: UploadedFiles}"
+                        UploadCompleted="{command: FilesUploadedComplete()}"
+                        UploadButtonText="{{resource: PageObjednavkaDetail.fileUploadButtonText}}"
+                        UploadErrorMessageText="{{resource: PageObjednavkaDetail.fileUploadErrorMessageText}}"
+                        SuccessMessageText="{{resource: PageObjednavkaDetail.fileSuccessMessageText}}"
+                        />
+
+        <table class="table table-bordered" Validation.Enabled="false">
+            <thead>
+                <tr>
+
+                    <th>{{resource: Grid.PopisSouboru}}</th>
+                    <th>{{resource: Grid.JmenoSouboru}}</th>
+                    <th>{{resource: Grid.PopisUlozit}}</th>
+                    <%--<th>delete</th>--%>
+                </tr>
+            </thead>
+            <dot:Repeater DataSource="{value: Files}" WrapperTagName="tbody">
+                <tr>
+                    <td>
+                        <dot:TextBox class="form-control" Text="{value: Description}"></dot:TextBox>
+                    </td>
+                    <td><dot:RouteLink RouteName="FileDownload" Param-Id="{value: ID}" Text="{value: FileName}" /></td>
+                    <td>
+                        <dot:LinkButton class="glyphicon glyphicon-ok" Text="" Click="{command: _parent.SaveDescription(Description, ID)}">
+                        </dot:LinkButton>
+                    </td>
+                    <td>
+                        <dot:LinkButton class="glyphicon glyphicon-remove" Text="" Click="{command: _parent.DeleteFile(ID)}">
+                            <PostBack.Handlers>
+                                <dot:ConfirmPostBackHandler Message="{{resource: PageObjednavkaDetail.fileDeleteConfirm}}" />
+                            </PostBack.Handlers>
+                        </dot:LinkButton>
+                    </td>
+                </tr>
+            </dot:Repeater>
+        </table>
+
+
+        <hr /> <br />
+
+               <p Visible="{value: ObjData.Stornovano}" style="font-size: 34px;">
+                   {{resource: PageObjednavkaDetail.Objednavka}} <b style="color: red;">{{resource: PageObjednavkaDetail.storno}}</b>
+               </p>
+
+        <div Visible="{value: ObjData.Objednano}">
+
+            <h4>{{resource: PageObjednavkaDetail.ObjVytvorena}}</h4>
+
+
+            <p Visible="{value: ObjData.Objednano}">
+                {{resource: PageObjednavkaDetail.DatumOdeslani}}
+                <dot:Literal Text="{value: ObjData.OdeslanoNaSchvaleniDne}" FormatString="d.M.yyyy H:mm" />
+            </p>
+
+            <div Visible="{value: ObjData.Schvaleno}">
+                <p>
+                    {{resource: PageObjednavkaDetail.DatumObjSchvalena}}
+                    <dot:Literal Text="{value: ObjData.SchvalenoDne}" FormatString="d.M.yyyy H:mm" />
+                </p>
+                <p>uživatelem {{value: Schvalovatel.Jmeno}}</p>
+                <p Visible="{value: !ObjData.Dokonceno}">{{resource: PageObjednavkaDetail.ObjednavkaNaOdesl}}</p>
+            </div>
+
+            <div Visible="{value: ObjData.Zamitnuto}">
+                <p style="font-size: 34px;"> {{resource: PageObjednavkaDetail.ObjednavkaByla}} <b style="color: red;">{{resource: PageObjednavkaDetail.zamitnuta}}</b></p>
+                <p>
+                    {{resource: PageObjednavkaDetail.Dne}}
+                    <dot:Literal Text="{value: ObjData.ZamitnutoDne}" FormatString="d.M.yyyy H:mm" />
+                </p>
+                <p>
+                    {{resource: PageObjednavkaDetail.Duvod}}
+                    <dot:Literal Text="{value: ObjData.DuvodZamitnutiText}" />
+                </p>
+                <hr />
+            </div>
+
+
+            <div Visible="{value: ObjData.Dokonceno}">
+                <p>
+                    {{resource: PageObjednavkaDetail.Objednavka}} <b>{{resource: PageObjednavkaDetail.dokoncena}}</b> {{resource: PageObjednavkaDetail.Dne}}
+                    <dot:Literal Text="{value: ObjData.DokoncenoDne}" FormatString="d.M.yyyy H:mm" />
+                </p>
+            </div>
+
+            <div Visible="{value: ObjData.Neodesilat}">
+                <p>{{resource: PageObjednavkaDetail.NebudeOdeslana}}</p>
+            </div>
+
+            <div Visible="{value: ObjData.Vytisknuto}">
+                <p>
+                    {{resource: PageObjednavkaDetail.VytisknutoDne}}
+                    <dot:Literal Text="{value: ObjData.VytisknutoDne}" FormatString="d.M.yyyy H:mm" />
+                </p>
+            </div>
+
+        </div>
+
+        <div class="text-center">
+            <dot:Button Enabled="{value: Editovatelny}" class="btn btn-primary" Text="{{resource: PageObjednavkaDetail.UlozitKoncept}}" Click="{command: SaveKoncept()}"></dot:Button>
+            <dot:Button Enabled="{value: Editovatelny}" class="btn btn-primary" Text="{{resource: PageObjednavkaDetail.ZaraditObjednavku}}" Click="{command: VytvoritObjednavku()}">
+                <PostBack.Handlers>
+                    <dot:ConfirmPostBackHandler Message="{{resource: PageObjednavkaDetail.ZaraditObjednavkuPotvrzeni}}" />
+                </PostBack.Handlers>
+            </dot:Button>
+            <dot:RouteLink class="btn btn-default" Text="{{resource: PageObjednavkaDetail.Ukoncit}}" RouteName="objednavkyPrehled" />
+
+            <dot:Button Visible="{value: ZrusitelnyPodpis}" class="btn btn-danger" Text="{{resource: PageObjednavkaDetail.CancelObj}}" Click="{command: ZrusitPodpisyPotvrzeni()}" />
+
+
+            <dot:Button Visible="{value: Stornovatelne}" class="btn btn-default right" style="margin-left: 10%;" Text="{{resource: PageObjednavkaDetail.StornoObj}}" Click="{command: StornovatObjednavku()}">
+                <PostBack.Handlers>
+                    <dot:ConfirmPostBackHandler Message="{{resource: PageObjednavkaDetail.StornoPotvrzeni}}" />
+                </PostBack.Handlers>
+            </dot:Button>
+        </div>
+
+
+
+    </div>
 
     <!--modalni okno - detail polozky-->
     <div class="modal fade" ID="item-detail" role="dialog" data-id="item-detail" Validator.InvalidCssClass="has-error" Validator.SetToolTipText="true" Validation.Enabled="false" Validation.Target="{value: ItemData}">
@@ -412,56 +424,56 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
-                    <h4 class="modal-title">Detail položky objednávky: {{value: ItemData.ObjednavkaID}}</h4>
-                    <dot:Literal Text="{{value: ItemData.DatumZalozeni}}" FormatString="d.M.yyyy H:mm" />                    
+                    <h4 class="modal-title">{{resource: ModalItems.nadpisObj}} {{value: ItemData.ObjednavkaID}}</h4>
+                    <dot:Literal Text="{{value: ItemData.DatumZalozeni}}" FormatString="d.M.yyyy H:mm" />
                 </div>
                 <div class="modal-body">
                     <p Visible="{value: ConfirmText != null}" class="alert alert-success">{{value: ConfirmText}}</p>
                     <p Visible="{value: AlertText != null}" class="alert alert-danger">{{value: AlertText}}</p>
                     <div class="row">
                         <div class="form-group col-sm-12">
-                            <label class="control-label">Popis</label>
+                            <label class="control-label">{{resource: Grid.Popis}}</label>
                             <dot:TextBox class="form-control" ID="txtItemPopis" Text="{value: ItemData.Popis}" Type="MultiLine" />
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="form-group col-sm-2" Validator.Value="{value: ItemData.Jednotka}">
-                            <label class="control-label">Jednotka</label>
+                            <label class="control-label">{{resource: Grid.Jednotka}}</label>
                             <div>
                                 <dot:TextBox class="form-control" Text="{value: ItemData.Jednotka}" required="required" Changed="{command: ClearAlerts()}" />
                             </div>
                         </div>
                         <div class="form-group col-sm-2">
-                            <label class="control-label">Množství</label>
+                            <label class="control-label">{{resource: Grid.Mnozstvi}}</label>
                             <div>
                                 <dot:TextBox class="form-control" Text="{value: ItemData.Mnozstvi}" Changed="{command: Prepocitat()}" ValueType="Number" />
                             </div>
                         </div>
 
                         <div class="form-group col-sm-3">
-                            <label class="control-label">Cena za jednotku</label>
+                            <label class="control-label">{{resource: Grid.JednCena}}</label>
                             <div>
                                 <dot:TextBox class="form-control" Text="{value: ItemData.CenaZaJednotku}" Changed="{command: Prepocitat()}" ValueType="Number" FormatString="N2" />
                             </div>
                         </div>
 
                         <div class="form-group col-sm-3">
-                            <label class="control-label">Celková cena</label>
+                            <label class="control-label">{{resource: Grid.CelkovaCena}}</label>
                             <div>
                                 <dot:TextBox readonly class="form-control" Text="{value: CelkovaCenaMena}" />
                             </div>
                         </div>
                         <!--<div class="form-group col-sm-2">
-                <label class="control-label">Měna</label>
-                <div>
-                    <dot:ComboBox DataSource="{value: MenaList}"
-                                  SelectedValue="{value: ItemData.Mena}" class="form-control" />
+                            <label class="control-label">Měna</label>
+                            <div>
+                                <dot:ComboBox DataSource="{value: MenaList}"
+                                              SelectedValue="{value: ItemData.Mena}" class="form-control" />
 
-                </div>
-            </div>-->
+                            </div>
+                        </div>-->
                         <div class="form-group col-sm-2">
-                            <label class="control-label">Termín dodání</label>
+                            <label class="control-label">{{resource: Grid.TerminDodani}}</label>
                             <div>
                                 <dot:TextBox class="form-control datetimepicker" Text="{value: ItemData.TerminDodani}" FormatString="dd.MM.yyyy" ValueType="DateTime" />
                             </div>
@@ -532,7 +544,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="control-label">Interní poznámka</label>
+                                <label class="control-label">{{resource: PageObjednavkaDetail.IntPoznamka}}</label>
                                 <div>
                                     <dot:TextBox class="form-control" Text="{value: ItemData.InterniPoznamka}" />
                                 </div>
@@ -542,43 +554,43 @@
 
 
                     <div class="row">
-                    <div class="form-group col-sm-3">
-                        <label class="control-label">Číslo nabídky &nbsp;</label>
-                        <div>
-                            <dot:TextBox class="form-control" Text="{value: ItemData.NabidkaCislo}" />
-                        </div>
-                    </div>
-
-                    <div class="form-group col-sm-4">
-                        <label class="control-label">Poptány nejméně tři společnosti? &nbsp;</label>
-                        <dot:CheckBox Checked="{value: ItemData.Poptany3Firmy}" />
-                        ANO
-                        <%--<span Visible="{value: ItemData.Poptany3Firmy}"> ANO</span>--%>
-                        <dot:CheckBox Checked="{value: !ItemData.Poptany3Firmy}" />
-                        NE
-                    </div>
-                    <div class="form-group col-sm-5">
-                        <label class="control-label">Zdůvodnění</label>
-                        <div>
-                            <dot:ComboBox DataSource="{value: ItemData.Poptany3Firmy ? DuvodyPoptavky : DuvodyNepoptani}"
-                                          SelectionChanged="{command: DuvodChange()}"
-                                          SelectedValue="{value: ItemData.DuvodID}"
-                                          ValueMember="ID"
-                                          DisplayMember="Text"
-                                          class="form-control" />
-
-
-                            <div Visible="{value: JinyDuvod}">
-                                <p><br>Prosím popište důvod:</p>
-                                <dot:TextBox class="form-control" Text="{value: ItemData.Duvod}" />
+                        <div class="form-group col-sm-3">
+                            <label class="control-label">{{resource: PageObjednavkaDetail.NabidkaCislo}} &nbsp;</label>
+                            <div>
+                                <dot:TextBox class="form-control" Text="{value: ItemData.NabidkaCislo}" />
                             </div>
                         </div>
-                        <p Visible="{value: DuvodHvezdicka}"><span style="color: red"> * </span>Jiný materiál nebo systém jiného Dodavatel by byly pro JULI Motorenwerk zcela nevyhovující a nekompatibilní z pohledu již zavedené současné i budoucí výroby nebo provozu JULI Motorenwerk</p>
+
+                        <div class="form-group col-sm-4">
+                            <label class="control-label">{{resource: PageObjednavkaDetail.Poptany3}} &nbsp;</label>
+                            <dot:CheckBox Checked="{value: ItemData.Poptany3Firmy}" />
+                            {{resource: Global.ANO}}
+                            <%--<span Visible="{value: ItemData.Poptany3Firmy}"> ANO</span>--%>
+                            <dot:CheckBox Checked="{value: !ItemData.Poptany3Firmy}" />
+                            {{resource: Global.NE}}
+                        </div>
+                        <div class="form-group col-sm-5">
+                            <label class="control-label">{{resource: PageObjednavkaDetail.Zduvodneni}}</label>
+                            <div>
+                                <dot:ComboBox DataSource="{value: ItemData.Poptany3Firmy ? DuvodyPoptavky : DuvodyNepoptani}"
+                                              SelectionChanged="{command: DuvodChange()}"
+                                              SelectedValue="{value: ItemData.DuvodID}"
+                                              ValueMember="ID"
+                                              DisplayMember="Text"
+                                              class="form-control" />
+
+
+                                <div Visible="{value: JinyDuvod}">
+                                    <p><br>{{resource: PageObjednavkaDetail.PopisteDuvody}}</p>
+                                    <dot:TextBox class="form-control" Text="{value: ItemData.Duvod}" />
+                                </div>
+                            </div>
+                            <p Visible="{value: DuvodHvezdicka}"><span style="color: red"> * </span>{{resource: PageObjednavkaDetail.JinyNevyhovuje}}</p>
+                        </div>
                     </div>
-                </div>
                     <div class="text-center">
-                        <dot:Button Enabled="{value:  Editovatelny}" class="btn btn-primary" Text="Uložit" Click="{command: SaveItem()}" />
-                        <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-default" Text="Ukončit" Click="{command: CloseModal("item-detail")}" />
+                        <dot:Button Enabled="{value:  Editovatelny}" class="btn btn-primary" Text="{{resource: Global.Ulozit}}" Click="{command: SaveItem()}" />
+                        <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-default" Text="{{resource: Global.Zrusit}}" Click="{command: CloseModal("item-detail")}" />
                     </div>
                 </div>
             </div>
@@ -590,75 +602,74 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Detail dodavatele</h4>
+                    <h4 class="modal-title">{{resource: ModalDodavatel.Nadpis}}</h4>
                 </div>
                 <div class="modal-body">
                     <p Visible="{value: ConfirmText != null}" class="alert alert-success">{{value: ConfirmText}}</p>
                     <p Visible="{value: AlertText != null}" class="alert alert-danger">{{value: AlertText}}</p>
 
 
+
                     <div class="row">
                         <div class="form-group col-sm-5">
-                            <label class="control-label">Název dodavatele</label>
+                            <label class="control-label">{{resource: ModalDodavatel.Nazev}}</label>
                             <div>
-                                <dot:ComboBox DataSource="{value: DodavateleS21}"
-                                              SelectedValue="{value: ObjData.DodavatelS21ID}"
-                                              ValueMember="Id"
-                                              EmptyItemText="Zvolte dodavatele ..."
-                                              DisplayMember="NazevCislo"
-                                              class="form-control" />
+                                <bp:ComboBox DataSource="{value: DodavateleS21List}"
+                                             SelectedValue="{value: DodavatelSelected}"
+                                             Placeholder="{{resource: PageObjednavkaDetail.ZvolteDodavatele}}"
+                                             class="ComboBoxStyle" />
                             </div>
                             <!--<dot:RouteLink RouteName="DodavatelEdit" Param-Id=0
-                                           class="btn btn-primary ButtonSmall" Text="Přidat dodavatele">
-                            </dot:RouteLink>-->
+                           class="btn btn-primary ButtonSmall" Text="Přidat dodavatele">
+            </dot:RouteLink>-->
                         </div>
 
-                        <div class="col-sm-2"> </div>
+                        <%--<div class="col-sm-2"> </div>
 
                         <div class="form-group col-sm-5">
                             <label class="control-label">Číslo dodavatele</label>
                             <div>
-                                <dot:ComboBox DataSource="{value: DodavateleS21ByNumb}"
-                                              SelectedValue="{value: ObjData.DodavatelS21ID}"
+                                <dot:ComboBox
+                                              DataSource="{value: DodavateleS21ByNumb}"
+                                              SelectedValue="{value: PozadavekData.DodavatelS21ID}"
                                               ValueMember="Id"
                                               EmptyItemText="Zvolte dodavatele ..."
                                               DisplayMember="CisloNazev"
                                               class="form-control" />
                             </div>
-                            <!--<dot:Button class="btn btn-primary ButtonSmall" Text="Přidat dodavatele" Click="{command: PridatDodavatele()}" />-->
-                        </div>
+                        </div>--%>
                     </div>
-
                     <div>
-                        <dot:Button class="btn btn-primary" Text="Načíst dodavatele z S21" Click="{command: LoadDodavatele(ObjData.DodavatelS21ID)}" />
-                        <dot:Button class="btn btn-primary" Text="Nový dodavatel" Click="{command: DodavatelReset()}" />
+                        <%--<dot:Button class="btn btn-primary" Text="{{resource: ModalDodavatel.NacistS21}}" Click="{command: LoadDodavatele(ObjData.DodavatelS21ID)}" />--%>
+                        <dot:Button class="btn btn-primary" Text="{{resource: ModalDodavatel.NacistS21}}" Click="{command: LoadDodavatele(DodavatelSelected, true)}" />
+                        <dot:Button class="btn btn-primary" Text="{{resource: ModalDodavatel.Novy}}" Click="{command: DodavatelReset()}" />
                     </div>
 
                     <hr>
                     <div class="row">
                         <div class="form-group col-sm-6">
-                            <label class="control-label">Název dodavatele</label>
+                            <label class="control-label">{{resource: ModalDodavatel.Nazev}}</label>
                             <div>
                                 <dot:TextBox class="form-control" Text="{value: DodavatelS21.SNAM05}" />
                             </div>
                         </div>
 
                         <div class="form-group col-sm-2">
-                            <label class="control-label">Číslo dodavatele</label>
+                            <label class="control-label">{{resource: ModalDodavatel.Cislo}}</label>
                             <div>
                                 <dot:TextBox class="form-control" Text="{value: DodavatelS21.SUPN05}" />
                             </div>
                         </div>
 
                         <div class="form-group col-sm-2">
-                            <label class="control-label">Měna</label>
+                            <label class="control-label">{{resource: ModalDodavatel.Mena}}</label>
                             <div>
                                 <dot:TextBox class="form-control" Text="{value: DodavatelS21.CURN05}" />
                             </div>
                         </div>
 
                         <div class="form-group col-sm-2">
-                            <label class="control-label">Kód země</label>
+                            <label class="control-label">{{resource: ModalDodavatel.Zeme}}</label>
                             <div>
                                 <dot:TextBox class="form-control" Text="{value: DodavatelS21.COCD05}" />
                             </div>
@@ -667,31 +678,36 @@
 
                     <div class="row">
                         <div class="col-sm-5 mycontent-left">
-                            <label class="control-label">Ulice</label>
+                            <label class="control-label">{{resource: ModalDodavatel.Ulice}}</label>
                             <div>
                                 <dot:TextBox class="form-control" Text="{value: DodavatelS21.SAD105}" />
                             </div>
                         </div>
 
-                                            <div class="col-sm-5">
-                            <label class="control-label">Kontaktní osoba</label>
+                        <!--<div class="col-sm-2">
+        </div>-->
+
+                        <div class="col-sm-5">
+                            <label class="control-label">{{resource: ModalDodavatel.KontaktOs}}</label>
                             <div>
-                                  <%--+ (Osoba.GTX11A == "" ? "" : (' (' + Osoba.GTX11A + ')'))--%>
-                                <dot:TextBox class="form-control" Text="{value: (Osoba.CNTN1A)}" />   <!--jmeno-->
+                                <dot:TextBox class="form-control" Text="{value: (Osoba.CNTN1A + (Osoba.GTX11A == "" ? "" : (' (' + Osoba.GTX11A + ')')))}" />   <!--jmeno-->
                             </div>
                         </div>
 
                     </div>
                     <div class="row">
                         <div class="col-sm-5 mycontent-left">
-                            <label class="control-label">Ulice / Město</label>
+                            <label class="control-label">{{resource: ModalDodavatel.UliceMesto}}</label>
                             <div>
                                 <dot:TextBox class="form-control" Text="{value: DodavatelS21.SAD205}" />
                             </div>
                         </div>
-                                            
+
+                        <!--<div class="col-sm-2">
+        </div>-->
+
                         <div class="col-sm-5">
-                            <label class="control-label">Společnost</label>
+                            <label class="control-label">{{resource: ModalDodavatel.Spolecnost}}</label>
                             <div>
                                 <dot:TextBox class="form-control" Text="{value: Osoba.CRNM1A}" /> <!--firma-->
                             </div>
@@ -699,14 +715,17 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-5 mycontent-left">
-                            <label class="control-label">Ulice / Město</label>
+                            <label class="control-label">{{resource: ModalDodavatel.UliceMesto}}</label>
                             <div>
                                 <dot:TextBox class="form-control" Text="{value: DodavatelS21.SAD305}" />
                             </div>
                         </div>
-                                             
+
+                        <!--<div class="col-sm-2">
+        </div>-->
+
                         <div class="col-sm-5">
-                            <label class="control-label">Telefon</label>
+                            <label class="control-label">{{resource: ModalDodavatel.Telefon}}</label>
                             <div>
                                 <dot:TextBox class="form-control" Text="{value: Osoba.OFNB1A}" /> <!--telefon-->
                             </div>
@@ -714,14 +733,17 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-5">
-                            <label class="control-label">Město</label>
+                            <label class="control-label">{{resource: ModalDodavatel.Mesto}}</label>
                             <div>
                                 <dot:TextBox class="form-control" Text="{value: DodavatelS21.SAD405}" />
                             </div>
                         </div>
 
+                        <!--<div class="col-sm-2">
+        </div>-->
+
                         <div class="col-sm-5">
-                            <label class="control-label">Fax</label>
+                            <label class="control-label">{{resource: ModalDodavatel.Fax}}</label>
                             <div>
                                 <dot:TextBox class="form-control" Text="{value: Osoba.PFNB1A}" />  <!--fax-->
                             </div>
@@ -729,21 +751,21 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-5">
-                            <label class="control-label">Město</label>
+                            <label class="control-label">{{resource: ModalDodavatel.Mesto}}</label>
                             <div>
                                 <dot:TextBox class="form-control" Text="{value: DodavatelS21.SAD505}" />
                             </div>
                         </div>
                         <div class="col-sm-5">
                             <div>
-                                <label class="control-label">Email</label>
+                                <label class="control-label">{{resource: ModalDodavatel.KontaktOsEmail}}</label>
                                 <dot:TextBox class="form-control" Text="{value: Osoba.EMIL1A}" />  <!--email-->
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-3">
-                            <label class="control-label">PSČ</label>
+                            <label class="control-label">{{resource: ModalDodavatel.PSC}}</label>
                             <div>
                                 <dot:TextBox class="form-control" Text="{value: DodavatelS21.PSC}" />
                             </div>
@@ -751,7 +773,7 @@
 
                         <div class="col-sm-5 col-sm-offset-2">
                             <div>
-                                <label class="control-label">Email dodavatele</label>
+                                <label class="control-label">{{resource: ModalDodavatel.EmailDodavatele}}</label>
                                 <dot:TextBox class="form-control" Text="{value: DodavatelS21.WURL05}" />  <!--email-->
                             </div>
                         </div>
@@ -762,13 +784,8 @@
                 <div class="modal-footer">
 
                     <div class="text-center">
-
-
-
-                        <!--<dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-primary" Text="Přidat položku" Click="{command: AddItem()}" />-->
-                        <!--<dot:RouteLink class="btn btn-default" Text="Zrušit" RouteName="PozadavekEdit" Param-Id="{value: ItemData.PozadavekID}" />-->
-                        <dot:Button class="btn btn-primary" Text="Uložit" Click="{command: SaveDodavatelModal()}" />
-                        <dot:Button class="btn btn-default" Click="{command: CloseModal("dodavatel-detail")}" Text="Zrušit" />
+                        <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-primary" Text="{{resource: ModalDodavatel.Ulozit}}" Click="{command: SaveDodavatelModal()}" />
+                        <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-default" Click="{command: CloseModal("dodavatel-detail")}" Text="{{resource: ModalDodavatel.Zrusit}}" />
                     </div>
 
 
@@ -780,22 +797,21 @@
             </div>
         </div>
     </div>
-    
+
     <!--modalni okno - potvrzeni-->
     <div class="modal fade" ID="confirm" role="dialog" data-id="confirm" Validation.Enabled="false" Validator.InvalidCssClass="has-error" Validator.SetToolTipText="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Potvrzení</h4>
+                    <h4 class="modal-title">{{resource: PageObjednavkaDetail.ModalConfirmNadpis}}</h4>
                 </div>
                 <div class="modal-body text-center">
                     <p Visible="{value: ConfirmText != null}" class="alert alert-success">{{value: ConfirmText}}</p>
                     <p Visible="{value: AlertText != null}" class="alert alert-danger">{{value: AlertText}}</p>
 
-
-                    <p><strong>OBJEDNÁVKA JE UŽ ODESLÁNA NA SCHVÁLENÍ!!</strong></p>
-                    <p>Uložením objednávky přestane platit odeslání a bude nutné ji odeslat znovu na podpis!</p>
-                    <p>Opravdu objednávku uložit?</p>
+                    <p><strong>{{resource: PageObjednavkaDetail.ModalConfirm1}}</strong></p>
+                    <p>{{resource: PageObjednavkaDetail.ModalConfirm2}}</p>
+                    <p>{{resource: PageObjednavkaDetail.ModalConfirm3}}</p>
 
                 </div>
                 <div class="modal-footer">
@@ -803,8 +819,8 @@
                     <div class="text-center">
                         <!--<dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-primary" Text="Přidat položku" Click="{command: AddItem()}" />-->
                         <!--<dot:RouteLink class="btn btn-default" Text="Zrušit" RouteName="PozadavekEdit" Param-Id="{value: ItemData.PozadavekID}" />-->
-                        <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-primary" Text="Uložit" Click="{command: ZrusitPodpisy()}" />
-                        <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-default" Text="Zrušit" Click="{command: CloseModal("confirm")}" />
+                        <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-primary" Text="{{resource: Global.Ulozit}}" Click="{command: ZrusitPodpisy()}" />
+                        <dot:Button Enabled="{value: !UploadedFiles.IsBusy}" class="btn btn-default" Text="{{resource: Global.Zrusit}}" Click="{command: CloseModal("confirm")}" />
                         <!--<dot:RouteLink RouteName="PozadavekEdit" Param-Id="{value: PozadavekData.ID}">
                            class="btn btn-primary" Text="Přidat položku">
                         </dot:RouteLink>-->
