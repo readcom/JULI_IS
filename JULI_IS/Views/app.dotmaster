@@ -7,10 +7,15 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
+
+    <%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>--%>
+
     <link rel="stylesheet" type="text/css" href="~/Style/bootstrap/bootstrap.min.css" />
+
     <link rel="stylesheet" type="text/css" href="~/Style/Default.css" />
     <link href="../Style/fa/font-awesome.min.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <%--<script src="~/Scripts/jquery-3.1.1.min.js"></script>--%>
     <link rel="stylesheet" type="text/css" href="~/Style/jquery.datetimepicker.css">
     <script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
     <!--<script src="~/Scripts/jquery-ui.min.js"></script>-->
@@ -21,89 +26,150 @@
 </head>
 <body>
     <header ID="pozadavky" class="container">
-        <div class="row">
-            <section ID="main-menu" class="col-xs-10">
-
-                <dot:RouteLink RouteName="Default">
-                    <h1><span class="glyphicon glyphicon-list-alt"></span> {{resource: Menu.AppName}}</h1>
-                </dot:RouteLink>
-
-                <!--<dot:LinkButton class="header-item" Click="{command: ShowDemandPopup(null)}" Validation.Enabled="false">
-                <span class="glyphicon glyphicon-plus"></span> Nový požadavek
-                </dot:LinkButton>-->
-
-                <dot:RouteLink RouteName="PozadavkyPrehled" class="{value: 'header-item ' + (ActivePage == 'newdemand' ? 'header-item-active' : '')}">
-                    <span class="fa fa-tasks"></span> {{resource: Menu.CelkovyPrehled}}
-                </dot:RouteLink>
-
-                <dot:RouteLink RouteName="PolozkyPrehled" class="{value: 'header-item ' + (ActivePage == 'newdemand' ? 'header-item-active' : '')}">
-                    <span class="fa fa-tasks"></span> {{resource: Menu.PolozkyPrehled}}
-                </dot:RouteLink>
-
-                <dot:RouteLink RouteName="DodavatelePrehled" class="{value: 'header-item ' + (ActivePage == 'manager' ? 'header-item-active' : '')}">
-                    <span class="fa fa-address-card-o"></span>  {{resource: Menu.Dodavatele}}
-                </dot:RouteLink>
-
-                <dot:RouteLink Visible="{value: CanSignPozadavky}" RouteName="sign" Text="Podpis požadavků" class="{value: 'header-item ' + (ActivePage == 'sign' ? 'header-item-active' : '')}">
-                    <span class="glyphicon glyphicon-pencil"></span>  {{resource: Menu.PodpisPozadavku}}
-                </dot:RouteLink>
-
-                <dot:RouteLink Visible="{value: CanSignObjednavky}" RouteName="SignObjednavky" Text="Podpis objednávek" class="{value: 'header-item ' + (ActivePage == 'SignObjednavky' ? 'header-item-active' : '')}">
-                    <span class="glyphicon glyphicon-pencil"></span>  {{resource: Menu.PodpisObj}}
-                </dot:RouteLink>
-
-                <dot:RouteLink Visible="{value: CanMakeObjednavky}" RouteName="objednavkyTvorba" Text="Tvorba objednávek" class="{value: 'header-item ' + (ActivePage == 'objednavkyTvorba' ? 'header-item-active' : '')}">
-                    <span class="glyphicon glyphicon-edit"></span>  {{resource: Menu.MakeObjFromPoz}}
-                </dot:RouteLink>
-
-                <dot:RouteLink RouteName="objednavkySprava" Text="Tvorba objednávek" class="{value: 'header-item ' + (ActivePage == 'objednavkySprava' ? 'header-item-active' : '')}">
-                    <span class="glyphicon glyphicon-list"></span>  {{resource: Menu.ObjSprava}}
-                </dot:RouteLink>
-
-                <dot:RouteLink RouteName="objednavkyPrehled" Text="Tvorba objednávek" class="{value: 'header-item ' + (ActivePage == 'objednavkyPrehled' ? 'header-item-active' : '')}">
-                    <span class="glyphicon glyphicon-list"></span>  {{resource: Menu.ObjPrehled}}
-                </dot:RouteLink>
-
-                <dot:RouteLink Visible="{value: CanMakeObjednavky}" RouteName="objednavkySend" Text="Odeslání objednávek" class="{value: 'header-item ' + (ActivePage == 'objednavkySend' ? 'header-item-active' : '')}">
-                    <span class="fa fa-envelope-o"></span>  {{resource: Menu.ObjOdeslani}}
-                </dot:RouteLink>
-
-                <dot:RouteLink RouteName="PrijemZbozi" class="{value: 'header-item ' + (ActivePage == 'PrijemZbozi' ? 'header-item-active' : '')}">
-                    <span class="fa fa-home"></span>  {{resource: Menu.ZboziPrijem}}
-                </dot:RouteLink>
-
-                <!--Visible="{value: ActiveUser=="marek.novak"}"-->
-                <dot:RouteLink Visible="{value: (ActiveUser=="marek.novak" || ActiveUser=="lukas.grundel")}" RouteName="temp" Text="Temp" class="{value: 'header-item ' + (ActivePage == 'temp' ? 'header-item-active' : '')}">
-                    <span class="glyphicon glyphicon-pencil"></span> Temp (pokusy)
-                </dot:RouteLink>
-
-                <dot:LinkButton class="header-item" data-toggle="modal" data-target="#setting" Visible="{value: (ActiveUser=='marek.novak')}">
-                    <i class="fa fa-cog" aria-hidden="true"></i> Nastavení
-                </dot:LinkButton>
-
-                <dot:RouteLink RouteName="logout" Text="Log off" class="header-item">
-                    <span class="glyphicon glyphicon-log-out"></span> LOG-OUT
-                </dot:RouteLink>
-            </section>
-
-            <section ID="menu-addon" class="col-xs-2">
-                <div ID="language-switch">
-                    <dot:LinkButton class="header-item" Click="{command: ChangeLanguage('CZ')}">
-                        <i class="fa fa-flag-o" aria-hidden="true"></i> CZ
-                    </dot:LinkButton>
-
-                    <dot:LinkButton class="header-item" Click="{command: ChangeLanguage('EN')}">
-                        <i class="fa fa-flag" aria-hidden="true"></i> EN
-                    </dot:LinkButton>
+        
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+         
+                        <dot:RouteLink RouteName="Default" class="navbar-brand">
+                            <span class="glyphicon glyphicon-list-alt"></span> {{resource: Menu.AppName}}
+                        </dot:RouteLink>
+           
                 </div>
-                <br />
-                <div class="header-item">
-                    <i class="glyphicon glyphicon-user"> </i>
-                    {{value: ActiveUser}}
-                </div>
-            </section>
 
-        </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pozadavky <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <dot:RouteLink RouteName="PozadavkyPrehled" class="{value: (ActivePage == 'newdemand' ? 'active' : '')}">
+                                        <span class="fa fa-tasks"></span> {{resource: Menu.CelkovyPrehled}}
+                                    </dot:RouteLink>
+                                </li>
+                                <li>
+                                    <dot:RouteLink RouteName="PolozkyPrehled" class="{value: (ActivePage == 'newdemand' ? 'header-item-active' : '')}">
+                                        <span class="fa fa-tasks"></span> {{resource: Menu.PolozkyPrehled}}
+                                    </dot:RouteLink>
+                                </li>
+
+                                <li>
+                                    <dot:RouteLink Visible="{value: CanSignPozadavky}" RouteName="sign" Text="Podpis požadavků" class="{value: 'header-item ' + (ActivePage == 'sign' ? 'header-item-active' : '')}">
+                                        <span class="glyphicon glyphicon-pencil"></span>  {{resource: Menu.PodpisPozadavku}}
+                                    </dot:RouteLink>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Objednavky <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+
+
+
+                                <li>
+                                    <dot:RouteLink Visible="{value: CanMakeObjednavky}" RouteName="objednavkyTvorba" Text="Tvorba objednávek" class="{value: 'header-item ' + (ActivePage == 'objednavkyTvorba' ? 'header-item-active' : '')}">
+                                        <span class="glyphicon glyphicon-edit"></span>  {{resource: Menu.MakeObjFromPoz}}
+                                    </dot:RouteLink>
+                                </li>
+                                <li>
+                                    <dot:RouteLink RouteName="objednavkySprava" Text="Tvorba objednávek" class="{value: 'header-item ' + (ActivePage == 'objednavkySprava' ? 'header-item-active' : '')}">
+                                        <span class="glyphicon glyphicon-list"></span>  {{resource: Menu.ObjSprava}}
+                                    </dot:RouteLink>
+                                </li>
+                                <li>
+                                    <dot:RouteLink RouteName="objednavkyPrehled" Text="Tvorba objednávek" class="{value: 'header-item ' + (ActivePage == 'objednavkyPrehled' ? 'header-item-active' : '')}">
+                                        <span class="glyphicon glyphicon-list"></span>  {{resource: Menu.ObjPrehled}}
+                                    </dot:RouteLink>
+                                </li>
+                                <li>
+                                    <dot:RouteLink Visible="{value: CanSignObjednavky}" RouteName="SignObjednavky" Text="Podpis objednávek" class="{value: 'header-item ' + (ActivePage == 'SignObjednavky' ? 'header-item-active' : '')}">
+                                        <span class="glyphicon glyphicon-pencil"></span>  {{resource: Menu.PodpisObj}}
+                                    </dot:RouteLink>
+                                </li>
+                                <li>
+                                    <dot:RouteLink Visible="{value: CanMakeObjednavky}" RouteName="objednavkySend" Text="Odeslání objednávek" class="{value: 'header-item ' + (ActivePage == 'objednavkySend' ? 'header-item-active' : '')}">
+                                        <span class="fa fa-envelope-o"></span>  {{resource: Menu.ObjOdeslani}}
+                                    </dot:RouteLink>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">One more separated link</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <dot:RouteLink RouteName="DodavatelePrehled" class="{value: 'header-item ' + (ActivePage == 'manager' ? 'header-item-active' : '')}">
+                                <span class="fa fa-address-card-o"></span>  {{resource: Menu.Dodavatele}}
+                            </dot:RouteLink>
+                        </li>
+                        <li>
+                            <dot:RouteLink RouteName="PrijemZbozi" class="{value: 'header-item ' + (ActivePage == 'PrijemZbozi' ? 'header-item-active' : '')}">
+                                <span class="fa fa-home"></span>  {{resource: Menu.ZboziPrijem}}
+                            </dot:RouteLink>
+                        </li>
+                        <li>
+                            <dot:RouteLink Visible="{value: (ActiveUser=="marek.novak" || ActiveUser=="lukas.grundel")}" RouteName="temp" Text="Temp" class="{value: 'header-item ' + (ActivePage == 'temp' ? 'header-item-active' : '')}">
+                                <span class="glyphicon glyphicon-pencil"></span> Temp (pokusy)
+                            </dot:RouteLink>
+                        </li>
+                        <li>
+                            <dot:LinkButton class="header-item" data-toggle="modal" data-target="#setting" Visible="{value: (ActiveUser=='marek.novak')}">
+                                <i class="fa fa-cog" aria-hidden="true"></i> Nastavení
+                            </dot:LinkButton>
+                        </li>
+
+                    </ul>
+
+                    <%--<form class="navbar-form navbar-left">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>--%>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <dot:LinkButton class="header-item" Click="{command: ChangeLanguage('CZ')}">
+                                <i class="fa fa-flag-o" aria-hidden="true"></i> CZ
+                            </dot:LinkButton>
+                        </li>
+                        <li>
+                            <dot:LinkButton class="header-item" Click="{command: ChangeLanguage('EN')}">
+                                <i class="fa fa-flag" aria-hidden="true"></i> EN
+                            </dot:LinkButton>
+                        </li>
+
+                        <li>
+                            <a href="#"><span class="glyphicon glyphicon-user"></span>  {{value: ActiveUser}}</a>
+                        </li>
+                        <li>
+                            <dot:RouteLink RouteName="logout" Text="Log off" class="header-item">
+                                <span class="glyphicon glyphicon-log-out"></span> LOG-OUT
+                            </dot:RouteLink>
+                        </li>
+
+                    </ul>
+
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+        
+        
+        
+        
+        
+        
+      
     </header>
 
     <article>

@@ -24,8 +24,6 @@ namespace ViewModels.PozadavkyViewModels
     // podpis level: 3 => vse podepsano, ceka na vytvoreni obj. a podpis nakupu
     // podpis level: 4 => vse podepsano, ceka na objednani
 
-        // testovaci koment
-
     public class PozadavekViewModel : AppViewModel
     {
         public PozadavekDTO PozadavekData { get; set; } = new PozadavekDTO();
