@@ -129,6 +129,9 @@
   <data name="MakeObjFromPoz" xml:space="preserve">
     <value>Tvorba objednávek z požadavků</value>
   </data>
+  <data name="Objednavky" xml:space="preserve">
+    <value>Objednávky</value>
+  </data>
   <data name="ObjOdeslani" xml:space="preserve">
     <value>Odeslání objednávek</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="PolozkyPrehled" xml:space="preserve">
     <value>Přehled položek</value>
+  </data>
+  <data name="Pozadavky" xml:space="preserve">
+    <value>Požadavky</value>
   </data>
   <data name="ZboziPrijem" xml:space="preserve">
     <value>Příjem zboží</value>

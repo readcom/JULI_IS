@@ -97,6 +97,15 @@ namespace JULI_IS.Resources.Pozadavky {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Objednávky.
+        /// </summary>
+        public static string Objednavky {
+            get {
+                return ResourceManager.GetString("Objednavky", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Send orders.
         /// </summary>
         public static string ObjOdeslani {
@@ -147,6 +156,15 @@ namespace JULI_IS.Resources.Pozadavky {
         public static string PolozkyPrehled {
             get {
                 return ResourceManager.GetString("PolozkyPrehled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Požadavky.
+        /// </summary>
+        public static string Pozadavky {
+            get {
+                return ResourceManager.GetString("Pozadavky", resourceCulture);
             }
         }
         
