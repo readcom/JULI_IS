@@ -491,6 +491,8 @@ namespace ViewModels.PozadavkyViewModels
 
         public void SavePozadavek()
         {
+
+            // TODO: asi tam nejsou vsechny polozky, ale jen prvni strana, proverit!            
             var items = SeznamItemsGridViewDataSet.Items.ToList();
 
 
@@ -1275,7 +1277,7 @@ namespace ViewModels.PozadavkyViewModels
 
                 //PozadavekData = PozadavkyService.GetPozadavekById(PozadavekId.Value);
                 // PozadavekData.DodavatelS21ID = PozadavkyService.LastS21DodId;
-                ItemsService.FillGridViewItemsByPozadavekId(SeznamItemsGridViewDataSet, PozadavekId.Value);
+                        ItemsService.FillGridViewItemsByPozadavekId(SeznamItemsGridViewDataSet, PozadavekId.Value);
                 Files = FilesService.GetFilesListByPozadavekID(PozadavekData.ID);
                 PozadavekData.CelkovaCena = ItemsService.GetCelkovaCenaByPozadavekId(PozadavekId.Value);
 

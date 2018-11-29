@@ -28,7 +28,7 @@ namespace ViewModels
         /// <summary>
         /// Connection string pro cinske prostredi
         /// </summary>
-        public string DtbConxStringEN = "SQLConnectionTest";
+        public string DtbConxStringEN = "SQLConnectionCN";
 
         public List<int> ActiveUserLevel { get; set; } = new List<int>();
         /// <summary>
@@ -61,6 +61,10 @@ namespace ViewModels
 
 	    public string SettingTextDoObjednavky { get; set; } =
 	         @"UPOZORNĚNÍ/nV době od 19.12 do 1.1.2018 bude příjem firmy JULI Motorenwerk, s.r.o.z důvodu inventury uzavřen.Zboží nebude možné přijmout.";
+
+
+        public bool PathChanged { get; set; } = false;
+        public string FilePath { get; set; } 
 
         //public void ShowDemandPopup(int? demandId)
         //{
@@ -172,9 +176,6 @@ namespace ViewModels
 
                 try
                 {
-
-
-
                     GlobalLanguage = CookiesServices.GetCookieValue("jazyk");
                     DtbConxString = CookiesServices.GetCookieValue("DTB");
 
@@ -184,10 +185,11 @@ namespace ViewModels
                     CanSignObjednavky = ActiveUserLevel.Contains(4);
                     CanMakeObjednavky = ActiveUserLevel.Contains(3);
                     CanSignPozadavky = (ActiveUserLevel.Contains(1) || ActiveUserLevel.Contains(2));
-                    Text = $"User: {ActiveUser}, Level: ";
+                    Text = $"User: {ActiveUser}, Level: ";              
                     ActiveUserLevel.ForEach(e => Text += e + ", ");
                     UserLever = ActiveUserLevel.Max();
 
+                    FilePath = SettingsService.GetSetting("FilePath");
 
                     if (string.IsNullOrEmpty(GlobalLanguage))
                     {
@@ -205,6 +207,8 @@ namespace ViewModels
                             CookiesServices.SetCookie("DTB", DtbConxStringEN);
                         }
                     }
+
+                    Text += $"Connected: {DBService.DatabaseInfo()}";
 
                 }
                 catch (Exception ex)

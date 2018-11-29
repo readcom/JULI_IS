@@ -42,8 +42,8 @@
     <Reference Include="DotVVM.BusinessPack, Version=1.1.5.0, Culture=neutral, PublicKeyToken=77e8efd43b7ae75f, processorArchitecture=MSIL">
       <HintPath>..\packages\DotVVM.BusinessPack.1.1.5-rc1\lib\net451\DotVVM.BusinessPack.dll</HintPath>
     </Reference>
-    <Reference Include="DotVVM.Contrib, Version=1.1.6.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotVVM.Contrib.Select2.1.1.6.1\lib\net451\DotVVM.Contrib.dll</HintPath>
+    <Reference Include="DotVVM.Contrib.Select2, Version=1.1.8.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotVVM.Contrib.Select2.1.1.8.1\lib\net451\DotVVM.Contrib.Select2.dll</HintPath>
     </Reference>
     <Reference Include="DotVVM.Core, Version=1.1.8.2, Culture=neutral, PublicKeyToken=23f3607db32275da, processorArchitecture=MSIL">
       <HintPath>..\packages\DotVVM.Core.1.1.8.2\lib\net451\DotVVM.Core.dll</HintPath>
@@ -58,10 +58,10 @@
       <HintPath>..\packages\DotVVM.Utils.HtmlElements.1.1.8\lib\net451\DotVVM.Utils.HtmlElements.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeAnalysis.Common.1.0.0\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>

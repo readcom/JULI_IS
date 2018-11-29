@@ -1292,7 +1292,7 @@ namespace Pozadavky.Services
                     Mnozstvi = itemData.Mnozstvi,
                     CenaZaJednotku = itemData.CenaZaJednotku,
                     CelkovaCena = itemData.CelkovaCena,
-                    TerminDodani = itemData.TerminDodani ?? DateTime.Now,
+                    TerminDodani = itemData.TerminDodani,
                     Poptany3Firmy = itemData.Poptany3Firmy,
                     DuvodID = itemData.DuvodID,
                     Duvod = itemData.Duvod,

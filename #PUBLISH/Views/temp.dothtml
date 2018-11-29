@@ -5,48 +5,72 @@
 
 
 
-    <bp:ComboBox DataSource="{value: ListPozadavekFullId2}"
-                 SelectedValue="{value: pozId}"
-                 Placeholder="Please select POZ" />
 
-    <p>Selected Country: {{value: pozId}}</p>
 
-    <h2>
-        TEST DODAVATELU
-    </h2>
-   
-    <%--<div class="form-group col-sm-3">
-        <label class="control-label">Název dodavatele</label>
-        <div>
-            <bp:ComboBox DataSource="{value: DodavateleS21List}"
-                         SelectedValue="{value: DodavatelCombo}"
-                         Placeholder="Zvolte dodavatele ..."
-                         class="ComboBoxStyle" />
+
+    <%--SAMPLE 5 ComboBox --%>
+    <div class="row">
+        <div class="col-sm-12">
+            <p>SAMPLE 5 ComboBox</p>
+            <bp:ComboBox DataSource="{value: Countries}"
+                         SelectedValue="{value: SelectedCountry}"
+                         ItemTextBinding="{value: Name}"
+                         ItemKeyBinding="{value: Id}"
+                         Placeholder="Please select Country"
+                         Changed="{command: CountryChanged()}" />
+
+
+            <bp:ComboBox DataSource="{value: Cities}"
+                         SelectedValue="{value: SelectedCity}"
+                         Placeholder="Please select City" />
+
+            <p>You've selected: {{value: SelectedCity}}, {{value: SelectedCountry.Name}}</p>
+
+            <%--SAMPLE 5--%>
+
+            <p>SAMPLE 4 ComboBox</p>
+            <bp:ComboBox DataSource="{value: Countries}"
+                         SelectedValue="{value: SelectedCountryId}"
+                         ItemValueBinding="{value: Id}"
+                         ItemTextBinding="{value: Name}"
+                         Placeholder="Please select Country">
+                <ItemTemplate>
+                    <p>{{value: Id}}. {{value: Name}}</p>
+                </ItemTemplate>
+            </bp:ComboBox>
+
+            <%--SAMPLE 7 ComboBox --%>
+
+            <p>SAMPLE 7 ComboBox</p>
+            <bp:ComboBox Text="{value: Text}"
+                         DataSource="{value: Countries}"
+                         SelectedValue="{value: SelectedCountry2}"
+                         ItemTextBinding="{value: Name}"
+                         ItemKeyBinding="{value: Name}"
+                         LoadItems="{staticCommand: LoadCountries(Text)}"
+                         Placeholder="Please select Country" />
+
+            <p>Selected Country: {{value: SelectedCountry2.Name}}</p>
+
+            <%--SAMPLE 8 ComboBox --%>
+
+            <p>SAMPLE 8 ComboBox</p>
+            <bp:ComboBox DataSource="{value: Cities2}"
+                         SelectedValue="{value: SelectedCity2}"
+                         ItemTextBinding="{value: Name}"
+                         ItemKeyBinding="{value: Id}"
+                         Placeholder="Select city">
+                <ItemTemplate>
+                    <p>{{value: Name}}, {{value: Country}}</p>
+                </ItemTemplate>
+            </bp:ComboBox>
+
+            <p>Selected City: {{value: SelectedCity2.Name}}, {{value: SelectedCity2.Country}}</p>
+
+
+
+
         </div>
-    </div>--%>
-    
-    <br /><br />
-    <bp:Button Text="zmen DTB"
-               Click="{command: Click2()}" />
-
-    <br /><br />
-
-    <dot:GridView DataSource="{value: SeznamGv}">
-        <Columns>
-            <dot:GridViewTextColumn ValueBinding="{value: FullPozadavekID}" HeaderText="ID" />
-            <dot:GridViewTextColumn ValueBinding="{value: Popis}" HeaderText="Name" />
-        </Columns>
-    </dot:GridView>
-
-
-
-    <p>
-        vybrano id: {{value: DodavatelS21ID}}
-    </p>
-
-    <p>
-        cas: {{value: elapsedTime}}
-    </p>
-
+    </div>
 </dot:Content>
 

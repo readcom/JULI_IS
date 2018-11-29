@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pozadavky.Data;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
@@ -13,10 +14,14 @@ namespace Pozadavky.Services
 {
     public static class DBService
     {
-      public static void ChangeDatabase(
-      this DbContext source,
-      string configConnectionStringName = ""
-          )
+
+        public static string DtbConxString
+        {
+            get { return CookiesServices.GetCookieValue("DTB"); }
+            set { }
+        }
+
+        public static void ChangeDatabase(this DbContext source, string configConnectionStringName = "")
         {
             try
             {
@@ -48,6 +53,23 @@ namespace Pozadavky.Services
                 
             }
         }
+
+        public static string DatabaseInfo()
+        {
+            string vysledek;
+
+            using (var db = new PozadavkyContext(DtbConxString))
+            {
+                string server = db.Database.Connection.DataSource;
+                string dtb = db.Database.Connection.Database;
+    
+                vysledek = $"Server: {server}, database: {dtb}";
+            }
+
+
+                return vysledek;
+        }
+
     }
 
 

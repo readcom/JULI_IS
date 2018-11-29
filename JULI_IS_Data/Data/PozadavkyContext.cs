@@ -11,7 +11,7 @@ namespace Pozadavky.Data
             : base("name=SQLConnection")
         {
             Configuration.LazyLoadingEnabled = false;
-            Configuration.ProxyCreationEnabled = false;
+            Configuration.ProxyCreationEnabled = false;           
         }
 
         public virtual DbSet<Dodavatele_S21> DodavateleS21 { get; set; }
@@ -31,5 +31,6 @@ namespace Pozadavky.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
         }
+
     }
 }

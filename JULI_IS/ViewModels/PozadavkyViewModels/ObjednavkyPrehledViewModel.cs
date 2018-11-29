@@ -37,6 +37,9 @@ namespace ViewModels.PozadavkyViewModels
 
         public bool JenPozadavky { get; set; } = true;
 
+        // DELEGAT
+        public delegate void DelegatProVyberFiltru(string filtr);
+        public DelegatProVyberFiltru VyberFiltr;
       
 
         //public void ChangeObjStyle()
@@ -164,12 +167,19 @@ namespace ViewModels.PozadavkyViewModels
                // NE, nenatahne se strankovani a zobrazi to vsechny zaznamy               
             }
 
-            if (String.IsNullOrEmpty(WhereFilter)) ColumnFilter = "";
-
-            if (SetDatum)
-                ItemsService.FillGridViewObjednavkyWithItemsFilteredSchvalene(SeznamItemsGv, "", "", DatumOd, DatumDo, ActiveUser, ActiveUserLevel);
+            if (String.IsNullOrEmpty(WhereFilter))
+            {
+                ColumnFilter = "";
+            }
             else
-                ItemsService.FillGridViewObjednavkyWithItemsFilteredSchvalene(SeznamItemsGv, ColumnFilter, WhereFilter, null, null, ActiveUser, ActiveUserLevel);
+            {
+                if (SetDatum)
+                    ItemsService.FillGridViewObjednavkyWithItemsFilteredSchvalene(SeznamItemsGv, "", "", DatumOd, DatumDo, ActiveUser, ActiveUserLevel);
+                else
+                    ItemsService.FillGridViewObjednavkyWithItemsFilteredSchvalene(SeznamItemsGv, ColumnFilter, WhereFilter, null, null, ActiveUser, ActiveUserLevel);
+            }
+
+        
 
 
             //info = ObjednavkyService.InfoText;

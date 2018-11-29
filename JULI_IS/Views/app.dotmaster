@@ -14,8 +14,9 @@
     <link rel="stylesheet" type="text/css" href="~/Style/bootstrap/bootstrap.min.css" />
 
     <link rel="stylesheet" type="text/css" href="~/Style/Default.css" />
-    <link href="../Style/fa/font-awesome.min.css" rel="stylesheet" />
-    <%--<script src="~/Scripts/jquery-3.1.1.min.js"></script>--%>
+    <link href="~/Style/fa/font-awesome.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="../Scripts/jquery-3.1.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="~/Style/jquery.datetimepicker.css">
     <script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
     <!--<script src="~/Scripts/jquery-ui.min.js"></script>-->
@@ -164,12 +165,7 @@
             </div><!-- /.container-fluid -->
         </nav>
         
-        
-        
-        
-        
-        
-      
+ 
     </header>
 
     <article>
@@ -222,6 +218,19 @@
                     </div>
 
 
+                    <div class="row">
+                        <div class="col-sm-12">
+
+
+                            Path to files:
+                            <bp:TextBox Text="{value: FilePath}" Type="Normal" Changed="{command: PathChanged=true}"/>
+
+                            <br />
+
+                        </div>
+                    </div>
+
+
                 </div>
                 <div class="modal-footer">
                     <div class="text-center">
@@ -235,6 +244,7 @@
 
 </body>
 
+<%--<dot:RequiredResource Name="jquery" />--%>
 <dot:RequiredResource Name="Main.css" />
 <dot:RequiredResource Name="bootstrap" />
 

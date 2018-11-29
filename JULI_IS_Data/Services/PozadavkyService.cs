@@ -29,10 +29,10 @@ namespace Pozadavky.Services
             set { } 
         }
 
-        static PozadavkyService()
-        {
-            DtbConxString = CookiesServices.GetCookieValue("DTB");
-        }
+        //static PozadavkyService()
+        //{
+        //    DtbConxString = CookiesServices.GetCookieValue("DTB");
+        //}
 
         public static List<PozadavekDTO> GetPozadavkyByName(string name = "")
         {

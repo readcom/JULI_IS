@@ -17,6 +17,7 @@ namespace Pozadavky.Services
             set { }
         }
 
+
         public static List<InvesticeDTO> GetInvesticeList()
         {
             using (var db = new PozadavkyContext(DtbConxString))
@@ -47,5 +48,17 @@ namespace Pozadavky.Services
 
         }
 
+        public static string GetSetting(string nastaveni)
+        {
+            using (var db = new PozadavkyContext(DtbConxString))
+            {
+                var setting = (from s in db.Settings
+                               where s.PopisNastaveni == nastaveni
+                               select s.VlastniNastaveni);
+
+                return "";
+
+            }
+        }
     }
 }

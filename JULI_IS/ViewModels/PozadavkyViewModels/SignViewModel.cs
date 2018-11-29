@@ -163,7 +163,8 @@ namespace ViewModels.PozadavkyViewModels
             {
 
                 PozadavkyService.FillGridViewPozadavkyToSignByUsersLevels(SeznamPozadavkuGv, ActiveUser);
-       
+                SeznamPozadavkuGv.SortingOptions.SortExpression = nameof(PozadavekDTO.PodpisLevel);
+
 
                 //// umi L1
                 //if (ActiveUserLevel.Contains(1))
@@ -195,6 +196,7 @@ namespace ViewModels.PozadavkyViewModels
             else
             {
                 PozadavkyService.FillGridViewPozadavkyToSignByUserOrLevel(SeznamPozadavkuGv, "", ActiveUserLevel);
+                SeznamPozadavkuGv.SortingOptions.SortExpression = nameof(PozadavekDTO.PodpisLevel);
             }
 
             NothingFound = SeznamPozadavkuGv.PagingOptions.TotalItemsCount == 0;

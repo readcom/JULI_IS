@@ -34,6 +34,7 @@ namespace JULI_IS
                 options.Services.AddSingleton<IUploadedFileStorage>(serviceProvider => new FileSystemUploadedFileStorage(tempDirectory, TimeSpan.FromHours(1)));
                // options.Services.AddSingleton<ICookieManager, SystemWebCookieManager>();
                 //options.AddDefaultTempStorages("temp");
+                
             });
 #if !DEBUG
             dotvvmConfiguration.Debug = false;

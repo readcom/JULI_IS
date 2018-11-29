@@ -13,8 +13,12 @@ namespace Pozadavky.Data
 
         [StringLength(50)]
         public string User { get; set; }
-
+        
         public int Skupina { get; set; }
+
+        public string PopisNastaveni { get; set; }
+        public string VlastniNastaveni { get; set; }
+
 
         public bool OdesilatMaily { get; set; }
 
