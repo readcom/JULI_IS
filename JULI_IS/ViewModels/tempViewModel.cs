@@ -71,7 +71,11 @@ namespace ViewModels
 
         // /SAMPLE 7
 
-        public string Text { get; set; }
+        public string VybranyText { get; set; }
+
+        public string SelectedObjId { get; set; }
+
+        public List<string> SeznamObj { get; set; }
 
         public Country SelectedCountry2 { get; set; }
 
@@ -85,7 +89,22 @@ namespace ViewModels
         }
 
 
+        [AllowStaticCommand]
+        public List<string> LoadObjNumb(string searchText)
+        {
+            return ObjednavkyService.SearchObjFullId(searchText);
+        }
 
+
+        public override Task PreRender()
+        {
+            if (!Context.IsPostBack)
+            {
+                SeznamObj = ObjednavkyService.GetObjFullId();
+            }
+
+            return base.PreRender(); ;
+        }
 
     }
 }

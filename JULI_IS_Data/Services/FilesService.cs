@@ -145,8 +145,19 @@ namespace Pozadavky.Services
             }
 
             string fl = Path.Combine(path, fileName);
-            if (System.IO.File.Exists(fl))
-                DeleteFileByPozadavekAndFileName(pozId, fl);
+
+            if (pozId != 0)
+            {
+                if (System.IO.File.Exists(fl))
+                    DeleteFileByPozadavekAndFileName(pozId, fileName, fl);
+            }
+
+            if (objId != 0)
+            {
+                if (System.IO.File.Exists(fl))
+                    DeleteFileByObjAndFileName(objId, fileName, fl);
+            }
+
 
             using (var fs = new FileStream(fl, FileMode.Create, FileAccess.Write))
             {

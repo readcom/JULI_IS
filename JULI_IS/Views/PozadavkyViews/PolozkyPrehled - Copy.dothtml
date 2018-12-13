@@ -13,11 +13,11 @@
                 <p>
                     {{resource: PagePolozky.VypsatPouze}} &nbsp;
                     <dot:RadioButton Checked="{value: CurrentUserOnly}" CheckedValue="{value: true}"
-                                     GroupName="RadioGroup" Text=""
+                                     GroupName="RadioGroup" Text="" 
                                      Validation.Enabled="false" /> {{resource: PagePolozky.AktUziv}} &nbsp;
 
                     <dot:RadioButton Checked="{value: CurrentUserOnly}" CheckedValue="{value: false}"
-                                     GroupName="RadioGroup" Text=""
+                                     GroupName="RadioGroup" Text="" 
                                      Validation.Enabled="false" /> {{resource: PagePolozky.Vsechny}}
                 </p>
             </div>
@@ -225,10 +225,6 @@
         <p>{{resource: Filter.PocetPolozek}} {{value: SeznamItemsGv.PagingOptions.TotalItemsCount}}</p>
         <br />
         <p Visible="{value: NothingFound}">  {{resource: PagePolozky.NoPolozky}} </p>
-
-        <p>
-            <dot:DataPager DataSet="{value: SeznamItemsGv}" class="pagination" />
-        </p>
 
         <dot:GridView DataSource="{value: SeznamItemsGv}" class="table table-bordered">
             <Columns>

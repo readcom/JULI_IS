@@ -1047,11 +1047,11 @@ namespace Pozadavky.Services
             p.AddFormattedText("Elektronické faktury zasílejte na email: faktury@juli.cz", TextFormat.Bold);
             p.AddFormattedText("\nE-invoices send to: faktury@juli.cz", TextFormat.Bold);
 
-            //p = section.AddParagraph();
-            //p.Format.Font.Size = 10;
-            //p.Format.SpaceBefore = "0.5cm";
-            //p.AddFormattedText("UPOZORNĚNÍ", TextFormat.Bold);
-            //p.AddFormattedText("\nV době od 19.12.2017 do 1.1.2018 bude příjem firmy JULI Motorenwerk, s.r.o. z důvodu inventury uzavřen. Zboží nebude možné přijmout.", TextFormat.Bold);
+            p = section.AddParagraph();
+            p.Format.Font.Size = 10;
+            p.Format.SpaceBefore = "0.5cm";
+            p.AddFormattedText("UPOZORNĚNÍ", TextFormat.Bold);
+            p.AddFormattedText("\nV době od 19.12.2018 do 1.1.2019 bude příjem firmy JULI Motorenwerk, s.r.o. z důvodu inventury uzavřen. Zboží nebude možné přijmout.", TextFormat.Bold);
 
 
 

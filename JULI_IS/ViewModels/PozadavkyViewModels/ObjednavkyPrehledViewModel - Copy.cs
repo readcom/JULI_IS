@@ -12,12 +12,12 @@ using DotVVM.Framework.Controls;
 
 namespace ViewModels.PozadavkyViewModels
 {
-    public class ObjednavkyPrehledViewModel : AppViewModel
+	public class ObjednavkyPrehledViewModel2 : AppViewModel
     {
         public GridViewDataSet<ObjednavkaDTO> SeznamObjednavekGv { get; set; } = new GridViewDataSet<ObjednavkaDTO>();
 
         public GridViewDataSet<ObjItemsDTO> SeznamItemsGv { get; set; } = new GridViewDataSet<ObjItemsDTO>();
-
+  
 
         public List<PozadavekDTO> SeznamPozadavku { get; set; } = new List<PozadavekDTO>();
 
@@ -43,7 +43,7 @@ namespace ViewModels.PozadavkyViewModels
         // DELEGAT
         public delegate void DelegatProVyberFiltru(string filtr);
         public DelegatProVyberFiltru VyberFiltr;
-
+      
 
         //public void ChangeObjStyle()
         //{
@@ -53,7 +53,7 @@ namespace ViewModels.PozadavkyViewModels
         //        ItemsService.FillGridViewItemsNaObjednani(SeznamObjednavekGv);
         //}
 
-
+	   
 
         public void DeleteObj(int id)
         {
@@ -114,8 +114,6 @@ namespace ViewModels.PozadavkyViewModels
             // ColumnFilter =  jmeno sloupce v databazi
             // WhereFilter = podminka pro ten sloupec z ComboBoxu
 
-            SeznamItemsGv.GoToFirstPage();
-
             if (!string.IsNullOrEmpty(filter))
             {
                 ColumnFilter = filter;
@@ -166,13 +164,13 @@ namespace ViewModels.PozadavkyViewModels
         public override Task PreRender()
         {
             if (!Context.IsPostBack)
-            {
+            {                                             
                 // POUZE POPRVE
 
                 ActiveUserLevel = UserServices.GetActiveUserLevels();
                 ActiveUser = UserServices.GetActiveUser();
 
-                ListObjFullId = ObjednavkyService.GetObjFullId();
+                ListObjFullId = ObjednavkyService.GetObjFullId(); 
 
                 ListHlavniRada.Add("02 - Modelové zařízení");
                 ListHlavniRada.Add("04 - Ostatní");
@@ -195,11 +193,11 @@ namespace ViewModels.PozadavkyViewModels
             if (String.IsNullOrEmpty(WhereFilter)) ColumnFilter = "";
 
             if (SetDatum)
-                ItemsService.FillGridViewObjednavkyWithItemsFilteredSchvalene(SeznamItemsGv, "", "", DatumOd, DatumDo, ActiveUser, ActiveUserLevel);
-            else
-                ItemsService.FillGridViewObjednavkyWithItemsFilteredSchvalene(SeznamItemsGv, ColumnFilter, WhereFilter, null, null, ActiveUser, ActiveUserLevel);
+                 ItemsService.FillGridViewObjednavkyWithItemsFilteredSchvalene(SeznamItemsGv, "", "", DatumOd, DatumDo, ActiveUser, ActiveUserLevel);
+            else 
+                 ItemsService.FillGridViewObjednavkyWithItemsFilteredSchvalene(SeznamItemsGv, ColumnFilter, WhereFilter, null, null, ActiveUser, ActiveUserLevel);
 
-
+            
 
             // musi se data natahnout znovu aby fungovalo strankovani
 
@@ -209,8 +207,8 @@ namespace ViewModels.PozadavkyViewModels
 
             //info = ObjednavkyService.InfoText;
             //PozadavekData.CelkovaCena = ItemsService.GetCelkovaCenaByPozadavekId(PozadavekId.Value);
-            NothingFound = SeznamItemsGv.PagingOptions.TotalItemsCount == 0;
-
+            NothingFound = SeznamItemsGv.PagingOptions.TotalItemsCount == 0;            
+            
             return base.PreRender();
         }
 

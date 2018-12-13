@@ -27,7 +27,7 @@
             <p>You've selected: {{value: SelectedCity}}, {{value: SelectedCountry.Name}}</p>
 
             <%--SAMPLE 5--%>
-
+            <hr />
             <p>SAMPLE 4 ComboBox</p>
             <bp:ComboBox DataSource="{value: Countries}"
                          SelectedValue="{value: SelectedCountryId}"
@@ -41,16 +41,22 @@
 
             <%--SAMPLE 7 ComboBox --%>
 
-            <p>SAMPLE 7 ComboBox</p>
-            <bp:ComboBox Text="{value: Text}"
-                         DataSource="{value: Countries}"
-                         SelectedValue="{value: SelectedCountry2}"
-                         ItemTextBinding="{value: Name}"
-                         ItemKeyBinding="{value: Name}"
-                         LoadItems="{staticCommand: LoadCountries(Text)}"
+
+            <%-- -------------------------------------------------------- --%>
+
+            <hr />
+            <p>SAMPLE 7 ComboBox - <b>Server Search</b></p>
+            <bp:ComboBox Text="{value: VybranyText}"
+                         DataSource="{value: SeznamObj}"
+                         SelectedValue="{value: SelectedObjId}"
+                         LoadItems="{staticCommand: LoadObjNumb(VybranyText)}"
                          Placeholder="Please select Country" />
 
-            <p>Selected Country: {{value: SelectedCountry2.Name}}</p>
+            <p>Selected Country: {{value: SelectedObjId}}</p>
+            <hr />
+
+
+            <%-- -------------------------------------------------------- --%>
 
             <%--SAMPLE 8 ComboBox --%>
 

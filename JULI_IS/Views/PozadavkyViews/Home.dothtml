@@ -22,6 +22,8 @@
                 </h1>
                 <div class="container jumbotron">
                     <ul>
+                        <li><strong style="background: yellow">06.12.2018 - Kompletně přepracován systém vyhledávání v požadavcích pro zvýšení rychlosti<strong /></li>
+                        <li><strong style="background: yellow">05.12.2018 - Kompletně přepracován systém vyhledávání v objednávkách pro zvýšení rychlosti<strong /></li>
                         <li>16.10.2018 - Možnost zadat prázdný termín dodání položky</li>
                         <li>18.09.2018 - Přepracované navigační menu</li>
                         <li>30.08.2018 - Lokalizace do EN!</li>

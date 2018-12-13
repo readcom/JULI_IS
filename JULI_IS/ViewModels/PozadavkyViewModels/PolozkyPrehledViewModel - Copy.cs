@@ -13,7 +13,7 @@ using System.IO;
 
 namespace ViewModels.PozadavkyViewModels
 {
-    public class PolozkyPrehledViewModel : AppViewModel
+	public class PolozkyPrehledViewModel2 : AppViewModel
     {
         //public int ActiveUserLevel { get; private set; } = UserServices.GetActiveUserLevel();
 
@@ -21,13 +21,13 @@ namespace ViewModels.PozadavkyViewModels
 
 
         public List<ItemsDTO> SeznamCheckedItems { get; set; } = new List<ItemsDTO>();
-
+           
         public bool CurrentUserOnly { get; set; } = false;
 
         public bool IQDodavateleSearch { get; set; } = true;
 
         public GridViewDataSet<ItemsDTO> SeznamItemsGv { get; set; } = new GridViewDataSet<ItemsDTO>();
-
+       
         public bool NothingFound { get; set; } = false;
 
         public bool JenPozadavky { get; set; } = true;
@@ -147,7 +147,7 @@ namespace ViewModels.PozadavkyViewModels
         public List<string> SeznamSloupcuP { get; set; } = new List<string>();
         public string VybranySloupec { get; set; } = "";
 
-        // public List<PozList> ListPozadavekFullId { get; set; } = new List<PozList>();
+       // public List<PozList> ListPozadavekFullId { get; set; } = new List<PozList>();
 
         public class PozList
         {
@@ -160,7 +160,7 @@ namespace ViewModels.PozadavkyViewModels
 
         public string WhereFilterPozadavek { get; set; } = "";
         public string WhereFilterDodavatel { get; set; } = "";
-        public string WhereFilterDodavatelNumber { get; set; } = "";
+        public string WhereFilterDodavatelNumber { get; set; } = "";        
         public string WhereFilterZalozil { get; set; } = "";
         public string WhereFilterKST { get; set; } = "";
 
@@ -173,14 +173,13 @@ namespace ViewModels.PozadavkyViewModels
 
         public void SetFiltr(string filter)
         {
-
-            SeznamItemsGv.GoToFirstPage();
+       
             ColumnFilter = filter;
             switch (filter)
             {
                 case "FullPozadavekID":
-                    //int PomlckaIndex = WhereFilterPozadavek.LastIndexOf('-');
-                    //WhereFilterPozadavek = "p" + WhereFilterPozadavek.Substring(PomlckaIndex + 1, 4) + "-" + WhereFilterPozadavek.Substring(0, PomlckaIndex);
+                //int PomlckaIndex = WhereFilterPozadavek.LastIndexOf('-');
+                //WhereFilterPozadavek = "p" + WhereFilterPozadavek.Substring(PomlckaIndex + 1, 4) + "-" + WhereFilterPozadavek.Substring(0, PomlckaIndex);
                     WhereFilter = WhereFilterPozadavek;
                     break;
                 case "FullDodavatelName":
@@ -204,10 +203,10 @@ namespace ViewModels.PozadavkyViewModels
             else SetDatum = false;
 
             qSQL = false;
-
+            
         }
 
-        public void SetSQL()
+       public void SetSQL()
         {
             ClearAlerts();
             qSQL = true;
@@ -217,7 +216,7 @@ namespace ViewModels.PozadavkyViewModels
                 );
         }
 
-
+        
 
         public void AddSloupec()
         {
@@ -244,7 +243,7 @@ namespace ViewModels.PozadavkyViewModels
                 ItemsService.GridViewSetSort(SeznamItemsGv);
 
             }
-
+     
             if (String.IsNullOrEmpty(WhereFilter)) ColumnFilter = "";
 
             if (CurrentUserOnly)
@@ -281,11 +280,11 @@ namespace ViewModels.PozadavkyViewModels
                 }
 
             }
-
+                
 
             NothingFound = SeznamItemsGv.PagingOptions.TotalItemsCount == 0;
-
-
+      
+            
             return base.PreRender();
         }
 

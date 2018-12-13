@@ -23,11 +23,14 @@
         <div class="row">
             <div class="col-sm-2">
                 <label class="control-label">{{resource: Filter.ObjCislo}}</label>
-                <bp:ComboBox DataSource="{value: ListObjFullId2}"
-                             <%--DisplayMember="objid"--%>
+                <bp:ComboBox Text="{value: HledanyText}"
+                             DataSource="{value: ListObjFullId}"    
                              SelectedValue="{value: WhereFilterObj}"
                              class="ComboBoxStyle"
-                             Changed="{command: SetFiltr("ObjednavkaFullID")}" />
+                             Changed="{command: SetFiltr("ObjednavkaFullID")}" 
+                             LoadItems="{staticCommand: LoadObjNumb(HledanyText)}"
+                             Placeholder="Zvolte číslo objednávky" />
+                            
             </div>
 
             <div class="col-sm-3">
@@ -48,8 +51,8 @@
 
             <div class="col-sm-2">
                 <label class="control-label">{{resource: Filter.Stav}}</label>
-                <bp:ComboBox DataSource="{value: ListKST}"
-                             SelectedValue="{value: WhereFilterKST}"
+                <bp:ComboBox DataSource="{value: ListStav}"
+                             SelectedValue="{value: WhereFilterStav}"
                              class="ComboBoxStyle"
                              Changed="{command: SetFiltr("Stav")}" />
             </div>
@@ -63,7 +66,7 @@
             </div>
         </div>
 
-        <div class="row" Visible="{value: false}">
+        <%--<div class="row" Visible="{value: false}">
             <div class="col-sm-2">
                 <dot:Button class="btn btn-success col-sm-10" Text="{{resource: Filter.FiltrObj}}" Click="{command: SetFiltr("ObjednavkaFullID")}" />
             </div>
@@ -77,7 +80,7 @@
                 <dot:Button class="btn btn-success col-sm-10" Text="{{resource: Filter.FiltrStav}}" Click="{command: SetFiltr("Stav")}" />
             </div>
 
-        </div>
+        </div>--%>
 
         <br />
 
@@ -104,7 +107,7 @@
             </div>
 
             <div class="form-group col-sm-2">
-                <dot:RouteLink class="btn btn-warning col-sm-8" style="position: relative; top: 24px;" Text="{{resource: Filter.FilterReset}}" RouteName="objednavkySprava" />
+                <dot:RouteLink class="btn btn-warning col-sm-8" style="position: relative; top: 24px;" Text="{{resource: Filter.FilterReset}}" RouteName="objednavkyPrehled" />
             </div>
 
         </div>

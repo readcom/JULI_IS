@@ -426,10 +426,12 @@
     <Compile Include="ViewModels\PozadavkyViewModels\logout.cs" />
     <Compile Include="ViewModels\PozadavkyViewModels\NewdemandViewModel.cs" />
     <Compile Include="ViewModels\PozadavkyViewModels\ObjednavkaDetailViewModel.cs" />
+    <Compile Include="ViewModels\PozadavkyViewModels\ObjednavkyPrehledViewModel - Copy.cs" />
     <Compile Include="ViewModels\PozadavkyViewModels\ObjednavkySpravaViewModel.cs" />
     <Compile Include="ViewModels\PozadavkyViewModels\ObjednavkyPrehledViewModel.cs" />
     <Compile Include="ViewModels\PozadavkyViewModels\objednavkySendViewModel.cs" />
     <Compile Include="ViewModels\PozadavkyViewModels\ObjednavkyTvorbaViewModel.cs" />
+    <Compile Include="ViewModels\PozadavkyViewModels\PolozkyPrehledViewModel - Copy.cs" />
     <Compile Include="ViewModels\PozadavkyViewModels\PolozkyPrehledViewModel.cs" />
     <Compile Include="ViewModels\PozadavkyViewModels\PozadaveknewViewModel.cs" />
     <Compile Include="ViewModels\PozadavkyViewModels\PozadavekViewModel.cs" />
@@ -535,6 +537,7 @@
     <Content Include="Views\DovolenkyViews\Home.dothtml" />
     <Content Include="Views\DovolenkyApp.dotmaster" />
     <Content Include="Views\PozadavkyViews\objednavkySprava.dothtml" />
+    <Content Include="Views\PozadavkyViews\PolozkyPrehled - Copy.dothtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -267,9 +267,7 @@ namespace Pozadavky.Services
                 dataSet.LoadFromQueryable(query);
             }
 
-        }
-
-       
+        }     
 
 
         public static void CelkovaCenaPrepocitat(int ObjId)
@@ -1266,6 +1264,105 @@ namespace Pozadavky.Services
             else vysledek = FullObjID.Substring(5, 4);
 
             return vysledek;
+        }
+
+
+        /// <summary>
+        /// vrati List FullId objednavek
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetListObjFullId()
+        {
+            using (var db = new PozadavkyContext(DtbConxString))
+            {
+                // var q = db.Objednavky.Distinct(x => x.FullObjednavkaID).
+
+                List<string> q = (from id in db.Objednavky
+                         select id.FullObjednavkaID)
+                         .Distinct()
+                         .OrderByDescending(c => c)
+                         .ToList();
+                return q;
+            }
+        }
+
+        /// <summary>
+        /// vrati List FullId objednavek
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> SearchObjFullId(string fullobj)
+        {
+            using (var db = new PozadavkyContext(DtbConxString))
+            {
+    
+                List<string> q = (from id in db.Objednavky
+                                  where id.FullObjednavkaID.Contains(fullobj)
+                                  select id.FullObjednavkaID)
+                         .Distinct()
+                         .OrderByDescending(c => c)
+                         .ToList();
+                return q;
+            }
+        }
+
+
+        /// <summary>
+        /// Vrati seznam objednávek (FullObjId)
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetObjFullId()
+        {
+            using (var db = new PozadavkyContext(DtbConxString))
+            {
+
+                List<string> q = (from id in db.Objednavky
+                                  where id.FullObjednavkaID != null && id.FullObjednavkaID != ""
+                                  select id.FullObjednavkaID)                                  
+                                  .Distinct()
+                                  .OrderByDescending(c => c)
+                                  //.Take(100)
+                                  .ToList();
+                return q;
+            }
+        }
+
+        /// <summary>
+        /// Vrati seznam zakladatelů z pozadavku
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetCreatorList()
+        {
+            using (var db = new PozadavkyContext(DtbConxString))
+            {  
+                List<string> query = (from i in db.ObjItems
+                                      join p in db.Pozadavky on i.PozadavekID equals p.ID                       
+                                      select p.Zalozil)
+                                      .Distinct()
+                                      .OrderBy(c => c)                          
+                                      .ToList();
+
+                return query;
+            }
+        }
+
+
+        /// <summary>
+        /// Vrati seznam dodavatelů z objednávek
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetDodavateleList()
+        {
+            using (var db = new PozadavkyContext(DtbConxString))
+            {
+
+                List<string> q = (from o in db.Objednavky
+                                  join d in db.Dodavatele on o.DodavatelID equals d.Id
+                                  select d.SNAM05)
+                                  .Distinct()
+                                  .OrderBy(c => c)
+                                  .ToList();
+                return q;
+            }
         }
 
 
